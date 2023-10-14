@@ -1,0 +1,1124 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.skin-blue .main-header .navbar {
+  background-color: #3c8dbc;
+}
+
+.skin-blue .wrapper {
+  background-color: #222d32;
+}
+
+.skin-blue .main-header .logo {
+  background-color: #367fa9;
+  color: #fff;
+  border-bottom: 0 solid transparent;
+}
+
+.skin-blue .sidebar-menu > li > .treeview-menu {
+  margin: 0 1px;
+  background: #2c3b41;
+}
+
+.main-header .sidebar-toggle:before {
+  content: "\f0c9";
+}
+
+.skin-blue .main-header .navbar .nav > li > a {
+  color: #fff;
+}
+
+.skin-blue .main-header .navbar .nav > li > a:hover {
+  background: rgba(0, 0, 0, 0.1);
+  /* color: #f6f6f6; */
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle {
+  color: #fff;
+}
+
+.skin-blue .main-header .navbar .sidebar-toggle:hover {
+  background-color: #367fa9;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu {
+  width: 280px;
+  padding: 0 0 0 0;
+  margin: 0;
+  top: 100%;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li.header {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background-color: #ffffff;
+  padding: 7px 10px;
+  border-bottom: 1px solid #f4f4f4;
+  color: #444444;
+  font-size: 14px;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu {
+  max-height: 200px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: hidden;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li {
+  position: relative;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a {
+  margin: 0;
+  padding: 10px 10px;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a:before {
+  content: " ";
+  display: table;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a:after {
+  content: " ";
+  display: table;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a:after {
+  clear: both;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > div > img {
+  margin: auto 10px auto auto;
+  width: 40px;
+  height: 40px;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > h4 {
+  padding: 0;
+  margin: 0 0 0 45px;
+  color: #444444;
+  font-size: 15px;
+  position: relative;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > h4 > small {
+  color: #999999;
+  font-size: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a > p {
+  margin: 0 0 0 45px;
+  font-size: 12px;
+  color: #888888;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li .menu > li > a {
+  display: block;
+  white-space: nowrap;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.navbar-nav > .messages-menu > .dropdown-menu > li.footer > a {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  font-size: 12px;
+  background-color: #fff;
+  padding: 7px 10px;
+  border-bottom: 1px solid #eeeeee;
+  color: #444 !important;
+  text-align: center;
+}
+
+.skin-blue .user-panel > .info {
+  color: #fff;
+}
+
+.skin-blue .user-panel > .info > a {
+  color: #fff;
+}
+
+.skin-blue .sidebar-form {
+  border-radius: 3px;
+  border: 1px solid #374850;
+  margin: 10px 10px;
+}
+
+.skin-blue .sidebar-form input[type="text"] {
+  color: #666;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 2px;
+}
+
+.skin-blue .sidebar-form input[type="text"] {
+  box-shadow: none;
+  background-color: #374850;
+  border: 1px solid transparent;
+  height: 35px;
+}
+
+.skin-blue .sidebar-form .btn {
+  color: #999;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
+}
+
+.input-group-btn .btn {
+  box-shadow: none;
+  background-color: #374850;
+  border: 1px solid transparent;
+  height: 35px;
+}
+
+.skin-blue .sidebar-form input[type="text"] {
+  color: #fff;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 2px;
+}
+
+.skin-blue .sidebar-menu > li.header {
+  color: #4b646f;
+  background: #1a2226;
+}
+
+.skin-blue .sidebar a {
+  color: #b8c7ce;
+}
+
+.skin-blue .sidebar-menu > li:hover > a {
+  color: #fff;
+}
+
+.skin-blue .main-header li.user-header {
+  background-color: #3c8dbc;
+}
+
+.skin-blue .main-header .navbar .nav .open > a {
+  background: rgba(0, 0, 0, 0.1);
+  color: #f6f6f6;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu > li.header {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background-color: #ffffff;
+  padding: 7px 10px;
+  border-bottom: 1px solid #f4f4f4;
+  color: #444444;
+  font-size: 14px;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu > li .menu {
+  max-height: 200px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: hidden;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a {
+  color: #444444;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 10px;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a {
+  display: block;
+  white-space: nowrap;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu > li .menu > li > a > .fa {
+  width: 20px;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu {
+  width: 280px;
+  padding: 0 0 0 0;
+  margin: 0;
+  top: 100%;
+}
+
+.navbar-nav > .notifications-menu > .dropdown-menu > li.footer > a {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  font-size: 12px;
+  background-color: #fff;
+  padding: 7px 10px;
+  border-bottom: 1px solid #eeeeee;
+  color: #444 !important;
+  text-align: center;
+}
+
+.navbar-nav > .tasks-menu > .dropdown-menu {
+  width: 280px;
+  padding: 0 0 0 0;
+  margin: 0;
+  top: 100%;
+}
+
+nav > .tasks-menu > .dropdown-menu > li.header {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background-color: #ffffff;
+  padding: 7px 10px;
+  border-bottom: 1px solid #f4f4f4;
+  color: #444444;
+  font-size: 14px;
+}
+
+.navbar-nav > .tasks-menu > .dropdown-menu > li .menu {
+  max-height: 200px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: hidden;
+}
+
+.navbar-nav > .tasks-menu > .dropdown-menu > li .menu > li > a {
+  padding: 10px;
+}
+
+.navbar-nav > .tasks-menu > .dropdown-menu > li .menu > li > a {
+  display: block;
+  white-space: nowrap;
+  border-bottom: 1px solid #f4f4f4;
+}
+
+.navbar-nav > .tasks-menu > .dropdown-menu > li .menu > li > a > h3 {
+  font-size: 14px;
+  padding: 0;
+  margin: 0 0 10px 0;
+  color: #666666;
+}
+
+.navbar-nav > .tasks-menu > .dropdown-menu > li .menu > li > a > .progress {
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-nav > .tasks-menu > .dropdown-menu > li.header {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background-color: #ffffff;
+  padding: 7px 10px;
+  border-bottom: 1px solid #f4f4f4;
+  color: #444444;
+  font-size: 14px;
+}
+
+.navbar-nav > .tasks-menu > .dropdown-menu > li.footer > a {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  font-size: 12px;
+  background-color: #fff;
+  padding: 7px 10px;
+  border-bottom: 1px solid #eeeeee;
+  color: #444 !important;
+  text-align: center;
+}
+
+.rdrMonth {
+  width: auto !important;
+}
+
+.rdrDefinedRangesWrapper {
+  width: auto !important;
+}
+.rdrCalendarWrapper {
+  z-index: 99;
+  border: 1px solid black;
+}
+
+.dateRanger .rdrCalendarWrapper {
+  position: absolute;
+  z-index: 99;
+  border: 1px solid black;
+}
+.rdrMonthAndYearWrapper {
+  height: auto !important;
+  padding-top: 0px !important;
+}
+
+.react-datepicker-popper {
+  z-index: 9999 !important;
+}
+
+.react-datepicker__input-container {
+  display: flex !important;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: 20px;
+  height: 17px;
+}
+
+.labels {
+  position: relative;
+  top: -4px;
+}
+
+.main {
+  position: relative;
+  top: 4px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Hiding the initial checkbox */
+.main input[type="checkbox"] {
+  visibility: hidden;
+}
+/* Creating a custom checkbox based on demand */
+.w3docs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 17px;
+  width: 17px;
+  background-color: rgb(185, 184, 184);
+  border-radius: 5px;
+}
+/* Specify the background color to be shown when hovering over checkbox */
+.main:hover input ~ .w3docs {
+  background-color: gray;
+}
+/* Specify the background color to be shown when checkbox is active */
+.main input:active ~ .w3docs {
+  background-color: white;
+}
+/* Specify the background color to be shown when checkbox is checked */
+.main input:checked ~ .w3docs {
+  background-color: #1abc9c;
+}
+
+.main input:disabled ~ .w3docs {
+  background-color: #f1f1f1;
+}
+/* Checkmark to be shown in checkbox */
+/* It is not be shown when not checked */
+.w3docs:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+/* Display checkmark when checked */
+.main input:checked ~ .w3docs:after {
+  display: block;
+}
+/* Styling the checkmark using webkit */
+/* Rotated the rectangle by 45 degree and 
+showing only two border to make it look
+like a tickmark */
+.main .w3docs:after {
+  left: 6px;
+  bottom: 5px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.containers {
+  position: relative;
+  top: 4px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Hide the browser's default radio button */
+.containers input[type="radio"] {
+  visibility: hidden;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 19px;
+  width: 19px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.containers:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.containers input:checked ~ .checkmark {
+  background-color: rgb(26 188 156);
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.containers input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.containers .checkmark:after {
+  top: 5.5px;
+  left: 5.5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+.containers input:disabled ~ .checkmark {
+  background-color: #f3f3f3;
+}
+
+.calendra-new .rdrCalendarWrapper {
+  position: absolute;
+}
+
+.golbal-Error {
+  font-size: 10px;
+  color: red;
+  font-weight: 500;
+}
+
+/* reprint page */
+
+.card {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid #e3e6f0;
+  border-radius: 0.35rem;
+}
+
+.shadow {
+  -webkit-box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15) !important;
+}
+
+.card-header:first-child {
+  border-radius: calc(0.35rem - 1px) calc(0.35rem - 1px) 0 0;
+}
+
+.card-header {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  color: inherit;
+  background-color: #f8f9fc;
+  border-bottom: 1px solid #e3e6f0;
+}
+
+.card-body {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding-top: 0.2rem;
+  padding-right: 1.25rem;
+  padding-bottom: 0.55rem;
+  padding-left: 1.25rem;
+}
+
+.time {
+  color: #000080;
+  font-size: 12.5px !important;
+  height: 25px !important;
+  padding: 0px 0px !important;
+  border-radius: 0.25em !important;
+  width: 100% !important;
+}
+
+.reprint-date {
+  padding: 6px 6px !important;
+  font-size: 12px !important;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.select-input-box {
+  border: 1px solid #cccccc;
+  border-left: none;
+  border-radius: 0px 3px 3px 0px;
+  padding: 13.5px !important;
+}
+
+.select-input-box:focus-visible {
+  outline: none;
+  border: 1px solid #3c8dbc;
+  border-left: none;
+}
+
+.calendra-new .rdrCalendarWrapper {
+  position: absolute !important;
+  top: 60px;
+}
+
+.navbar {
+  display: block !important;
+  padding: 0px !important;
+}
+
+.navbar-nav {
+  flex-direction: row !important;
+}
+
+.css-1xc3v61-indicatorContainer {
+  padding: 0px !important;
+}
+
+.css-13cymwt-control {
+  min-height: 25px !important;
+}
+
+.login-box-body .form-control {
+  font-size: 13px;
+  padding: 15px !important;
+}
+
+.btn-facebook {
+  padding: 5px 10px !important;
+  background-color: #3b5998 !important;
+  /* border-radius: 5px; */
+  color: white !important;
+  font-size: 12px !important;
+}
+
+.btn-google {
+  padding: 5px 10px !important;
+  background-color: #dd4b39 !important;
+  /* border-radius: 5px; */
+  color: white !important;
+  font-size: 12px !important;
+}
+
+.btn-social {
+  text-align: left !important;
+  padding-left: 44px !important;
+}
+
+.btn-custom-01 {
+  background-color: #337ab7 !important;
+  color: white !important;
+  padding: 10px 5px !important;
+}
+
+.login-logo a:hover {
+  text-decoration: none !important;
+  color: #444 !important;
+}
+
+.login-logo a b {
+  font-weight: 700 !important;
+}
+
+.login-box-msg {
+  font-size: 13px !important;
+}
+
+/* patient registration */
+
+.control-label {
+  font-weight: bold;
+}
+
+.set-height {
+  min-height: 28px !important;
+}
+
+.boottable .table-responsive {
+  overflow-y: auto;
+  height: 400px;
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+
+/* Handle */
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #d4d4d4;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #979696;
+}
+
+.main-sidebar::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+
+/* Handle */
+.main-sidebar::-webkit-scrollbar-thumb {
+  background: #d4d4d4;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+.main-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #979696;
+}
+
+.table-responsive thead {
+  position: sticky;
+  top: 0px;
+  background-color: white;
+}
+
+.fade {
+  opacity: 0.95 !important;
+}
+
+.modal-custom-css {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+  font-size: 15px;
+  background-color: #000080;
+  color: white;
+  padding: 10px;
+}
+
+.color-Status-1 {
+  background-color: purple;
+  color: white;
+}
+
+.color-Status-2 {
+  background-color: orange;
+  color: white;
+}
+
+.color-Status-3 {
+  background-color: #00bfff !important;
+  color: black;
+}
+
+.color-Status-4 {
+  background-color: #8b0000 !important;
+  color: white;
+}
+.color-Status-5 {
+  background-color: green !important;
+  color: white;
+}
+.color-Status-10 {
+  background-color: pink !important;
+  color: white;
+}
+.suggestion-data {
+  position: absolute;
+  top: 24px;
+  z-index: 999;
+  width: 86%;
+  right: 17px;
+  background-color: white;
+  padding: 5px;
+  border: 1px solid black;
+  list-style: none;
+  min-height: auto;
+  max-height: 300px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.suggestion-data li {
+  padding: 4px;
+  cursor: pointer;
+}
+
+.suggestion-data li:hover {
+  background-color: blue;
+  color: white;
+  transition: 0.3s;
+}
+
+.matchIndex {
+  background-color: blue;
+  color: white;
+}
+
+.cmyNjn > .wrapper {
+  border-radius: 0px !important;
+  border: none !important;
+}
+.cmyNjn {
+  height: 23px !important;
+  top: -6px;
+}
+
+.cmyNjn > .wrapper:hover {
+  box-shadow: none !important;
+}
+
+.fDbOPw {
+  min-height: 0px !important;
+}
+
+/* patient modal*/
+
+.modal-header {
+  background: #8ac2ed;
+}
+
+.modal-header .modal-title {
+  color: black;
+  font-weight: bold;
+}
+
+.Status-0 {
+  background-color: limegreen !important;
+  color: #fff !important;
+  font-family: auto;
+}
+.Status-1 {
+  background-color: #800080 !important;
+  color: #fff !important;
+
+  font-family: auto;
+}
+
+.Status-2 {
+  background-color: #ffa500 !important;
+  color: #fff !important;
+
+  font-family: auto;
+}
+
+.Status-3 {
+  background-color: #00bfff !important;
+  color: #000;
+
+  font-family: auto;
+}
+
+.Status-4 {
+  background-color: #8b0000 !important;
+  color: #fff !important;
+
+  font-family: auto;
+}
+
+.Status-5 {
+  background-color: #008000 !important;
+  color: #fff !important;
+
+  font-family: auto;
+}
+
+.Status-6 {
+  background-color: skyblue !important;
+  color: #fff !important;
+
+  font-family: auto;
+}
+
+.Status-7 {
+  background-color: Red !important;
+  color: #fff !important;
+
+  font-family: auto;
+}
+
+.Status-10 {
+  background-color: Pink !important;
+  color: #fff !important;
+
+  font-family: auto;
+}
+.Status-11 {
+  background-color: sandybrown !important;
+  color: #fff !important;
+
+  font-family: auto;
+}
+.Status-12 {
+  background-color: yellow !important;
+  color: #000 !important;
+
+  font-family: auto;
+}
+.Status-13 {
+  background-color: orangered !important;
+  color: #000 !important;
+
+  font-family: auto;
+}
+.Status-14 {
+  background-color: greenyellow !important;
+  color: #000 !important;
+
+  font-family: auto;
+}
+.Status-15 {
+  background-color: #44a3aa !important;
+
+  font-family: auto;
+}
+.Status-all {
+  background-image: linear-gradient(
+    to right,
+    purple,
+    orange,
+    skyblue,
+    green,
+    red
+  );
+  color: #fff !important;
+}
+
+.Status-20 {
+  background-color: #e30909 !important;
+
+  font-family: auto;
+  color: white;
+}
+.Status-21 {
+  background-color: yellow !important;
+  color: black;
+  font-family: auto;
+}
+.Status-22 {
+  background-color: #fc361c !important;
+  color: white;
+  font-family: auto;
+}
+.Status-23 {
+  background-color: #fced1c !important;
+  color: black;
+  font-family: auto;
+}
+.Status-24 {
+  background-color: #d6d4d0 !important;
+  color: black;
+  font-family: auto;
+}
+
+.round {
+  border-radius: 15px;
+  padding: 7px;
+}
+.center {
+  text-align: center !important;
+}
+
+.foreColor {
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+.required {
+  border-bottom: 1.5px solid red !important;
+  border-radius: 4px !important;
+}
+
+.custom-form {
+  width: 87%;
+  height: 27px;
+}
+
+.weekDays-selector input[type="checkbox"] + label {
+  display: inline-block;
+  /* border-radius: 6px; */
+  margin-bottom: 2px !important;
+  background: #dddddd;
+  height: 14px;
+  width: 30px;
+  margin-right: 3px;
+  line-height: 15px;
+  text-align: center;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.weekDays-selector input {
+  display: none !important;
+}
+
+.checkedWeekday {
+  background: #2ad705 !important;
+  color: #ffffff !important;
+  margin-right: 10px !important;
+}
+
+.rmsc .dropdown-heading {
+  height: 27px !important;
+}
+
+.loading-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+.error-occured-input {
+  border: 1px solid red !important;
+}
+
+.roundarrow {
+  border-radius: 50%;
+  background-color: #ccc;
+  padding: 3px 10px;
+  font-size: 11px;
+}
+
+.high {
+  background-color: red !important;
+}
+
+.low {
+  background-color: yellow !important;
+}
+
+.resultEntryCssTable {
+  width: 650px;
+  z-index: 1;
+}
+
+.resultEntryCssTable thead {
+  background-color: rgb(200, 200, 200);
+}
+
+.excel-table {
+  width: 100%;
+}
+
+.suggestion-Fixed-Box {
+  width: 300px;
+  position: fixed;
+  right: 12px;
+  bottom: 10px;
+  z-index: 999;
+  padding: 5px;
+}
+
+.suggestion-Fixed-Box .box {
+  text-align: center;
+  background-color: blue;
+  color: white;
+  border-radius: 20px;
+  padding: 10px;
+  cursor: pointer;
+  width: 30%;
+  float: right;
+  box-shadow: 0px 0px 5px black;
+}
+
+.suggestion-Fixed-Box .inner-Box {
+  border: 5px solid #007bff;
+  max-height: 200px;
+  overflow: scroll;
+}
+
+.bg-yellow-new {
+  border-bottom: 3px solid yellow;
+}
+
+.react-datepicker__header {
+  background-color: #c0c0c0 !important;
+}
+
+.react-datepicker-popper[data-placement^="bottom"]
+  .react-datepicker__triangle::after {
+  border-bottom-color: #c0c0c0 !important;
+}
+
+.react-datepicker__header:not(.react-datepicker__header--has-time-select) {
+  width: 243px !important;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  width: 2.7rem !important;
+  font-size: 11px !important;
+}
+
+.excel-table th{
+  display: none;
+}
+
+.select__menu{
+  z-index: 999 !important;
+}
+
+.custom-button {
+ 
+  background-color: rgb(219, 219, 219);
+  /* color: white; */
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+  
+}
+
+.is-Active-btn {
+  box-shadow: 0px 0px 5px;
+  color: #000;
+  font-weight: bold;
+  background-color: rgb(255, 255, 255);
+  border-bottom: 2px solid rgb(40, 112, 189);
+}
+
+.treeview-menu .active{
+  color: white !important;
+}
+
