@@ -13,7 +13,7 @@ const ViewLogModal = ({ data, viewLog, showViewLog, handleCloseViewLog }) => {
             style={{
               marginTop: "200px",
               backgroundColor: "transparent",
-              maxHeight: "150px",
+              maxHeight: "200px",
               overflowY: "auto",
             }}
           >

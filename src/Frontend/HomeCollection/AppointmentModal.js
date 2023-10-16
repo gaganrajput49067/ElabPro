@@ -76,6 +76,8 @@ const AppointmentModal = ({
       ...searchData,
       [name]: date,
     });
+
+    
   };
   const GetPatientDetailonSlot = (SetPhelebo) => {
     const phleboIds = SetPhelebo.map((phelebo) => phelebo.SelectedPheleboId);
@@ -219,9 +221,77 @@ const AppointmentModal = ({
   };
 
   const DoAppointment = (match, data, selectedPhelebo) => {
-    console.log(match, selectedPhelebo);
+    // console.log(match, data,selectedPhelebo);
+    const currentTime = new Date();
+    const currentHours = currentTime.getHours();
+    const currentMinutes = currentTime.getMinutes();
 
-    if (match >= selectedPhelebo?.TimeslotData) {
+    const [dataHours, dataMinutes] = data.split(":").map(Number);
+
+    const appointmentDate = new Date(searchData.AppointmentDate);
+    const currentDate = new Date();
+
+    const appointmentDay = appointmentDate.getDate();
+    const currentDay = currentDate.getDate();
+
+    console.log(appointmentDay, currentDay);
+
+    if (appointmentDay < currentDay) {
+      toast.error("The appointment date is in the past");
+    } else if (appointmentDay == currentDay) {
+      if (
+        dataHours < currentHours ||
+        (dataHours === currentHours && dataMinutes < currentMinutes)
+      ) {
+        toast.error("You can't book an appointment for this time");
+      } else if (match >= selectedPhelebo?.TimeslotData) {
+        toast.error("Booking is Filled for given Slot");
+      } else {
+        setSelectedPhelebo({
+          ...selectedPhelebo,
+          centreid: searchData.DropLocationId,
+          SelectedTime: data,
+          Address: searchData.Address,
+          AppointmentDate: searchData.AppointmentDate,
+          CityID: searchData.CityID,
+          DropLocationId: searchData.DropLocationId,
+          // DropLocationLabel: searchData?.DropLocationLabel,
+          Email: searchData.Email,
+          Landmark: searchData.Landmark,
+          LocalityID: searchData.LocalityID,
+          Pincode: searchData.Pincode,
+          RouteId: searchData.RouteId
+            ? searchData?.RouteId
+            : dropLocation[0]?.SelectedRouteId,
+          SelectedBindRoute: searchData.SelectedBindRoute,
+          StateID: searchData.StateID,
+          uhid: showPatientData.Patientid,
+          Title: showPatientData.title,
+          Patient_ID: showPatientData.Patientid,
+          Mobile: showPatientData.Mobile,
+          DOB: moment(showPatientData.DOB).format("YYYY-MMM-DD"),
+          Age: showPatientData.Age,
+          NAME: showPatientData?.FirstName,
+          Gender: showPatientData.Gender,
+          House_No: showPatientData.HouseNo,
+          Locality: showPatientData.LocalityName,
+          State: showPatientData.StateName,
+          City: showPatientData.City,
+          Landmark: showPatientData.Landmark,
+          AgeYear: showPatientData?.AgeYear,
+          AgeMonth: showPatientData?.AgeMonth,
+          AgeDays: showPatientData?.AgeDays,
+          TotalAgeInDays: showPatientData?.TotalAgeInDays,
+        });
+        if (searchData.Address === "") {
+          toast.error("Please Enter Proper Address");
+        } else if (searchData?.DropLocationId === "") {
+          toast.error("Please Pick Any DropLocation");
+        } else {
+          setAppointment(true);
+        }
+      }
+    } else if (match >= selectedPhelebo?.TimeslotData) {
       toast.error("Booking is Filled for given Slot");
     } else {
       setSelectedPhelebo({
@@ -1067,8 +1137,8 @@ const AppointmentModal = ({
                           ))}
                         </tr>
                       </thead>
-                      {console.log(showPhelebo, getPatientDetailOnSlot)}
-                      <tbody style={{ height: "25px", fontSize: "12px" }}>
+
+                      <tbody style={{ height: "25px", fontSize: "13px" }}>
                         {showPhelebo.map((ele, index) => (
                           <tr key={index}>
                             <td
@@ -1126,7 +1196,9 @@ const AppointmentModal = ({
                                                   backgroundColor: "white",
                                                   fontWeight: "bold",
                                                   padding: "2px",
+                                                  border: "1px solid grey",
                                                   margin: "2px",
+                                                  borderRadius: "10px",
                                                   fontSize: "12px",
                                                 }}
                                                 onMouseEnter={() => {

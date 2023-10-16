@@ -138,6 +138,7 @@ const SingleBulkPanelChange = () => {
       toast.error(generatedError);
     }
   };
+  
   console.log(tableData, "neeraj");
 
   const dateSelect = (date, name) => {

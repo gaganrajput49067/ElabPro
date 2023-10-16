@@ -39,7 +39,7 @@ const DoAppointmentModal = ({
   const [discountPercentage, setDiscountPercentage] = useState("");
   const [disAmt, setdisAmt] = useState("");
   const [net, setNet] = useState(0);
-  
+
   const [discountamount, setDiscountAmount] = useState(0); //discounted amount
   const [tableData, setTableData] = useState([]);
   // const [pheleboCharge, setPheleboCharge] = useState([]);
@@ -171,6 +171,23 @@ const DoAppointmentModal = ({
       setDiscount(Number(net) - Number(discountAmount));
     }
   }, [discountPercentage, net]);
+
+  useEffect(() => {
+    // console.log(discountamount);
+
+    if (discountamount == "" || discountamount == 0) {
+      setTestData({
+        ...testData,
+        DoctorID: "",
+        DisReason: "",
+      });
+      setDiscountApproval([]);
+      getDiscountApproval();
+      // 
+    }
+  }, [discountamount]);
+
+  // console.log(testData?.DoctorID);
   const handleCheckBox = (index, e) => {
     const { name, checked } = e.target;
 
@@ -241,6 +258,8 @@ const DoAppointmentModal = ({
   const handleBooking = () => {
     if (tableData.length === 0) {
       toast.error("Please Select Any Test");
+    } else if (!appointData?.SourceofCollection) {
+      toast.error("Please Select any Source of Collection");
     } else {
       if (appointData?.Paymentmode) {
         if (disAmt || discountPercentage) {
@@ -347,32 +366,36 @@ const DoAppointmentModal = ({
   };
   const SearchTest = (e) => {
     const val = e.target.value;
-    axios
-      .post("/api/v1/CustomerCare/BindBillingTestDataHomeCollection", {
-        CentreID: selectedPhelebo.centreid,
-        TestName: val,
-      })
-      .then((res) => {
-        const data = res?.data?.message;
-        const suggestions = data.map((ele) => {
-          return {
-            TestName: handleSplit(ele.TestName, "~")[1],
-            TestCode: ele?.TestCode,
-            InvestigationID: ele?.InvestigationID,
-            CentreID: ele?.CentreID,
-          };
-        });
-        console.log(suggestions);
-        setSuggestion(suggestions);
-        console.log(data);
-      })
-      .catch((err) =>
-        toast.error(
-          err?.response?.data?.message
-            ? err?.response?.data?.message
-            : "Something Went Wrong"
-        )
-      );
+    // console.log(val.length);
+
+    if (val.length >= 3) {
+      axios
+        .post("/api/v1/CustomerCare/BindBillingTestDataHomeCollection", {
+          CentreID: selectedPhelebo.centreid,
+          TestName: val,
+        })
+        .then((res) => {
+          const data = res?.data?.message;
+          const suggestions = data.map((ele) => {
+            return {
+              TestName: handleSplit(ele.TestName, "~")[1],
+              TestCode: ele?.TestCode,
+              InvestigationID: ele?.InvestigationID,
+              CentreID: ele?.CentreID,
+            };
+          });
+          console.log(suggestions);
+          setSuggestion(suggestions);
+          console.log(data);
+        })
+        .catch((err) =>
+          toast.error(
+            err?.response?.data?.message
+              ? err?.response?.data?.message
+              : "Something Went Wrong"
+          )
+        );
+    }
   };
 
   const handleIndex = (e) => {
@@ -643,11 +666,6 @@ const DoAppointmentModal = ({
                       ]}
                       onChange={handleChange}
                     />
-                    {appointData?.SourceofCollection === "" && (
-                      <span className="golbal-Error">
-                        {errors?.SourceofCollection}
-                      </span>
-                    )}
                   </div>
                 </div>
 
@@ -1074,7 +1092,7 @@ const DoAppointmentModal = ({
                       disabled={tableData.length === 0}
                     />
                   </div>
-                {/* </div>
+                  {/* </div>
 
                 <div className="row p-2"> */}
                   <div className="col-md-2">
@@ -1091,7 +1109,7 @@ const DoAppointmentModal = ({
                         { label: "Select Discount By", value: "" },
                         ...discountApproval,
                       ]}
-                      isDisabled={tableData.length === 0}
+                      isDisabled={tableData.length === 0 || discountamount == 0}
                       className="select-input-box form-control input-sm"
                     />
                   </div>
@@ -1103,15 +1121,13 @@ const DoAppointmentModal = ({
                     </div>
                     <Input
                       name="DisReason"
-                      disabled={tableData.length === 0}
+                      disabled={tableData.length === 0 || discountamount == 0}
                       className="select-input-box form-control input-sm"
                       value={testData?.DisReason}
                       onChange={handleTestChange}
                     />
                   </div>
-                  
                 </div>
-    
               </div>
 
               {suggestedTest.length > 0 && (

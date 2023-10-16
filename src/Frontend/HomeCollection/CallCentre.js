@@ -233,12 +233,12 @@ const CallCentre = () => {
               </div>
 
               <div className="row">
-                <div className="col-md-2">
+                <div className="col-md-5">
                   <label>{t("Email")} : &nbsp;</label>
                   {showPatientData?.Email}
                 </div>
 
-                <div className="col-md-3">
+                <div className="col-md-2">
                   <label>{t("DOB")} : &nbsp;</label>
                   {moment(showPatientData.DOB).format("DD-MMM-YYYY")}
                 </div>
@@ -251,19 +251,20 @@ const CallCentre = () => {
                   <label>{t("City")} : &nbsp;</label>
                   {showPatientData?.City}
                 </div>
-                <div className="col-md-2">
-                  <label>{t("State")} : &nbsp;</label>
-                  {showPatientData?.StateName}
-                </div>
+                
               </div>
 
               <div className="row">
-                <div className="col-md-2">
+              <div className="col-md-2">
+                  <label>{t("State")} : &nbsp;</label>
+                  {showPatientData?.StateName}
+                </div>
+                <div className="col-md-3">
                   <label>{t("Pincode")} : &nbsp;</label>
                   {showPatientData?.Pincode}
                 </div>
 
-                <div className="col-md-3">
+                <div className="col-md-2">
                   <label>{t("Last Call")} : &nbsp;</label>
                   {showPatientData?.LastCall}
                 </div>

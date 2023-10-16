@@ -332,6 +332,7 @@ export const NewPatientModalValidationSchema = (formData) => {
   if (formData?.Email.trim().length > 0 && !emailRegex.test(formData?.Email)) {
     err = { ...err, Emailvalid: "Please enter a valid email address" };
   }
+ 
   return err;
 };
 export const HandleHCBooking = (appointData) => {
@@ -342,9 +343,7 @@ export const HandleHCBooking = (appointData) => {
   if (appointData?.Alternatemobileno.length !== 10) {
     err = { ...err, Alternatemobilenum: "Please enter valid number" };
   }
-  if (!appointData.SourceofCollection) {
-    err = { ...err, SourceofCollection: "This Field is Required" };
-  }
+
   return err;
 };
 export const PreventSpecialCharacterandNumber = (value) => {

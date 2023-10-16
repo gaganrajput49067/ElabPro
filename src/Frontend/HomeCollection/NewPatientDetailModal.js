@@ -30,15 +30,13 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
   const [title, setTitle] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCity] = useState([]);
-  const [locality,  setLocality] = useState([]);
+  const [locality, setLocality] = useState([]);
   const [country, setCountry] = useState([]);
   const { t } = useTranslation();
 
   const handleSave = () => {
-
-
     const generatedError = NewPatientModalValidationSchema(formData);
-    console.log(formData);
+    // console.log(formData);
     console.log(generatedError);
     if (generatedError === "") {
       axios
@@ -71,7 +69,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
   };
 
   console.log(formData);
-
+  
   // const getId = (names, value) => {
   //   const data = names.find((ele) => value === ele?.value);
   //   return data.ID;
@@ -295,7 +293,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
             label: ele?.NAME,
           };
         });
- 
+
         setLocality(localities);
       })
       .catch((err) => {
@@ -319,7 +317,6 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
           };
         });
 
-     
         setCity(cities);
       })
       .catch((err) => {
@@ -416,7 +413,13 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
 
   return (
     <>
-      <Modal show={show} size="lg" centered className="form-horizontal" id="ModalSizeHC">
+      <Modal
+        show={show}
+        size="lg"
+        centered
+        className="form-horizontal"
+        id="ModalSizeHC"
+      >
         <Modal.Header
           className="modal-header"
           style={{ position: "sticky", zIndex: 1055, top: 0 }}
@@ -634,7 +637,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                 </div>
 
                 <label className="  col-sm-1" htmlFor="Pin Code">
-                  {t("PinCode")} :
+                  {t("Pincode")} :
                 </label>
                 <div className="col-sm-2 ">
                   <Input
@@ -649,7 +652,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                   />
                 </div>
                 <label className="  col-sm-1" htmlFor="Email Id">
-                  {t("EmailId")} :
+                  {t("Email Id")} :
                 </label>
                 <div className="col-sm-2 ">
                   <Input
@@ -657,7 +660,6 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     name="Email"
                     value={formData.Email}
                     type="text"
-                    
                     placeholder="Email Id"
                     autoComplete="off"
                     onChange={handleSelectChange}
