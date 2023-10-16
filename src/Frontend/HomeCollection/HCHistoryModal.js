@@ -150,14 +150,16 @@ const HCHistoryModal = ({
                   {showPatientData?.NAME}({showPatientData?.Mobile})
                 </label>
               </div>
-<div className="box">
-              <div className="box-body  hcStatus">
-                <div className="" style={{
-                      display:"flex",
-                      justifyContent:"space-between",
-                      flexWrap:"wrap"
-                    }}>
-                  
+              <div className="box">
+                <div className="box-body  hcStatus">
+                  <div
+                    className=""
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      flexWrap: "wrap",
+                    }}
+                  >
                     <div>
                       <button
                         style={{
@@ -249,9 +251,9 @@ const HCHistoryModal = ({
                       <label className="control-label">{t("Canceled")}</label>
                     </div>
                   </div>
-                  </div>
+                </div>
               </div>
-  {/* <div className="col-md-3">
+              {/* <div className="col-md-3">
                       <button
                         style={{
                           marginTop: "2px",
@@ -322,22 +324,19 @@ const HCHistoryModal = ({
                       >
                         <div className="box-body">
                           <div className="row">
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Create Date ")}</label>&nbsp;:&nbsp;
                               {ele?.EntryDateTime}
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Create By ")}</label>&nbsp;:&nbsp;
                               {ele?.EntryByName}
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("App Date ")}</label>&nbsp;:&nbsp;
                               {ele?.appdate}
                             </div>
-                          </div>
-
-                          <div className="row">
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Prebooking ID")}&nbsp;:&nbsp;</label>
                               {ele?.prebookingid}
                               &nbsp;&nbsp;
@@ -372,41 +371,41 @@ const HCHistoryModal = ({
                               )}
                               &nbsp;
                             </div>
-                            <div className="col-md-4">
+                          </div>
+
+                          <div className="row">
+                            <div className="col-md-3">
                               <label>{t("UHID ")}</label>&nbsp;:&nbsp;
                               {ele?.Patient_ID}
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Phelbo ")}</label>&nbsp;:&nbsp;
                               {ele?.phleboname}
                             </div>
-                          </div>
-
-                          <div className="row">
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Phlebo Mobile ")}</label>&nbsp;:&nbsp;
                               {ele?.PMobile}
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Centre ")}</label>&nbsp;:&nbsp;
                               {ele?.centre}
-                            </div>
-                            <div className="col-md-4">
-                              <label>{t("Status ")}</label>&nbsp;:&nbsp;
-                              {ele?.cstatus}
                             </div>
                           </div>
 
                           <div className="row">
-                            <div className="col-md-4">
+                            <div className="col-md-3">
+                              <label>{t("Status ")}</label>&nbsp;:&nbsp;
+                              {ele?.cstatus}
+                            </div>
+                            <div className="col-md-3">
                               <label>{t("Visit ID ")}</label>&nbsp;:&nbsp;
                               {ele?.visitid}
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Patient Rating ")}</label>&nbsp;:&nbsp;
                               {ele?.patientrating}
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Phelbo Rating ")}</label>&nbsp;:&nbsp;
                               {ele?.phelborating}
                             </div>
@@ -436,50 +435,48 @@ const HCHistoryModal = ({
                           </div>
 
                           <div className="row">
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Gross Amount ")}</label>&nbsp;:&nbsp;
                               {ele?.netamt}
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Discount Amount ")}</label>
                               &nbsp;:&nbsp;
                               {ele?.discamt}
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Net Amount ")}</label>&nbsp;:&nbsp;
                               {ele?.netamt}
                             </div>
-                          </div>
-
-                          <div className="row">
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Payment Mode ")}</label>&nbsp;:&nbsp;
                               {ele?.PaymentMode}
                             </div>
-                            <div className="col-md-4">
-                              <label>{t("CheckIn Date ")}</label>&nbsp;:&nbsp;
-                              {ele?.checkindatetime}
-                            </div>
-                            <div className="col-md-4">
-                              <label>{t("Comp. Date ")}</label>&nbsp;:&nbsp;
-                              {ele?.compdate}
-                            </div>
                           </div>
 
                           <div className="row">
-                            <div className="col-md-8">
+                            <div className="col-md-3">
+                              <label>{t("CheckIn Date ")}</label>&nbsp;:&nbsp;
+                              {ele?.checkindatetime}
+                            </div>
+                            <div className="col-md-3">
+                              <label>{t("Comp. Date ")}</label>&nbsp;:&nbsp;
+                              {ele?.compdate}
+                            </div>
+
+                            <div className="col-md-3">
                               <label>{t("Booking Date ")}</label>&nbsp;:&nbsp;
                               {ele?.currentstatusdate}
                             </div>
-                            <div className="col-md-4">
+                            <div className="col-md-3">
                               <label>{t("Images ")}</label>&nbsp;:&nbsp;
-                              <div
+                              <button
                                 name="View log"
                                 className="btn btn-primary btn-sm "
                                 onClick={() => getViewLog(ele)}
                               >
                                 View Log
-                              </div>
+                              </button>
                             </div>
                           </div>
                         </div>
