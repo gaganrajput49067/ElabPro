@@ -34,6 +34,7 @@ function HomeCollectionDetailModal({
     const [testDetails, setTestDetails] = useState([]);
     const [bindSourceCall, setBindSourceCall] = useState([]);
     const [PatientDetails, setPatientDetails] = useState({});
+    
 
     console.log(ele)
 
@@ -74,7 +75,7 @@ function HomeCollectionDetailModal({
     }
     const getTotalAmount = () => {
 
-        return testDetails.reduce((total, item) => total + item.NetAmt, 0)
+        return testDetails.reduce((total, item) => total + item.NetAmt, 0).toFixed(2);
     }
 
 
@@ -142,7 +143,18 @@ function HomeCollectionDetailModal({
    return;
 }
      
-    console.log(bindSourceCall);
+    
+
+    const changeFlow=(a)=>{
+   
+         console.log(a);
+         setFormData({...formData,AlternateMobileNo:a?.AlternateMobileNo
+            ,SourceofCollection:a?.SourceofCollection,Vip:a?.VIP?1:0,HardCopyRequired:a?.HardCopyRequired?1:0,Remarks:a?.Remarks});
+          bindTest()
+          getLogData()
+        getBindSourceCall();
+        getPatientDetails();
+    }     
 
     return (
         <>
@@ -173,8 +185,12 @@ function HomeCollectionDetailModal({
                 <HCEditModal
                     showEdit={showEdit}
                     handleCloseEdit={handleCloseEdit}
+                    changeFlow={changeFlow}
                     details={ele}
                     testDetails={testDetails}
+                    Discamount={testDetails.reduce((current, init) =>
+                        current + init.Discamt, 0
+                      )}
                     PatientDetails={PatientDetails}
                 />
             )}

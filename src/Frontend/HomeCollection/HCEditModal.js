@@ -11,8 +11,9 @@ import { useEffect } from "react";
 import { HCPaymentMode } from "../../ChildComponents/Constants";
 import { autocompleteOnBlur } from "../util/Commonservices";
 import { number } from "../util/Commonservices/number";
-const HCEditModal = ({ showEdit, handleCloseEdit, details, testDetails,PatientDetails }) => {
-  
+import { HandleHCEditBooking } from "../../ChildComponents/validations";
+const HCEditModal = ({ showEdit, handleCloseEdit, details, testDetails, PatientDetails, Discamount,changeFlow }) => {
+ const [errors,setError]=useState({})
   const [showDOS, setShowDOS] = useState(false);
   const [bindSourceCall, setBindSourceCall] = useState([]);
   const [discountApproval, setDiscountApproval] = useState([]);
@@ -29,25 +30,28 @@ const HCEditModal = ({ showEdit, handleCloseEdit, details, testDetails,PatientDe
   const [disAmt, setdisAmt] = useState("");
   const [net, setNet] = useState(0);
   const [discount, setDiscount] = useState(0); //total amount after discount
-  
-  const [discountamount, setDiscountAmount] = useState(0); //discounted amount
+
+  const [discountamount, setDiscountAmount] = useState();
+  //discounted amount
+
   const [tableData, setTableData] = useState([]);
+
   const [appointData, setAppointData] = useState({
     AppDateTime: details?.AppDate,
-    Address: details?.House_No    ,
-  
+    Address: details?.House_No,
+
     updatepatient: "1",
-    HardCopyRequired: "",
+    HardCopyRequired: details?.HardCopyRequired === 0 ? false : true,
     PheleboNumber: details?.PMobile,
     PhlebotomistID: details?.PhlebotomistId,
     atitude: "",
     Longitude: "",
     ispermanetaddress: 1,
-    ReceiptRequired: 1, 
+    ReceiptRequired: 1,
     AlternateMobileNo: details?.AlternateMobileNo,
     Client: "",
-    PaymentMode: "",
-    SourceofCollection: details?.SourceofCollection,
+    PaymentMode: testDetails[0]?.PaymentMode,
+    SourceofCollection: Number(details?.SourceofCollection),
     Phelebotomistname: details?.PhleboName,
     emailidpcc: "",
     centrename: details?.Centre,
@@ -57,13 +61,14 @@ const HCEditModal = ({ showEdit, handleCloseEdit, details, testDetails,PatientDe
     endtime: "",
     oldprebookingid: "",
     hcrequestid: "",
-    VIP: "",
+    VIP: details?.Vip === 0 ? false : true,
     followupcallid: "",
-    PreBookingId:details?.PreBookingId
+    PreBookingId: details?.PreBookingId
     // phelboshare: pheleboCharge?.value,
-});
+  });
+  console.log(appointData)
 
-const [testData, setTestData] = useState({
+  const [testData, setTestData] = useState({
     Title: PatientDetails[0]?.Title,
     Patient_ID: details?.Patient_ID,
     PName: PatientDetails[0]?.FirstName,
@@ -88,7 +93,7 @@ const [testData, setTestData] = useState({
     PreBookingCentreID: details?.PreBookingCentreID,
     Panel_ID: "",
     GrossAmt: "",
-    DiscAmt: "",
+    // DiscAmt: 0,
     DisReason: "",
     NetAmt: "",
     DiscountTypeID: "",
@@ -99,15 +104,15 @@ const [testData, setTestData] = useState({
     DoctorID: "",
     RefDoctor: "SELF",
     OtherDoctor: "",
-    Remarks: "",
+    Remarks: details?.Remarks,
     isUrgent: false,
     isPediatric: "",
-});
+  });
 
 
   const [suggestedTestShow, setSuggestedTestShow] = useState(false);
   const [suggestedTest, setSuggestedTest] = useState([]);
- 
+
   console.log(details);
   console.log(testDetails);
   console.log(PatientDetails)
@@ -124,16 +129,65 @@ const [testData, setTestData] = useState({
       )
     );
 
-    setDiscountPercentage("");
-    setdisAmt("");
-    setDiscount(0);
-    setDiscountAmount(0);
+    const total = tableData.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.Rate,
+      0
+    )
+    console.log(discountamount, total)
+    console.log(tableData)
+
+    const datas = tableData.map((ele) => {
+      const DiscountPercentage = (Number(discountamount) / Number(total)) * 100;
+      const NetAmount = (
+        ele?.Rate -
+        (DiscountPercentage / 100) * ele?.Rate
+      ).toFixed(2);
+
+      return {
+        ...ele,
+        DiscountPercentage: DiscountPercentage,
+        GrossAmt: ele?.Rate,
+        DiscAmt:
+          tableData?.length > 1
+            ? (ele?.Rate - NetAmount).toFixed(2)
+            : ele?.DiscAmt,
+        NetAmt:NetAmount,
+
+      };
+
+
+    });
+    setTableData(datas)
+     console.log(datas);
+    if (tableData.length === 0) {
+      setNet(0)
+      setDiscountAmount(0)
+    }
+
+    
+    
   }, [tableData.length]);
+  
 
   useEffect(() => {
-    setDiscount(Number(net) - Number(disAmt));
+    setNet(
+      testDetails.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.Rate,
+        0
+      )
+    );
+
+    // // setDiscountPercentage("");
+    // setdisAmt("");
+    // setDiscount(0);
+    // // setDiscountAmount(0);
+  }, []);
+
+  useEffect(() => {
+    setDiscount(Number(net) - Number(disAmt))
     setDiscountAmount(disAmt);
-  }, [disAmt, net]);
+
+  }, [disAmt]);
 
   useEffect(() => {
     if (!isNaN(net) && !isNaN(discountPercentage)) {
@@ -141,7 +195,9 @@ const [testData, setTestData] = useState({
       setDiscountAmount(discountAmount);
       setDiscount(Number(net) - Number(discountAmount));
     }
-  }, [discountPercentage, net]);
+  }, [discountPercentage]);
+
+
 
   const getBindSourceCall = () => {
     axios
@@ -154,6 +210,7 @@ const [testData, setTestData] = useState({
             label: ele?.Source,
           };
         });
+        console.log(SourceCall);
         setBindSourceCall(SourceCall);
       })
       .catch((err) =>
@@ -173,6 +230,7 @@ const [testData, setTestData] = useState({
             label: ele?.label,
           };
         });
+        console.log(discount);
         setDiscountApproval(discount);
       })
       .catch((err) =>
@@ -180,41 +238,48 @@ const [testData, setTestData] = useState({
       );
   };
   const handleSplit = (id, symbol) => {
+    
     const data = id?.split(symbol);
     return data;
   };
-  //   const getDiscountApproval = () => {
-  //     axios
-  //       .post("/api/v1/CustomerCare/getDiscountApproval", {
-  //         CentreId: selectedPhelebo.centreid,
-  //       })
-  //       .then((res) => {
-  //         const data = res?.data?.message;
-  //         const discount = data?.map((ele) => {
-  //           return {
-  //             value: handleSplit(ele?.VALUE, "#")[0],
-  //             label: ele?.label,
-  //           };
-  //         });
-  //         setDiscountApproval(discount);
-  //       })
-  //       .catch((err) =>
-  //         toast.error(err?.res?.data ? err?.res?.data : "Something Went Wrong")
-  //       );
-  //   };
 
-  const handleBooking = () => {};
+  const handleBooking = () => {
+    if (tableData.length === 0) {
+      toast.error("Please Select Any Test");
+    }
+    else if(appointData?.SourceofCollection=="")
+    {
+      toast.error("Select Source of Collection");
+    } else {
+      if (appointData?.PaymentMode) {
+        if (disAmt || discountPercentage) {
+          if (testData?.DoctorID && testData?.DisReason) {
+            handleUpdate();
+          } else {
+            toast.error("Please Choose Discount Approval And Discount Reason");
+          }
+        } else {
+          handleUpdate();
+        }
+      } else {
+        toast.error("Please Select Payment Mode");
+      }
+    }
+  };
+
+
   const handleUpdate = () => {
-    
+
     console.log(appointData);
     console.log(tableData);
+
     const datas = tableData.map((ele) => {
       const DiscountPercentage = (Number(discountamount) / Number(net)) * 100;
       const NetAmount = (
         ele?.Rate -
         (DiscountPercentage / 100) * ele?.Rate
       ).toFixed(2);
-
+     
       return {
         ...ele,
         DiscountPercentage: DiscountPercentage,
@@ -225,32 +290,45 @@ const [testData, setTestData] = useState({
             : discountamount,
         NetAmt: tableData?.length > 1 ? NetAmount : discount,
         isUrgent: ele?.isUrgent ? 1 : 0,
-        VIP: ele?.VIP ? 1 : 0,
+        Remarks:testData?.Remarks,
         isPediatric: ele?.isPediatric ? 1 : 0,
       };
     });
 
-    
+    console.log(datas);
+    const generatedError = HandleHCEditBooking(appointData);
+    if(generatedError==="")
+    {
       axios
-        .post("/api/v1/HomeCollectionSearch/UpdateHomeCollection", {
-          datatosave: datas,
-          ...appointData,
-          HardCopyRequired: appointData.HardCopyRequired ? 1 : 0,
-        })
-        .then((res) => {
-          console.log(res?.data?.message);
-          toast.success("Booking Successfully");
-          // handleAppointment();
-          // callhandleOnRouteValue(routeValueData);
-        })
-        .catch((err) => {
-          toast.error(
-            err?.response?.data?.message
-              ? err?.response?.data?.message
-              : "Something Went Wrong"
-          );
-        });
+      .post("/api/v1/HomeCollectionSearch/UpdateHomeCollection", {
+        datatosave: datas,
+        ...appointData,
+        HardCopyRequired: appointData.HardCopyRequired ? 1 : 0,
+        VIP:appointData.VIP?1:0
+      })
+      .then((res) => {
+        console.log(res?.data?.message);
+        toast.success("Update Successfully");
+        // handleAppointment();
+        // callhandleOnRouteValue(routeValueData);
+        handleCloseEdit();
+        changeFlow(appointData);
+
+
+      })
+      .catch((err) => {
+        toast.error(
+          err?.response?.data?.message
+            ? err?.response?.data?.message
+            : "Something Went Wrong"
+        );
+      });
+    }
+    else {
+      setError(generatedError);
+    }
     
+
 
   };
   const handleChange = (e) => {
@@ -261,11 +339,16 @@ const [testData, setTestData] = useState({
   };
 
   const handleAppointChange = (e) => {
-    const { name, value } = e.target;
-    setAppointData({ ...appointData, [name]: value });
+    const { name, value, type, checked } = e.target;
+    setAppointData({ ...appointData, [name]: type === 'checkbox' ? checked : value });
 
     console.log(bookingData);
   };
+
+
+
+
+
   const SearchTest = (e) => {
     const val = e.target.value;
     axios
@@ -334,71 +417,127 @@ const [testData, setTestData] = useState({
     console.log(data);
     getTableData(data);
   };
+  // const calculateAmt = (rate) => {
+
+  //   const TotalRate = rate + tableData.reduce((current, item) =>
+  //     current + item.Rate, 0);
+
+  //   console.log(TotalRate, discountamount);
+  //   const percentage = (discountamount / TotalRate) * 100;
+  //   console.log(percentage.toFixed(2));
+
+  //   const deductedAmount = rate * (percentage / 100);
+
+  //   return deductedAmount.toFixed(2);
+  // }
+  // const calculateNet = (rate) => {
+  //   const TotalRate = rate + tableData.reduce((current, item) =>
+  //     current + item.Rate, 0);
+
+  //   console.log(TotalRate, discountamount);
+  //   const percentage = (discountamount / TotalRate) * 100;
+  //   console.log(percentage.toFixed(2));
+
+  //   const deductedAmount = rate * (percentage / 100);
+
+  //   return Number(rate - deductedAmount.toFixed(2));
+
+
+  // }
   const getTableData = (data) => {
-    axios
-      .post("/api/v1/CustomerCare/BindSingleTestDataHomeCollection", {
-        InvestigationID: data.InvestigationID,
-        CentreID: data.CentreID,
-      })
-      .then((res) => {
-        const newData = res?.data?.message;
-        console.log(newData);
-        const appendedData = [
-          ...tableData,
-          ...newData.map((ele) => {
-            return {
-              ...testData,
-              DataType: ele?.DataType,
-              DepartmentID: ele?.DepartmentID,
-              FromAge: ele?.FromAge,
-              Gender: ele?.Gender,
-              InvestigationID: ele?.InvestigationID,
-              IsSampleRequired: ele?.IsSampleRequired,
-              Rate: ele?.Rate,
-              ReportType: ele?.ReportType,
-              RequiredAttachment: ele?.RequiredAttachment,
-              SampleCode: ele?.SampleCode,
-              SampleName: ele?.SampleName,
-              SampleTypeID: ele?.SampleTypeID,
-              ItemId: ele?.TestCode,
-              ItemName: ele?.TestName,
-              ToAge: ele?.ToAge,
-              deleiveryDate: ele?.deleiveryDate,
-              refRateValue: ele?.refRateValue,
-            };
-          }),
-        ];
-        setTableData(appendedData);
-      })
-      .catch((err) => console.log(err));
+
+    const ItemIndex = tableData.findIndex((e) => e.InvestigationID === data.InvestigationID)
+
+    if (ItemIndex === -1) {
+      axios
+        .post("/api/v1/CustomerCare/BindSingleTestDataHomeCollection", {
+          InvestigationID: data.InvestigationID,
+          CentreID: data.CentreID,
+        })
+        .then((res) => {
+          const newData = res?.data?.message;
+          console.log(newData);
+          const appendedData = [
+            ...tableData,
+            ...newData.map((ele) => {
+              return {
+                ...testData,
+                DataType: ele?.DataType,
+                DepartmentID: ele?.DepartmentID,
+                FromAge: ele?.FromAge,
+                Gender: ele?.Gender,
+                InvestigationID: ele?.InvestigationID,
+                IsSampleRequired: ele?.IsSampleRequired,
+                Rate: ele?.Rate,
+                ReportType: ele?.ReportType,
+                RequiredAttachment: ele?.RequiredAttachment,
+                SampleCode: ele?.SampleCode,
+                SampleName: ele?.SampleName,
+                SampleTypeID: ele?.SampleTypeID,
+                ItemId: ele?.TestCode,
+                ItemName: ele?.TestName,
+                ToAge: ele?.ToAge,
+                deleiveryDate: ele?.deleiveryDate,
+                refRateValue: ele?.refRateValue,
+                DiscAmt:0
+
+
+              };
+            }),
+          ];
+          console.log(appendedData);
+          setDiscountAmount('');
+          setDiscountPercentage('');
+          setTableData(appendedData);
+        })
+        .catch((err) => console.log(err));
+    }
+
+    else {
+      toast.error("Duplicate Test Found")
+    }
+
   };
 
   const handleFilter = (data) => {
     const value = tableData.filter(
       (ele) => ele.InvestigationID !== data.InvestigationID
     );
-
-    setTableData(value);
+    console.log(value);
+     setDiscountAmount('');
+     setDiscountPercentage('');
+     const value2=value.map((item)=>{
+      return {...item,DiscAmt:0}
+     })
+    setTableData(value2);
     toast.success("Successfully Removed");
   };
 
- 
-  
-  
+
+
+
   const fillTableData = () => {
     console.log(testData)
     console.log(testDetails);
-
-    const tableData=testDetails.map((item)=>{
-      return {...testData,...item}
+    const testdetails2 = testDetails.map(({ Discamt, ...rest }) => {
+      return { ...rest, DiscAmt: Discamt
+      };
+    });
+    const testDetails3 = testdetails2.map((item) => {
+      return { ...item, InvestigationID: item?.ItemId }
     })
+    const tableData = testDetails3.map((item) => {
+      return { ...testData, ...item }
+    })
+    console.log(tableData)
     setTableData(tableData)
-    console.log(tableData);
-};
- 
+    
+  };
+  console.log(tableData);
+
   const handleTestChange = (e) => {
     const { name, value, type, checked } = e.target;
-    // console.log(checked);
+    console.log(testData?.Remarks);
     setTestData({
       ...testData,
       [name]: type === "checkbox" ? checked : value,
@@ -422,7 +561,11 @@ const [testData, setTestData] = useState({
     getBindSourceCall();
     fillTableData();
     getDiscountApproval();
+    setDiscountAmount(Discamount.toFixed(2))
   }, []);
+
+
+
   console.log(tableData);
 
   return (
@@ -469,30 +612,40 @@ const [testData, setTestData] = useState({
                 {t("Referred Doctor")}:
               </label>
               <div className="col-sm-12 col-md-3">
-              <Input
-                      className="select-input-box form-control input-sm"
-                      value={testData?.RefDoctor}
-                      type="text"
-                      onChange={handleTestChange}
-                      name="RefDoctor"
-                    />
+                <Input
+                  className="select-input-box form-control input-sm"
+                  value={testData?.RefDoctor}
+                  type="text"
+                  onChange={handleTestChange}
+                  name="RefDoctor"
+                />
               </div>
 
               <label className="col-sm-12  col-md-3" htmlFor="AltMobile">
                 {t("Alternate Mobile No.")} :
               </label>
               <div className="col-sm-12 col-md-3">
-              <Input
-                      className="select-input-box form-control input-sm"
-                      type="number"
-                      autoComplete="off"
-                      max={10}
-                      onChange={handleAppointChange}
-                      onInput={(e) => number(e, 10)}
-                      value={appointData?.Alternatemobileno}
-                      name="Alternatemobileno"
-                    />
-                      
+                <Input
+                  className="select-input-box form-control input-sm"
+                  type="number"
+                  autoComplete="off"
+                  max={10}
+                  onChange={handleAppointChange}
+                  onInput={(e) => number(e, 10)}
+                  value={appointData?.AlternateMobileNo}
+                  name="AlternateMobileNo"
+                />
+                 {appointData?.AlternateMobileNo === "" && (
+                      <span className="golbal-Error">
+                        {errors?.Alternatemobilenos}
+                      </span>
+                    )}
+                {appointData?.AlternateMobileNo.length > 0 &&
+                      appointData?.AlternateMobileNo.length !== 10 && (
+                        <span className="golbal-Error">
+                          {errors?.Alternatemobilenum}
+                        </span>
+                      )}
               </div>
             </div>
 
@@ -501,28 +654,28 @@ const [testData, setTestData] = useState({
                 {t("Source of Collection")} :
               </label>
               <div className="col-sm-12 col-md-3">
-              <SelectBox
-                      name="SourceofCollection"
-                      className="input-sm"
-                      value={appointData?.SourceofCollection}
-                      options={[
-                        { label: "Select Source Of Collection", value: "" },
-                        ...bindSourceCall,
-                      ]}
-                      onChange={handleAppointChange}
-                    />
+                <SelectBox
+                  name="SourceofCollection"
+                  className="input-sm"
+                  selectedValue={appointData?.SourceofCollection}
+                  options={[
+                    { label: "Select Source Of Collection", value: "" },
+                    ...bindSourceCall,
+                  ]}
+                  onChange={handleAppointChange}
+                />
               </div>
               <label className="col-sm-12  col-md-3" htmlFor="Remarks">
                 {t("Remarks")} :
               </label>
               <div className="col-sm-12 col-md-3">
-              <Input
-                      className="select-input-box form-control input-sm"
-                      type="text"
-                      name="Remarks"
-                      onChange={handleTestChange}
-                      value={testData?.Remarks}
-                    />
+                <Input
+                  className="select-input-box form-control input-sm"
+                  type="text"
+                  name="Remarks"
+                  onChange={handleTestChange}
+                  value={testData?.Remarks}
+                />
               </div>
             </div>
             <div className="row">
@@ -530,17 +683,17 @@ const [testData, setTestData] = useState({
                 {t("Payment Mode")} :
               </label>
               <div className="col-sm-12 col-md-3">
-                 <SelectBox
-                      name="Paymentmode"
-                      value={appointData?.Paymentmode}
-                      className="input-sm"
-                      options={[
-                        { label: "Select Payment Mode", value: "" },
-                        ...HCPaymentMode,
-                      ]}
-                      isDisabled={tableData.length === 0}
-                      onChange={handleAppointChange}
-                    />
+                <SelectBox
+                  name="PaymentMode"
+                  selectedValue={appointData?.PaymentMode}
+                  className="input-sm"
+                  options={[
+                    { label: "Select Payment Mode", value: "" },
+                    ...HCPaymentMode,
+                  ]}
+                  isDisabled={tableData.length === 0}
+                  onChange={handleAppointChange}
+                />
               </div>
               <label className="col-sm-12  col-md-3" htmlFor="Address">
                 {t("Address")} :
@@ -549,40 +702,42 @@ const [testData, setTestData] = useState({
                 <Input
                   className="select-input-box form-control input-sm"
                   type="text"
-                  name="Remarks"
+                  name="Address"
+                  value={appointData?.Address}
+                  onChange={handleAppointChange}
                 />
               </div>
             </div>
             <div className="row">
               <div className="col-sm-1">
-              <Input
-                      type="checkbox"
-                      name="VIP"
-                      onChange={handleAppointChange}
-                      checked={appointData?.VIP}
-                    />
+                <Input
+                  type="checkbox"
+                  name="VIP"
+                  onChange={handleAppointChange}
+                  checked={appointData?.VIP}
+                />
                 <label className="control-label">VIP</label>
               </div>
 
               <div className="col-sm-2">
-              <Input
-                      type="checkbox"
-                      name="isPediatric"
-                      onChange={handleTestChange}
-                      checked={testData?.isPediatric}
-                    />
+                <Input
+                  type="checkbox"
+                  name="isPediatric"
+                  onChange={handleTestChange}
+                  checked={testData?.isPediatric}
+                />
                 <label className="control-label">
                   {t("Pedriatic Patient")}
                 </label>
               </div>
 
               <div className="col-sm-3">
-              <Input
-                      type="checkbox"
-                      name="HardCopyRequired"
-                      onChange={handleAppointChange}
-                      checked={appointData?.HardCopyRequired}
-                    />
+                <Input
+                  type="checkbox"
+                  name="HardCopyRequired"
+                  onChange={handleAppointChange}
+                  checked={appointData?.HardCopyRequired}
+                />
                 <label className="control-label">
                   {t("Hard copy of report required")}
                 </label>
@@ -598,7 +753,7 @@ const [testData, setTestData] = useState({
                 <Input
                   name="totalAmount"
                   className="select-input-box form-control input-sm"
-                  value={discount}
+                  value={net - discountamount}
                 />
               </div>
             </div>
@@ -650,14 +805,7 @@ const [testData, setTestData] = useState({
                   >
                     Count : {tableData.length}
                   </button>
-                  <div
-                    className="col-sm-3"
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <label style={{ color: "red" }}>
-                      Home Collection Charge : 0
-                    </label>
-                  </div>
+
                 </div>
                 <div
                   className="row"
@@ -686,9 +834,8 @@ const [testData, setTestData] = useState({
                           <li
                             onClick={() => handleListSearch(data)}
                             key={index}
-                            className={`${
-                              index === indexMatch && "matchIndex"
-                            }`}
+                            className={`${index === indexMatch && "matchIndex"
+                              }`}
                           >
                             {data.TestCode}~{data.TestName}
                           </li>
@@ -696,11 +843,16 @@ const [testData, setTestData] = useState({
                       </ul>
                     )}
                   </div>
-                  <div className="col-sm-4">
-                    <label>
+                  <div className="col-sm-8">
+                    <span style={{ fontWeight: 'bold' }}>
                       Total Amount :&nbsp;
                       {net}
-                    </label>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span style={{ fontWeight: 'bold' }}>
+                      Disc Amount :&nbsp;
+                      {Number(discountamount).toFixed(2)}
+                    </span>
                   </div>
                 </div>
                 <div
@@ -711,7 +863,7 @@ const [testData, setTestData] = useState({
                     <div
                       className=" box-body divResult table-responsive"
                       id="no-more-tables"
-                      // style={{ paddingTop: "3px", paddingBottom: "3px" }}
+                    // style={{ paddingTop: "3px", paddingBottom: "3px" }}
                     >
                       <div className="row">
                         <table
@@ -733,8 +885,10 @@ const [testData, setTestData] = useState({
                               <th>IsUrgent</th>
                             </tr>
                           </thead>
+                          
                           {tableData.length > 0 && (
                             <tbody>
+                              
                               {tableData.map((ele, index) => (
                                 <>
                                   <tr key={index}>
@@ -778,9 +932,8 @@ const [testData, setTestData] = useState({
                                         type="number"
                                         className="select-input-box form-control input-sm"
                                         name="discountamt"
-                                        value={
-                                          ele?.Discamt > 0 ? ele?.Discamt : 0
-                                        }
+                                        value={ele?.DiscAmt}
+                                        disabled
                                         min={0}
                                       />
                                     </td>
@@ -793,7 +946,7 @@ const [testData, setTestData] = useState({
                                       />
                                     </td>
                                     <td data-title={t("IsUrgent")}>
-                                    <Input
+                                      <Input
                                         type="checkbox"
                                         name="isUrgent"
                                         onChange={(e) =>
@@ -902,17 +1055,21 @@ const [testData, setTestData] = useState({
                 <div className="row">
                   <label className="col-sm-4">Discount Amt :</label>
                   <div className="col-sm-6">
+
                     <Input
                       name="DiscAmt"
-                      value={disAmt}
+                      value={discountamount !== 0 ? discountamount : ''}
                       type="number"
                       className="select-input-box form-control input-sm"
                       onInput={(e) => number(e, 20)}
                       placeholder="Disc Amt"
                       onChange={(e) => {
+                        console.log(tableData)
+                       
+                     
                         if (
                           tableData?.reduce(
-                            (acc, init) => acc + init.Discamt,
+                            (acc, init) =>  Number(acc) + Number(init.DiscAmt),
                             0
                           ) != 0
                         ) {
@@ -928,26 +1085,28 @@ const [testData, setTestData] = useState({
                           toast.error("Discount Already Given");
                         }
                       }}
+                      
                     />
                   </div>
                 </div>
 
-                
+
                 <div className="row">
                   <label className="col-sm-4">Discount in % :</label>
                   <div className="col-sm-6">
                     <Input
                       name="discountPercentage"
                       type="number"
-                      
+
                       onInput={(e) => number(e, 3)}
                       value={discountPercentage}
                       placeholder="Disc Perc"
                       className="select-input-box form-control input-sm"
                       onChange={(e) => {
+                       console.log(tableData);
                         if (
                           tableData?.reduce(
-                            (acc, init) => acc + init.Discamt,
+                            (acc, init) => Number(acc) + Number(init.DiscAmt),
                             0
                           ) != 0
                         ) {
@@ -978,8 +1137,9 @@ const [testData, setTestData] = useState({
                         { label: "Select Discount By", value: "" },
                         ...discountApproval,
                       ]}
-                      isDisabled={tableData.length === 0}
+                      isDisabled={discountamount==''}
                       className="select-input-box form-control input-sm"
+                      onChange={handleTestChange}
                     />
                   </div>
                 </div>
@@ -988,10 +1148,11 @@ const [testData, setTestData] = useState({
                   <div className="col-sm-6">
                     <Input
                       name="DisReason"
-                      disabled={tableData.length === 0}
+                      disabled={discountamount==''}
                       className="select-input-box form-control input-sm"
-                      // value={testData?.DisReason}
-                      // onChange={handleTestChange}
+                      value={testData?.DisReason}
+                      onChange={handleTestChange}
+                      
                     />
                   </div>
                 </div>
@@ -1010,7 +1171,7 @@ const [testData, setTestData] = useState({
                 <button
                   type="button"
                   className="btn btn-primary btn-block btn-sm"
-                  onClick={handleUpdate}
+                  onClick={handleBooking}
                 >
                   Update Appointment
                 </button>

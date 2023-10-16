@@ -346,6 +346,17 @@ export const HandleHCBooking = (appointData) => {
 
   return err;
 };
+export const HandleHCEditBooking = (appointData) => {
+  let err = "";
+  if (!appointData.AlternateMobileNo) {
+    err = { ...err, Alternatemobilenos: "This Field is Required" };
+  }
+  if (appointData?.AlternateMobileNo.length !== 10) {
+    err = { ...err, Alternatemobilenum: "Please enter valid number" };
+  }
+
+  return err;
+};
 export const PreventSpecialCharacterandNumber = (value) => {
   const reg = /[^a-zA-Z ]/g;
   if (!reg.test(value)) {
