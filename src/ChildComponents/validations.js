@@ -367,6 +367,11 @@ export const AppointmentModalValidationSchema = (searchData) => {
     err = { ...err, LocalityID: "This Field is Required" };
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (searchData?.Email.trim().length > 0 && !emailRegex.test(searchData?.Email)) {
+    err = { ...err, Emailvalid: "Please enter a valid email address" };
+  }
   // if (!searchData.DropLocationId) {
   //   err = { ...err, DropLocationId: "Pick any DropLocation" };
   // }

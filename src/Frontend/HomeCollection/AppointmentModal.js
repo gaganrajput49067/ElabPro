@@ -79,6 +79,15 @@ const AppointmentModal = ({
 
     
   };
+
+  useEffect(() => {
+    const generatedError = AppointmentModalValidationSchema(searchData);
+    setError({
+     ...errors,
+      Emailvalid: generatedError.Emailvalid,
+    });
+  }, [searchData?.Email]);
+
   const GetPatientDetailonSlot = (SetPhelebo) => {
     const phleboIds = SetPhelebo.map((phelebo) => phelebo.SelectedPheleboId);
 
@@ -923,6 +932,10 @@ const AppointmentModal = ({
                       value={searchData.Email}
                       disabled={updateAddressDisable ? false : true}
                     />
+                    
+                  {errors?.Emailvalid && (
+                    <span className="golbal-Error">{errors?.Emailvalid}</span>
+                  )}
                   </div>
 
                   <div

@@ -34,6 +34,15 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
   const [country, setCountry] = useState([]);
   const { t } = useTranslation();
 
+  useEffect(() => {
+    const generatedError = NewPatientModalValidationSchema(formData);
+    setErros({
+     ...errors,
+      Emailvalid: generatedError.Emailvalid,
+    });
+  }, [formData?.Email]);
+
+  
   const handleSave = () => {
     const generatedError = NewPatientModalValidationSchema(formData);
     // console.log(formData);
@@ -68,8 +77,8 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
     }
   };
 
-  console.log(formData);
-  
+  // console.log(formData);
+
   // const getId = (names, value) => {
   //   const data = names.find((ele) => value === ele?.value);
   //   return data.ID;
