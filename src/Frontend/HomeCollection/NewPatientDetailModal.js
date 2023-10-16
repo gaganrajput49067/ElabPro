@@ -374,7 +374,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
             label: ele?.CountryName,
           };
         });
-        Country?.unshift({ label: t("India"), value: 1 });
+        // Country?.unshift({ label: t("India"), value: 1 });
         setCountry(Country);
       })
       .catch((err) => {

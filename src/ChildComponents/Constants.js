@@ -1419,7 +1419,7 @@ export const HCNewPatientForm = {
   Pincode: "",
   StateID:"",
   MediaStreamAudioDestinationNode: "",
-  CountryID: "",
+  CountryID: 1,
   Phone: "",
   Mobile: "",
   Email: "",
