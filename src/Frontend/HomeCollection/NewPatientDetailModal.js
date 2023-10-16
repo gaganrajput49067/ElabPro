@@ -37,12 +37,11 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
   useEffect(() => {
     const generatedError = NewPatientModalValidationSchema(formData);
     setErros({
-     ...errors,
+      ...errors,
       Emailvalid: generatedError.Emailvalid,
     });
   }, [formData?.Email]);
 
-  
   const handleSave = () => {
     const generatedError = NewPatientModalValidationSchema(formData);
     // console.log(formData);
@@ -482,6 +481,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                         name="PName"
                         type="text"
                         value={formData.PName}
+                        autoComplete="off"
                         onChange={handleSelectChange}
                       />
                       {formData?.PName === "" && (
@@ -595,6 +595,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     className="select-input-box form-control input-sm"
                     name="HouseNo"
                     type="text"
+                    autoComplete="off"
                     placeholder="House No."
                     value={formData.HouseNo}
                     onChange={handleSelectChange}
@@ -654,7 +655,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     name="Pincode"
                     value={formData.Pincode}
                     max={6}
-                    // readOnly={true}
+                    autoComplete="off"
                     type="text"
                     placeholder="Pin Code"
                     onChange={handleSelectChange}
@@ -669,8 +670,8 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     name="Email"
                     value={formData.Email}
                     type="text"
-                    placeholder="Email Id"
                     autoComplete="off"
+                    placeholder="Email Id"
                     onChange={handleSelectChange}
                   />
 
@@ -686,6 +687,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     className="select-input-box form-control input-sm"
                     name="Landmark"
                     type="text"
+                    autoComplete="off"
                     value={formData?.Landmark}
                     placeholder="Landmark"
                     onChange={handleSelectChange}
