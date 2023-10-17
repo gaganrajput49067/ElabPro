@@ -984,13 +984,13 @@ input[type="number"] {
   background-color: #4acfee;
 }
 
-.status-reschedule {
+/* .status-reschedule {
   background-color: #800080;
 }
 
 .status-cancel {
   background-color: #ee82ee;
-}
+} */
 
 .status-rescheduled {
   background-color: #989898;
@@ -1075,3 +1075,4 @@ input[type="number"] {
 #HomeCollectionDetailModal{
   width: 1200px;
 }
+

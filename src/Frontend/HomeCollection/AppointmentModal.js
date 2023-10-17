@@ -76,14 +76,12 @@ const AppointmentModal = ({
       ...searchData,
       [name]: date,
     });
-
-    
   };
 
   useEffect(() => {
     const generatedError = AppointmentModalValidationSchema(searchData);
     setError({
-     ...errors,
+      ...errors,
       Emailvalid: generatedError.Emailvalid,
     });
   }, [searchData?.Email]);
@@ -201,7 +199,6 @@ const AppointmentModal = ({
                 // label: handleSplit(ele?.centreid, "^")[1],
                 // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
                 SelectedRouteName: handleSplit(ele?.route, "@")[0],
-
                 SelectedRouteId: handleSplit(ele?.route, "@")[1],
                 PheleboNumber: handleSplit(ele?.NAME, " ")[1],
                 PheleboName: handleSplit(ele?.NAME, " ")[0],
@@ -760,8 +757,12 @@ const AppointmentModal = ({
 
                 {/* <div className="box-body"> */}
                 <div className="row" style={{ backgroundColor: "skyblue" }}>
-                  <label className="col-sm-12  col-md-2" htmlFor="Address">
-                    {t("Address")} -
+                  <label
+                    className="col-sm-12  col-md-2"
+                    htmlFor="Address"
+                   
+                  >
+                    {t("Address :- ")}
                   </label>
 
                   <div className="col-md-3">
@@ -903,7 +904,7 @@ const AppointmentModal = ({
                     />
                   </div>
                   <label className="col-sm-12 col-md-1" htmlFor="Landmark">
-                    {t("Landmark")}:
+                    {t("Landmark")} :
                   </label>
                   <div className="col-sm-12 col-md-2">
                     <Input
@@ -932,10 +933,10 @@ const AppointmentModal = ({
                       value={searchData.Email}
                       disabled={updateAddressDisable ? false : true}
                     />
-                    
-                  {errors?.Emailvalid && (
-                    <span className="golbal-Error">{errors?.Emailvalid}</span>
-                  )}
+
+                    {errors?.Emailvalid && (
+                      <span className="golbal-Error">{errors?.Emailvalid}</span>
+                    )}
                   </div>
 
                   <div
@@ -981,7 +982,7 @@ const AppointmentModal = ({
                     className="col-sm-12 col-md-1"
                     htmlFor="Drop Location (Centre)"
                   >
-                    {t("DropLocation")}:
+                    {t("Droplocation")}:
                   </label>
                   <div className="col-sm-12 col-md-2">
                     <SelectBox
@@ -1157,7 +1158,7 @@ const AppointmentModal = ({
                             <td
                               onClick={() => pheleboData(ele)}
                               style={{ cursor: "pointer" }}
-                              className="text-center"
+                              className="text-center hcStatus"
                             >
                               <label style={{ cursor: "pointer" }}>
                                 {ele.PheleboName}
@@ -1169,7 +1170,7 @@ const AppointmentModal = ({
                             </td>
                             {ele?.SlotArray?.map((slotArray, slotIndex) => (
                               <td
-                                className="PheloMapTable text-center"
+                                className="PheloMapTable text-center "
                                 key={slotIndex}
                                 onClick={() => {
                                   const matches = getPatientDetailOnSlot.filter(

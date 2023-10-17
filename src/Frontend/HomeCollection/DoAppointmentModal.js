@@ -122,6 +122,7 @@ const DoAppointmentModal = ({
     isPediatric: "",
   });
 
+  
   const [showLog, setShowLog] = useState({ status: false, data: "" });
   const [errors, setError] = useState([]);
 
@@ -1488,9 +1489,9 @@ const DoAppointmentModal = ({
                           <th className="text-center">{t("GrossAmt")}</th>
                           <th className="text-center">{t("DiscAmt")}</th>
                           <th className="text-center">{t("NetAmt")}</th>
-                          <th className="text-center">{t("Edit")}</th>
+                          {/* <th className="text-center">{t("Edit")}</th>
                           <th className="text-center">{t("RS")}</th>
-                          <th className="text-center">{t("Cancel")}</th>
+                          <th className="text-center">{t("Cancel")}</th> */}
                         </tr>
                       </thead>
 
@@ -1549,7 +1550,7 @@ const DoAppointmentModal = ({
                             <td data-title="NetAmt" className="text-center">
                               {ele.netamt}&nbsp;
                             </td>
-                            <td
+                            {/* <td
                               data-title="Edit"
                               className="text-center"
                               style={{ cursor: "pointer" }}
@@ -1575,7 +1576,7 @@ const DoAppointmentModal = ({
                               }}
                             >
                               X&nbsp;
-                            </td>
+                            </td> */}
                           </tr>
                         ))}
                       </tbody>

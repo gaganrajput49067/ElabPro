@@ -377,7 +377,7 @@ const PheleBotomistRegisteration = () => {
                     };
                 });
                 name !== "Title" &&
-                    value.unshift({ label: `Select ${name} `, value: "" });
+                    value.unshift({ label: `Select `, value: "" });
 
 
                 setGender(value);

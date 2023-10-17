@@ -28,8 +28,8 @@ const HCHistoryModal = ({
   const statusClasses = {
     Pending: "status-pending",
     DoorLock: "status-doorlock",
-    "Reschedule Request": "status-reschedule",
-    "Cancel Request": "status-cancel",
+    // "Reschedule Request": "status-reschedule",
+    // "Cancel Request": "status-cancel",
     Rescheduled: "status-rescheduled",
     CheckIn: "status-checkin",
     Completed: "status-completed",
