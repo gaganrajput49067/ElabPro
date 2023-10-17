@@ -665,6 +665,7 @@ const DoAppointmentModal = ({
                         { label: "Select Source Of Collection", value: "" },
                         ...bindSourceCall,
                       ]}
+                      
                       onChange={handleChange}
                     />
                   </div>
@@ -696,7 +697,7 @@ const DoAppointmentModal = ({
                         { label: "Select Payment Mode", value: "" },
                         ...HCPaymentMode,
                       ]}
-                      isDisabled={tableData.length === 0}
+                      // isDisabled={tableData.length === 0}
                       onChange={handleChange}
                     />
                   </div>
@@ -916,9 +917,9 @@ const DoAppointmentModal = ({
                                 <>
                                   <tr key={index}>
                                     <td data-title="S.No">
-                                      {index + 1}
+                                      {index + 1}&nbsp;
                                       <button
-                                        className="btn btn-danger btn-sm"
+                                        className="btn btn-danger  btn-sm"
                                         onClick={() => {
                                           handleFilter(ele);
                                         }}

@@ -412,6 +412,7 @@ const RouteMaster = () => {
               <Input
                 className="select-input-box form-control input-sm"
                 type="text"
+                autoComplete="off"
                 placeholder="Route"
                 name="Route"
                 value={formData?.Route}
@@ -507,6 +508,7 @@ const RouteMaster = () => {
                 className="select-input-box form-control input-sm"
                 type="text"
                 name="Route"
+                autoComplete="off"
                 value={searchData?.Route}
                 placeholder="Route"
                 onChange={handleSearchChange}

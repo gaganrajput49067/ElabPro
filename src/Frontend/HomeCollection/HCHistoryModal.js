@@ -437,7 +437,7 @@ const HCHistoryModal = ({
                           <div className="row">
                             <div className="col-md-3">
                               <label>{t("Gross Amount ")}</label>&nbsp;:&nbsp;
-                              {ele?.netamt}
+                              {ele?.Rate}
                             </div>
                             <div className="col-md-3">
                               <label>{t("Discount Amount ")}</label>

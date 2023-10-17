@@ -757,11 +757,7 @@ const AppointmentModal = ({
 
                 {/* <div className="box-body"> */}
                 <div className="row" style={{ backgroundColor: "skyblue" }}>
-                  <label
-                    className="col-sm-12  col-md-2"
-                    htmlFor="Address"
-                   
-                  >
+                  <label className="col-sm-12  col-md-2" htmlFor="Address">
                     {t("Address :- ")}
                   </label>
 
@@ -1195,15 +1191,7 @@ const AppointmentModal = ({
                                           ele.SelectedPheleboId &&
                                         patient.apptime === slotArray[0] ? (
                                           <>
-                                            {/* 
-                                            {console.log(
-                                              "Hii",
-                                              patient.phlebotomistid ===
-                                                ele.SelectedPheleboId &&
-                                                patient.apptime ===
-                                                  slotArray[0],
-                                              slotIndex
-                                            )} */}
+                                            
                                             <div key={patientIndex}>
                                               <div
                                                 style={{
@@ -1250,12 +1238,12 @@ const AppointmentModal = ({
                                                     }}
                                                   >
                                                     <span>
-                                                      Prebooking Id:{" "}
+                                                      Prebooking Id:
                                                       {patient?.PreBookingID}
                                                     </span>
                                                     <br></br>
                                                     <span>
-                                                      Address:{" "}
+                                                      Address:
                                                       {patient?.Address}
                                                     </span>
                                                     <br></br>
@@ -1268,22 +1256,22 @@ const AppointmentModal = ({
                                                     </span>
                                                     <br></br>
                                                     <span>
-                                                      HardCopyRequired:{" "}
+                                                      HardCopyRequired:
                                                       {
                                                         patient?.HardCopyRequired
                                                       }
                                                     </span>
                                                     <br></br>
                                                     <span>
-                                                      NetAmount:{" "}
+                                                      NetAmount:
                                                       {patient?.netAmount}
                                                     </span>
                                                   </span>
                                                 )}
                                             </div>
                                           </>
-                                        ) : (
-                                          ""
+                                        )  : (
+                                        ""
                                         )}
                                       </>
                                     )
