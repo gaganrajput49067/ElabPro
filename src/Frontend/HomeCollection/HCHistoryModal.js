@@ -7,6 +7,7 @@ import ViewLogModal from "./ViewLogModal";
 import axios from "axios";
 import { toast } from "react-toastify";
 import HCHistoryRescheduleModal from "./HCHistoryRescheduleModal";
+import Loading from "../util/Loading";
 const HCHistoryModal = ({
   showPatientData,
   hcHistoryShow,
@@ -314,7 +315,8 @@ const HCHistoryModal = ({
               </div> */}
                 {/* <br></br> */}
 
-                {hcHistory.length > 0 &&
+                {/* {console.log(hcHistory.length)} */}
+                {hcHistory.length > 0 ? (
                   hcHistory.map((ele, index) => (
                     <>
                       <div
@@ -482,7 +484,10 @@ const HCHistoryModal = ({
                         </div>
                       </div>
                     </>
-                  ))}
+                  ))
+                ) : (
+                  <Loading />
+                )}
 
                 <hr></hr>
               </div>

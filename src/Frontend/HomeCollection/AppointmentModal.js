@@ -13,6 +13,7 @@ import AppointmentNotBookedModal from "./AppointmentNotBookedModal";
 import { AppointmentModalValidationSchema } from "../../ChildComponents/validations";
 import DoAppointmentModal from "./DoAppointmentModal";
 import PhelebotomistDetailModal from "./PhelebotomistDetailModal";
+import Loading from "../util/Loading";
 const AppointmentModal = ({
   showPatientData,
   appointShow,
@@ -28,6 +29,7 @@ const AppointmentModal = ({
   const [appointment, setAppointment] = useState(false);
   const [updateAddressDisable, setUpdateAddressDisable] = useState(false);
   const [phelebotomistData, setPhelebotomistData] = useState([]);
+  const [load, setLoad] = useState(false);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [localities, setLocalities] = useState([]);
@@ -167,10 +169,11 @@ const AppointmentModal = ({
           };
           console.log(obj);
         }
-
+        setLoad(true);
         axios
           .post("/api/v1/CustomerCare/BindSlot", obj)
           .then((res) => {
+            setLoad(false);
             const data = res.data.Data;
             const slot = res?.data?.Slot;
             const TimeslotData = res?.data?.TimeslotData;
@@ -213,6 +216,7 @@ const AppointmentModal = ({
             GetPatientDetailonSlot(SetPhelebo);
           })
           .catch((err) => {
+            setLoad(false);
             setShowPhelebo([]);
             toast.error(
               err?.response?.data?.message
@@ -446,12 +450,13 @@ const AppointmentModal = ({
       });
     }
   };
+
   // useEffect(() => {
   //   if (!searchData?.DropLocationId || searchData?.DropLocationId=="") {
   //     dropLocation?.unshift({ label: "Select Drop location", value: "" });
   //   }
   // }, [searchData?.DropLocationId]);
-  
+
   const callhandleOnRouteValue = (data) => {
     console.log(data);
 
@@ -560,6 +565,7 @@ const AppointmentModal = ({
         };
 
         getDropLocationDropDown(name, value, data[0].pincode);
+        console.log("first")
         handleSearch(obj);
       })
       .catch((err) => {
@@ -1106,8 +1112,9 @@ const AppointmentModal = ({
                   </label>
                 </div>
               </div> */}
-
-              {showPhelebo.length > 0 ? (
+              {load ? (
+                <Loading />
+              ) : showPhelebo.length > 0 ? (
                 <div className="box-body">
                   <div className="row" style={{ overflowX: "auto" }}>
                     <table
