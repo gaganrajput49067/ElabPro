@@ -437,6 +437,29 @@ const DoAppointmentModal = ({
     console.log(data);
     getTableData(data);
   };
+// console.log(testData?.Gender)
+  const CheckageTest = (gender, ToAge, FromAge) => {
+    let genderCheck = false;
+    let ageCheck = true;
+    let message = "";
+    genderCheck = [testData?.Gender, "Both"].includes(gender) ? true : false;
+
+    if (testData?.TotalAgeInDays > ToAge) {
+      ageCheck = false;
+      message = "Your Age is Greater than this test Maximum Age";
+    }
+
+    if (testData?.TotalAgeInDays < FromAge) {
+      ageCheck = false;
+      message = "Your Age is Less than this test Minimum Age";
+    }
+
+    return {
+      genderCheck: genderCheck,
+      ageCheck: ageCheck,
+      message: message,
+    };
+  };
 
   const getTableData = (data) => {
     const ItemIndex = tableData.findIndex(
@@ -450,32 +473,50 @@ const DoAppointmentModal = ({
         })
         .then((res) => {
           const newData = res?.data?.message;
-          const appendedData = [
-            ...tableData,
-            ...newData.map((ele) => {
-              return {
-                ...testData,
-                DataType: ele?.DataType,
-                SubCategoryID: ele?.DepartmentID,
-                FromAge: ele?.FromAge,
-                InvestigationID: ele?.InvestigationID,
-                IsSampleRequired: ele?.IsSampleRequired,
-                Rate: ele?.Rate,
-                SampleRemarks: ele?.SampleRemarks,
-                ReportType: ele?.ReportType,
-                RequiredAttachment: ele?.RequiredAttachment,
-                SampleCode: ele?.SampleCode,
-                SampleName: ele?.SampleName,
-                SampleTypeID: ele?.SampleTypeID,
-                ItemId: ele?.TestCode,
-                ItemName: ele?.TestName,
-                ToAge: ele?.ToAge,
-                deleiveryDate: ele?.deleiveryDate,
-                refRateValue: ele?.refRateValue,
-              };
-            }),
-          ];
-          setTableData(appendedData);
+
+          const { genderCheck, ageCheck, message } = CheckageTest(
+            res?.data?.message[0]?.Gender,
+            res?.data?.message[0]?.ToAge,
+            res?.data?.message[0]?.FromAge
+          );
+
+          if (genderCheck && ageCheck) {
+            const appendedData = [
+              ...tableData,
+              ...newData.map((ele) => {
+                return {
+                  ...testData,
+                  TestGender:ele?.Gender,
+  
+                  DataType: ele?.DataType,
+                  SubCategoryID: ele?.DepartmentID,
+                  FromAge: ele?.FromAge,
+                  InvestigationID: ele?.InvestigationID,
+                  IsSampleRequired: ele?.IsSampleRequired,
+                  Rate: ele?.Rate,
+                  SampleRemarks: ele?.SampleRemarks,
+                  ReportType: ele?.ReportType,
+                  RequiredAttachment: ele?.RequiredAttachment,
+                  SampleCode: ele?.SampleCode,
+                  SampleName: ele?.SampleName,
+                  SampleTypeID: ele?.SampleTypeID,
+                  ItemId: ele?.TestCode,
+                  ItemName: ele?.TestName,
+                  ToAge: ele?.ToAge,
+                  deleiveryDate: ele?.deleiveryDate,
+                  refRateValue: ele?.refRateValue,
+                };
+              }),
+            ];
+            setTableData(appendedData);
+          }
+
+          else {
+            !genderCheck &&
+              toast.error("This Test is Not for " + testData?.Gender);
+            !ageCheck && toast.error(message);
+          }
+         
         })
         .catch((err) => console.log(err));
     } else {
