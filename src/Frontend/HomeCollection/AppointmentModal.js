@@ -446,7 +446,12 @@ const AppointmentModal = ({
       });
     }
   };
-
+  // useEffect(() => {
+  //   if (!searchData?.DropLocationId || searchData?.DropLocationId=="") {
+  //     dropLocation?.unshift({ label: "Select Drop location", value: "" });
+  //   }
+  // }, [searchData?.DropLocationId]);
+  
   const callhandleOnRouteValue = (data) => {
     console.log(data);
 
@@ -1191,7 +1196,6 @@ const AppointmentModal = ({
                                           ele.SelectedPheleboId &&
                                         patient.apptime === slotArray[0] ? (
                                           <>
-                                            
                                             <div key={patientIndex}>
                                               <div
                                                 style={{
@@ -1270,8 +1274,8 @@ const AppointmentModal = ({
                                                 )}
                                             </div>
                                           </>
-                                        )  : (
-                                        ""
+                                        ) : (
+                                          ""
                                         )}
                                       </>
                                     )

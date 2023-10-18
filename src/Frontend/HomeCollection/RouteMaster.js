@@ -167,38 +167,49 @@ const RouteMaster = () => {
 
   const handleSearchChange = (e) => {
     const { name, value } = e.target;
-    setSearchData({ ...searchData, [name]: value });
 
     if (name === "StateId") {
       getSearchCity(value);
+      setSearchData({ ...searchData, [name]: value, CityId: "" });
+      setCitySearch([]);
     }
-
+    if (name === "CityId") {
+      setSearchData({ ...searchData, [name]: value });
+    }
     if (name === "NoofRecord") {
       handleSearch(value);
     }
   };
 
   const handleUpdate = () => {
-    axios
-      .post(
-        "/api/v1/RouteMaster/UpdateRouteData",
-        getTrimmedData({
-          ...formData,
-          IsActive: formData?.IsActive ? 1 : 0,
+    const generatedError = RouteMasterValidationSchema(formData);
+    if (generatedError === "") {
+      setLoad(true);
+      axios
+        .post(
+          "/api/v1/RouteMaster/UpdateRouteData",
+          getTrimmedData({
+            ...formData,
+            IsActive: formData?.IsActive ? 1 : 0,
+          })
+        )
+        .then((res) => {
+          setLoad(false);
+          toast.success(res?.data?.message);
+          handleCancel();
+          handleSearch(searchData?.NoofRecord);
         })
-      )
-      .then((res) => {
-        toast.success(res?.data?.message);
-        handleCancel();
-        handleSearch(searchData?.NoofRecord);
-      })
-      .catch((err) => {
-        toast.error(
-          err?.response?.data?.message
-            ? err?.response?.data?.message
-            : "Error Occured"
-        );
-      });
+        .catch((err) => {
+          toast.error(
+            err?.response?.data?.message
+              ? err?.response?.data?.message
+              : "Error Occured"
+          );
+        });
+    } else {
+      setErros(generatedError);
+      setLoad(false);
+    }
   };
 
   const editRouteMaster = (ele) => {
