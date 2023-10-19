@@ -264,7 +264,6 @@ const HomeCollectionLocationMaster = () => {
         .catch((err) => {
           console.log(err);
           setLoad(false);
-          
           toast.error("Error Occurred");
         });
 
@@ -322,29 +321,16 @@ const HomeCollectionLocationMaster = () => {
           setSearchLoad(false);
         }
         else {
+          setLocationTable([])
           toast.error('No Record Found...')
           setSearchLoad(false);
-          setLocationTable([]);
-          setSearchData({
-            StateId: "",
-            CityId: "",
-            NoofRecord: "40",
-            searchvalue: ''
-          });
         }
 
       })
       .catch((err) => {
         console.log(err);
         toast.error("Data Not Found");
-        setLocationTable([]);
         setSearchLoad(false);
-        setSearchData({
-          StateId: "",
-          CityId: "",
-          NoofRecord: "40",
-          searchvalue: ''
-        });
       });
   };
 
@@ -459,8 +445,8 @@ const HomeCollectionLocationMaster = () => {
                 HeadquarterID: "",
                 CityZoneId: "",
                 NoofSlotForApp: "",
-                OpenTime: "",
-                CloseTime: "",
+                OpenTime: "00:00",
+                CloseTime: "23:30",
                 AvgTime: "",
                 AreaName: "",
                 Pincode: ""
@@ -519,7 +505,7 @@ const HomeCollectionLocationMaster = () => {
     const duplicateEntries = [];
 
     for (let item of localities) {
-      const areaName = item['AreaName'].trim();
+      const areaName = item['AreaName'].trim().toLowerCase();
       const pincode = item['Pincode'];
       const combination = `${areaName}-${pincode}`;
 
@@ -715,8 +701,8 @@ const HomeCollectionLocationMaster = () => {
         HeadquarterID: "",
         CityZoneId: "",
         NoofSlotForApp: "1",
-        OpenTime: "",
-        CloseTime: "",
+        OpenTime: "00:00",
+        CloseTime: "23:30",
         AvgTime: "15",
         AreaName: "",
         Pincode: ""

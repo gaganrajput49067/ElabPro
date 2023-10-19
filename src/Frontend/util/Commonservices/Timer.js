@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-const Timer = () => {
-  const [seconds, setSeconds] = useState(300);
+
+
+const Timer = ({onTimerFinish}) => {
+  const [seconds, setSeconds] = useState(10);
   const [timerFinished, setTimerFinished] = useState(false);
 
   useEffect(() => {
@@ -23,10 +25,18 @@ const Timer = () => {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  if (timerFinished) {
+    onTimerFinish()
+    return null; 
+  }
+
   return (
     <div style={{color:'red'}}>
       {formatTime(seconds)}
-    </div>
+      </div>
   );
+  
 };
-export default Timer
+
+export default Timer;
+

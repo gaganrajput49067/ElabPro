@@ -88,6 +88,11 @@ const AppointmentModal = ({
     });
   }, [searchData?.Email]);
 
+  useEffect(() => {
+    console.log(searchData?.LocalityID);
+    console.log(searchData);
+  }, [searchData?.LocalityID]);
+
   const GetPatientDetailonSlot = (SetPhelebo) => {
     const phleboIds = SetPhelebo.map((phelebo) => phelebo.SelectedPheleboId);
 
@@ -125,12 +130,14 @@ const AppointmentModal = ({
         );
       });
   };
+  console.log(searchData);
   const handleSearch = (payload) => {
     console.log(payload);
     // console.log(searchData);
     const Today = searchData?.AppointmentDate.getDay();
     const generatedError = AppointmentModalValidationSchema(searchData);
-
+    console.log(searchData);
+    console.log(generatedError);
     let obj = {
       areaid: "",
       pincode: "",
@@ -143,32 +150,15 @@ const AppointmentModal = ({
       setShowPhelebo([]);
       toast.error("You Cannot Book appointment on Sunday");
     } else {
-      if (generatedError === "") {
-        if (payload) {
-          obj = {
-            areaid: payload.areaid,
-            pincode: payload.pincode,
+      if (payload) {
+        obj = {
+          areaid: payload.areaid,
+          pincode: payload.pincode,
 
-            fromdate: moment(searchData.AppointmentDate).format("DD-MMM-YYYY"),
-            freeslot: searchData?.freeslot,
-            phelboid: searchData?.phelboid,
-          };
-        } else {
-          setSearchData({
-            ...searchData,
-            RouteId: "",
-            SelectedBindRoute: searchData.onLoadRoute,
-          });
-
-          obj = {
-            areaid: searchData?.LocalityID,
-            pincode: searchData?.Pincode,
-            fromdate: moment(searchData.AppointmentDate).format("DD-MMM-YYYY"),
-            freeslot: searchData?.freeslot,
-            phelboid: searchData?.phelboid,
-          };
-          console.log(obj);
-        }
+          fromdate: moment(searchData.AppointmentDate).format("DD-MMM-YYYY"),
+          freeslot: searchData?.freeslot,
+          phelboid: searchData?.phelboid,
+        };
         setLoad(true);
         axios
           .post("/api/v1/CustomerCare/BindSlot", obj)
@@ -202,6 +192,7 @@ const AppointmentModal = ({
                 // label: handleSplit(ele?.centreid, "^")[1],
                 // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
                 SelectedRouteName: handleSplit(ele?.route, "@")[0],
+
                 SelectedRouteId: handleSplit(ele?.route, "@")[1],
                 PheleboNumber: handleSplit(ele?.NAME, " ")[1],
                 PheleboName: handleSplit(ele?.NAME, " ")[0],
@@ -224,12 +215,79 @@ const AppointmentModal = ({
                 : "Error Occured"
             );
           });
-      } else {
-        setError(generatedError);
+      } 
+      else {
+        const generatedError = AppointmentModalValidationSchema(searchData);
+        if (generatedError == "") {
+          obj = {
+            areaid: searchData?.LocalityID,
+            pincode: searchData?.Pincode,
+            fromdate: moment(searchData.AppointmentDate).format("DD-MMM-YYYY"),
+            freeslot: searchData?.freeslot,
+            phelboid: searchData?.phelboid,
+          };
+          setLoad(true);
+          axios
+            .post("/api/v1/CustomerCare/BindSlot", obj)
+            .then((res) => {
+              setLoad(false);
+              const data = res.data.Data;
+              const slot = res?.data?.Slot;
+              const TimeslotData = res?.data?.TimeslotData;
+
+              const slotTime = TimeslotData.map((e) => {
+                return {
+                  NoofSlotForApp: e.NoofSlotForApp,
+                };
+              });
+
+              const SlotArray = [];
+              for (
+                let i = 0;
+                i < slot.length;
+                i += parseInt(slotTime[0].NoofSlotForApp, 10)
+              ) {
+                SlotArray.push(
+                  slot.slice(i, i + parseInt(slotTime[0].NoofSlotForApp, 10))
+                );
+              }
+
+              const SetPhelebo = data?.map((ele) => {
+                return {
+                  SelectedPheleboId: ele?.ID,
+                  // value: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[1],
+                  // label: handleSplit(ele?.centreid, "^")[1],
+                  // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
+                  SelectedRouteName: handleSplit(ele?.route, "@")[0],
+
+                  SelectedRouteId: handleSplit(ele?.route, "@")[1],
+                  PheleboNumber: handleSplit(ele?.NAME, " ")[1],
+                  PheleboName: handleSplit(ele?.NAME, " ")[0],
+                  istemp: ele?.istemp,
+                  Slotdata: slot,
+                  SlotArray: SlotArray,
+                  TimeslotData: slotTime[0].NoofSlotForApp,
+                };
+              });
+              // console.log(SetPhelebo);
+              setShowPhelebo(SetPhelebo);
+              GetPatientDetailonSlot(SetPhelebo);
+            })
+            .catch((err) => {
+              setLoad(false);
+              setShowPhelebo([]);
+              toast.error(
+                err?.response?.data?.message
+                  ? err?.response?.data?.message
+                  : "Error Occured"
+              );
+            });
+        } else {
+          setError(generatedError);
+        }
       }
     }
   };
-
   const DoAppointment = (match, data, selectedPhelebo) => {
     // console.log(match, data,selectedPhelebo);
     const currentTime = new Date();
@@ -391,13 +449,14 @@ const AppointmentModal = ({
       setSearchData({
         ...searchData,
         [name]: value,
-        Pincode: "",
-        DropLocationId: "",
-        SelectedBindRoute: "",
+        // Pincode: "",
+        // DropLocationId: "",
+        // SelectedBindRoute: "",
         RouteId: "",
       });
-      setShowPhelebo([]);
-      setDropLocation([]);
+
+      // setShowPhelebo([]);
+      // setDropLocation([]);
     }
 
     if (name === "RouteId") {
@@ -518,19 +577,19 @@ const AppointmentModal = ({
             // CentreID: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
           };
         });
-
+        console.log(name, value);
         console.log(DropLocation);
-        setSearchData({
+        setSearchData((searchData) => ({
           ...searchData,
           Pincode: pincode,
           [name]: value,
           DropLocationId: DropLocation[0].value,
           // DropLocationLabel: DropLocation[0].label,
-          // RouteId: DropLocation[0].SelectedRouteId,
+          RouteId: "",
           onLoadRouteId: DropLocation[0].SelectedRouteId,
           onLoadRoute: DropLocation[0].SelectedRouteName,
           SelectedBindRoute: DropLocation[0].SelectedRouteName,
-        });
+        }));
         setDropLocation(DropLocation);
       })
       .catch((err) => {
@@ -565,7 +624,7 @@ const AppointmentModal = ({
         };
 
         getDropLocationDropDown(name, value, data[0].pincode);
-        console.log("first")
+        console.log("first");
         handleSearch(obj);
       })
       .catch((err) => {

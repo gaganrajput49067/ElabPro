@@ -7,26 +7,33 @@ import { toast } from "react-toastify"
 const HCHistoryCancelModal = ({ showCancel, handleCloseCancel, details }) => {
   const { t } = useTranslation();
 
-  const [cancelreason, setReason] = useState()
+  const [cancelreason, setReason] = useState('')
   const handleCancel = () => {
-
-    const payload = {
-      PreBookingId: details.PreBookingId,
-      CancelReason:cancelreason
+    console.log(cancelreason)
+     if(cancelreason!="")
+     {
+      const payload = {
+        PreBookingId: details.PreBookingId,
+        CancelReason:cancelreason
+      }
+      console.log(payload)
+      axios.post('api/v1/HomeCollectionSearch/CancelAppointment',payload).then((res)=>{
+         if(res.data)
+         {
+          toast.success(res?.data?.message)
+           handleCloseCancel()
+         }   
+        
+  
+      }).catch((err)=>{
+        toast.error('Could not Cancel')
+      })
     }
-    console.log(payload)
-    axios.post('api/v1/HomeCollectionSearch/CancelAppointment',payload).then((res)=>{
-       if(res.data)
-       {
-        toast.success(res?.data?.message)
-         handleCloseCancel()
-       }   
-      
-
-    }).catch((err)=>{
-      toast.error('Could not Cancel')
-    })
-  }
+  else
+     {
+          toast.error('Enter Cancel Reason')
+     }
+    }
   return (
     <>
       <Modal

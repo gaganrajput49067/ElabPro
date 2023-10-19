@@ -23,7 +23,7 @@ import {
     PhelbosearchDefault
 } from "../../ChildComponents/Constants";
 
-import { PreventSpecialCharacterandNumber, PreventSpecialCharacter } from "../util/Commonservices";
+import { PreventSpecialCharacterandNumber, PreventSpecialCharacter, PreventNumber } from "../util/Commonservices";
 import { Link } from 'react-router-dom';
 import { SimpleCheckbox } from "../../ChildComponents/CheckBox";
 
@@ -137,13 +137,12 @@ const PheleBotomistRegisteration = () => {
     }
     const dateSelect = (date, name, value) => {
         if (name === 'Fromdate' || name === 'Todate') {
-           
-            if(name==="Fromdate")
-            {
-                setSelectcharge({...selectCharge,[name]: date,Todate: new Date(date.getTime() + 86400000)})
+
+            if (name === "Fromdate") {
+                setSelectcharge({ ...selectCharge, [name]: date, Todate: new Date(date.getTime() + 86400000) })
             }
-            else{
-                setSelectcharge({...selectCharge,[name]: date})
+            else {
+                setSelectcharge({ ...selectCharge, [name]: date })
             }
         }
         else {
@@ -156,8 +155,8 @@ const PheleBotomistRegisteration = () => {
     };
     const handleSelectChange = (event) => {
         const { name, value, checked, type } = event?.target;
-     
-           if (name === 'Name' || name === 'FatherName' || name === 'MotherName' || name === 'P_City') {
+
+        if (name === 'Name' || name === 'FatherName' || name === 'MotherName' || name === 'P_City') {
             setFormData({
                 ...formData,
                 [name]: PreventSpecialCharacterandNumber(value) ? value : formData[name]
@@ -172,32 +171,43 @@ const PheleBotomistRegisteration = () => {
                 setFormData({ ...formData, [name]: `${value}` })
             }
         }
-        else if (name === 'PanNo'||name==='DocumentNo') {
+        else if (name === 'PanNo' || name === 'DocumentNo') {
             setFormData({
                 ...formData,
                 [name]: PreventSpecialCharacter(value) ? value : formData[name]
             });
         }
-        else if (name==='LogoutTime')
-        {
-            if(value>formData?.LoginTime){
-                setFormData({...formData,[name]:value})
+        else if (name === 'LogoutTime') {
+            if (value > formData?.LoginTime) {
+                setFormData({ ...formData, [name]: value })
             }
         }
-        else if(name==='LoginTime')
-            {
-                if(value<formData?.LogoutTime)
-                {
-                    setFormData({...formData,[name]:value})
-                }
+        else if (name === 'LoginTime') {
+            if (value < formData?.LogoutTime) {
+                setFormData({ ...formData, [name]: value })
             }
-        else if(name==='Vehicle_Num')
-        {
+        }
+        else if (name === 'Vehicle_Num') {
             setFormData({
                 ...formData,
                 [name]: PreventSpecialCharacter(value) ? value : formData[name]
             });
 
+        }
+        else if (name === 'DocumentType') {
+            if (value != "") {
+                setFormData({
+                    ...formData,
+                    [name]: value
+                });
+            }
+            else {
+
+                setFormData({
+                    ...formData, [name]: value, DocumentNo: ''
+                })
+
+            }
         }
         else {
             setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
@@ -209,26 +219,28 @@ const PheleBotomistRegisteration = () => {
 
     };
 
+
+
     const handleSearchChange = (event) => {
         const { name, value, checked, type } = event?.target;
         if (name === 'SearchState') {
             fetchCities(value)
             setSearchData({ ...searchData, [name]: value, SearchCity: '' })
         }
-        else {
+        else  {
             console.log(value);
             if (name === 'NoOfRecord') {
                 setSearchData({ ...searchData, [name]: Number(value) })
             }
-            else {
+        else {
                 setSearchData({ ...searchData, [name]: value })
             }
 
         }
 
-    } 
-   
-    
+    }
+
+
 
     const formdataSaveHandler = () => {
 
@@ -243,23 +255,23 @@ const PheleBotomistRegisteration = () => {
                 JoiningDate: moment(formData?.JoiningDate).format("DD-MMM-YYYY"),
                 Age: moment(formData?.Age).format("DD-MMM-YYYY"),
                 NAME: formData?.Name.trim(),
-                P_Address:formData?.P_Address? formData?.P_Address.trim():'',
-                P_City: formData?.P_City?formData?.P_City.trim():'',
+                P_Address: formData?.P_Address ? formData?.P_Address.trim() : '',
+                P_City: formData?.P_City ? formData?.P_City.trim() : '',
                 Email: formData?.Email.trim(),
-                FatherName:formData?.FatherName? formData?.FatherName.trim():'',
-                MotherName: formData?.MotherName?formData?.MotherName.trim():'',
+                FatherName: formData?.FatherName ? formData?.FatherName.trim() : '',
+                MotherName: formData?.MotherName ? formData?.MotherName.trim() : '',
                 Qualification: formData?.Qualification.trim(),
-                Vehicle_Num: formData?.Vehicle_Num?formData?.Vehicle_Num.trim():'',
+                Vehicle_Num: formData?.Vehicle_Num ? formData?.Vehicle_Num.trim() : '',
                 DrivingLicence: formData?.DrivingLicence.trim(),
-                PanNo: formData?.PanNo?formData?.PanNo.trim():'',
-                DucumentNo:formData?.DocumentNo?formData?.DocumentNo.trim():'',
-                DucumentType:formData?.DocumentType?formData?.DocumentType:'',
+                PanNo: formData?.PanNo ? formData?.PanNo.trim() : '',
+                DucumentNo: formData?.DocumentNo ? formData?.DocumentNo.trim() : '',
+                DucumentType: formData?.DocumentType ? formData?.DocumentType : '',
                 UserName: formData?.UserName.trim(),
                 Password: formData?.Password.trim(),
             };
             delete updatedFormData['DocumentNo'];
             delete updatedFormData['DocumentType'];
-            
+
             // phlebochargedata.forEach(object => {
             //     delete object['ChargeName'];
             // })
@@ -267,8 +279,8 @@ const PheleBotomistRegisteration = () => {
 
             const fullData = {
                 obj: updatedFormData,
-                phlebochargedata:[]
-                }
+                phlebochargedata: []
+            }
 
 
             axios.post("/api/v1/PhelebotomistMaster/SavePhelebotomist", fullData
@@ -305,8 +317,8 @@ const PheleBotomistRegisteration = () => {
                             LogoutTime: '',
                             StateId: '',
                             CityId: '',
-                            P_City:'',
-                            P_Pincode:''
+                            P_City: '',
+                            P_Pincode: ''
                         })
                         setphlebochargedata([])
                         setPhleboTable([])
@@ -326,44 +338,49 @@ const PheleBotomistRegisteration = () => {
 
     }
     const searchDataHandler = () => {
-        if (searchData?.SearchType) {
-            if (searchData?.SearchValue) {
-                axios.post('api/v1/PhelebotomistMaster/SearchPhlebotomist',
+        if (searchData?.SearchType && searchData?.SearchValue) {
+             axios.post('api/v1/PhelebotomistMaster/SearchPhlebotomist',
                     searchData).then((res) => {
-                        if (res.data) {
+                        if (res.data.message.length>0) {
 
                             setPhleboTable(res.data.message)
 
                         }
+                        else {
+                            setPhleboTable([])
+                            toast.error('No record found')}
                     })
                     .catch((err) => {
                         toast.error(err?.data?.message ? err?.data?.message : 'Something Went wrong')
                     })
 
             }
-            else {
-                setPhleboTable([])
-                toast.error('Enter Search Value')
-            }
-
-        }
-        else {
-            console.log(searchData);
+         else if(searchData?.SearchType!=""&&searchData?.SearchValue=="")
+         {
+            toast.error('Enter Search Value');
+         }
+         else if(searchData?.SearchValue!=""&&searchData?.SearchType=="")
+         {
+            toast.error('Select Search Type');
+         }
+         else {
             axios.post('api/v1/PhelebotomistMaster/SearchPhlebotomist',
-                { ...searchData, NoOfRecord: searchData?.NoOfRecord }).then((res) => {
-                    if (res.data) {
+            searchData).then((res) => {
+                if (res.data.message.length>0) {
 
-                        setPhleboTable(res.data.message)
+                    setPhleboTable(res.data.message)
 
-                    }
-                })
-                .catch((err) => {
-                    toast.error(err?.data?.message ? err?.data?.message : 'Something Went wrong')
-                })
-        }
-
-
+                }
+                else {toast.error('No record found')
+                setPhleboTable([])}
+            })
+            .catch((err) => {
+                toast.error(err?.data?.message ? err?.data?.message : 'Something Went wrong')
+                setPhleboTable([])
+            })
+         }
     }
+
     const getDropDownData = (name) => {
 
         axios
@@ -377,7 +394,7 @@ const PheleBotomistRegisteration = () => {
                     };
                 });
                 name !== "Title" &&
-                    value.unshift({ label: `Select `, value: "" });
+                    value.unshift({ label: 'Select', value: "" });
 
 
                 setGender(value);
@@ -390,21 +407,21 @@ const PheleBotomistRegisteration = () => {
 
     const getRequiredAttachment = () => {
         axios
-        .post("/api/v1/Global/GetGlobalData", {
-            Type: "RequiredAttachment",
-        })
-        .then((res) => {
-            let data = res.data.message;
-            
-            let RequiredAttachment = data.map((ele) => {
-                return {
-                    value: ele.FieldID,
-                    label: ele.FieldDisplay,
-                };
-            });
-           setDocumentType(RequiredAttachment)
-        })
-        .catch((err) => console.log(err));
+            .post("/api/v1/Global/GetGlobalData", {
+                Type: "RequiredAttachment",
+            })
+            .then((res) => {
+                let data = res.data.message;
+
+                let RequiredAttachment = data.map((ele) => {
+                    return {
+                        value: ele.FieldID,
+                        label: ele.FieldDisplay,
+                    };
+                });
+                setDocumentType(RequiredAttachment)
+            })
+            .catch((err) => console.log(err));
     };
     const getBloodType = () => {
         axios.get('api/v1/CommonHC/GetBloodGroupData').then((res) => {
@@ -445,24 +462,24 @@ const PheleBotomistRegisteration = () => {
             })
 
     }
-    const chargeChangeHandler = (event) => {
+    // const chargeChangeHandler = (event) => {
 
-        const { name, value } = event?.target
+    //     const { name, value } = event?.target
 
-        if (name === 'ChargeName') {
-            if (value) {
-                
-                const { Name, Amount } = getNameAmountofCharge(value);
-                setSelectcharge({
-                    ...selectCharge,
-                    ChargeId: `${value}`,
-                    ChargeName: Name,
-                    ChargeAmount: Amount
-                })
-            }
+    //     if (name === 'ChargeName') {
+    //         if (value) {
 
-        }
-    }
+    //             const { Name, Amount } = getNameAmountofCharge(value);
+    //             setSelectcharge({
+    //                 ...selectCharge,
+    //                 ChargeId: `${value}`,
+    //                 ChargeName: Name,
+    //                 ChargeAmount: Amount
+    //             })
+    //         }
+
+    //     }
+    // }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const getNameAmountofCharge = (id) => {
         if (id) {
@@ -478,20 +495,19 @@ const PheleBotomistRegisteration = () => {
         }
 
     }
-    
     const handleSelectMultiChange = (select, name) => {
         if (name === 'StateId') {
 
             console.log(formData?.CityId);
             const val = select.map((ele) => { return ele?.value });
             console.log(val)
-            setFormData({ ...formData, [name]: val,CityId:'' })
+            setFormData({ ...formData, [name]: val, CityId: '' })
             if (val.length > 0) {
                 fetchCities(val)
             }
-            else{
-              setFormData({...formData,StateId:'',CityId:''}) 
-              setCities([])
+            else {
+                setFormData({ ...formData, StateId: '', CityId: '' })
+                setCities([])
             }
 
         }
@@ -501,8 +517,8 @@ const PheleBotomistRegisteration = () => {
         }
     };
     const addPhelboChargeHandler = () => {
-        if (selectCharge?.ChargeId && selectCharge?.ChargeAmount && selectCharge?.ChargeName &&  selectCharge?.Fromdate &&selectCharge?.Todate) {
-           
+        if (selectCharge?.ChargeId && selectCharge?.ChargeAmount && selectCharge?.ChargeName && selectCharge?.Fromdate && selectCharge?.Todate) {
+
             const chargeData = { ChargeID: `${selectCharge?.ChargeId.toString()}`, ChargeAmount: selectCharge?.ChargeAmount, ChargeName: selectCharge?.ChargeName, FromDate: selectCharge?.Fromdate ? moment(selectCharge?.Fromdate).format("DD-MMM-YYYY") : new Date(), ToDate: selectCharge?.Todate ? moment(selectCharge?.Todate).format("DD-MMM-YYYY") : new Date() }
             const id = chargeData?.ChargeID
             if (phlebochargedata.length > 0) {
@@ -523,8 +539,9 @@ const PheleBotomistRegisteration = () => {
                 }
             }
             else {
-                
-            setphlebochargedata([...phlebochargedata, chargeData]);}
+
+                setphlebochargedata([...phlebochargedata, chargeData]);
+            }
             setSelectcharge(
                 {
                     ChargeName: '',
@@ -592,8 +609,8 @@ const PheleBotomistRegisteration = () => {
                 Email: details[0]?.Email || '',
                 FatherName: details[0]?.FatherName || '',
                 MotherName: details[0]?.MotherName || '',
-                P_Pincode:details[0]?.P_Pincode?details[0]?.P_Pincode:'',
-                P_City:details[0]?.P_City?details[0]?.P_City:'',
+                P_Pincode: details[0]?.P_Pincode ? details[0]?.P_Pincode : '',
+                P_City: details[0]?.P_City ? details[0]?.P_City : '',
                 P_Address: details[0]?.P_Address || '',
                 BloodGroup: details[0]?.BloodGroup || '',
                 Qualification: details[0]?.Qualification || '',
@@ -648,6 +665,7 @@ const PheleBotomistRegisteration = () => {
     }
 
     const formdataUpdateHandler = () => {
+
         const generatedError = PhelbotomistValidationSchema(formData);
 
         if (generatedError === "") {
@@ -660,30 +678,24 @@ const PheleBotomistRegisteration = () => {
                 Age: moment(formData?.Age).format("DD-MMM-YYYY"),
                 NAME: formData?.Name.trim(),
                 DucumentType: formData?.DocumentType,
-                DucumentNo: formData?.DocumentNo?formData?.DocumentNo:'',
-                P_Address:formData?.P_Address? formData?.P_Address.trim():'',
-                P_City: formData?.P_City?formData?.P_City.trim():'',
+                DucumentNo: formData?.DocumentNo ? formData?.DocumentNo : '',
+                P_Address: formData?.P_Address ? formData?.P_Address.trim() : '',
+                P_City: formData?.P_City ? formData?.P_City.trim() : '',
                 Email: formData?.Email.trim(),
-                FatherName:formData?.FatherName? formData?.FatherName.trim():'',
-                MotherName: formData?.MotherName?formData?.MotherName.trim():'',
+                FatherName: formData?.FatherName ? formData?.FatherName.trim() : '',
+                MotherName: formData?.MotherName ? formData?.MotherName.trim() : '',
                 Qualification: formData?.Qualification.trim(),
-                Vehicle_Num: formData?.Vehicle_Num?formData?.Vehicle_Num.trim():'',
+                Vehicle_Num: formData?.Vehicle_Num ? formData?.Vehicle_Num.trim() : '',
                 DrivingLicence: formData?.DrivingLicence.trim(),
-                PanNo: formData?.PanNo?formData?.PanNo.trim():'',
+                PanNo: formData?.PanNo ? formData?.PanNo.trim() : '',
                 UserName: formData?.UserName.trim(),
                 Password: formData?.Password.trim(),
             };
             delete updatedFormData['DocumentNo'];
             delete updatedFormData['DocumentType'];
-            // console.log(updatedFormData);
-
-            // phlebochargedata.forEach(object => {
-            //     delete object['ChargeName'];
-            // })
-            
             const fullData = {
                 obj: updatedFormData,
-                phlebochargedata:[]
+                phlebochargedata: []
             }
 
             axios.post("/api/v1/PhelebotomistMaster/UpdatePhlebotomist", fullData
@@ -718,7 +730,9 @@ const PheleBotomistRegisteration = () => {
                             LoginTime: '',
                             LogoutTime: '',
                             StateId: '',
-                            CityId: ''
+                            CityId: '',
+                            P_Pincode: '',
+                            P_City: ''
                         })
                         setphlebochargedata([])
                         setPhleboTable([])
@@ -746,15 +760,23 @@ const PheleBotomistRegisteration = () => {
         getPhleboChargeData();
 
     }, [])
-    
-    const navigateHandler=()=>{
+
+    useEffect(() => {
+        const generatedError = PhelbotomistValidationSchema(formData);
+        setErros({
+            ...errors,
+            Emailvalid: generatedError.Emailvalid,
+        });
+    }, [formData?.Email]);
+
+    const navigateHandler = () => {
 
 
-    }   
-  function validate(input){
-        if(/^\s/.test(input.value))
-          input.value = '';
-      }
+    }
+    function validate(input) {
+        if (/^\s/.test(input.value))
+            input.value = '';
+    }
 
 
 
@@ -764,7 +786,7 @@ const PheleBotomistRegisteration = () => {
             <div className="box box-success form-horizontal">
                 <div className="box-header with-border">
                     <h3 className="box-title">Phelebotomist Registeration</h3>
-                <Link  className="box-title right-underline " to="/TemporaryPhelebotomist">Add New Temporary Phelebotomist</Link>
+                    <Link className="box-title right-underline " to="/TemporaryPhelebotomist">Add New Temporary Phelebotomist</Link>
                 </div>
                 <div
                     className="box-body"
@@ -777,7 +799,7 @@ const PheleBotomistRegisteration = () => {
 
 
                                     <label className="col-sm-1" htmlFor="inputEmail3" >
-                                         Name:
+                                        Name:
                                     </label>
                                     <div className="col-sm-2">
                                         <Input
@@ -810,7 +832,7 @@ const PheleBotomistRegisteration = () => {
                                         Gender:
                                     </label>
                                     <div className="col-sm-1" >
-                               
+
                                         <SelectBox
                                             name="Gender"
                                             className=" input-sm"
@@ -825,7 +847,7 @@ const PheleBotomistRegisteration = () => {
                                     <div className="col-sm-1"
                                     >
                                         <SimpleCheckbox
-                                       
+
                                             type="checkbox"
                                             name="IsActive"
                                             checked={formData.IsActive}
@@ -833,25 +855,25 @@ const PheleBotomistRegisteration = () => {
                                         />
                                         <label className="control-label">IsActive</label>
                                     </div>
-                                    
+
 
                                     <label className="col-sm-1" htmlFor="inputEmail3" >
-                                    Address:
-                                </label>
-                                <div className="col-sm-2">
-                                    <Input
-                                        className="form-control input-sm"
-                                        name='P_Address'
-                                        onChange={handleSelectChange}
-                                        value={formData?.P_Address}
-                                    />
+                                        Address:
+                                    </label>
+                                    <div className="col-sm-2">
+                                        <Input
+                                            className="form-control input-sm"
+                                            name='P_Address'
+                                            onChange={handleSelectChange}
+                                            value={formData?.P_Address}
+                                        />
 
-                                </div>
+                                    </div>
 
                                 </div>
                             </div>
                             <div className="row">
-                                
+
                                 <label className="col-sm-1" htmlFor="inputEmail3" >
                                     City:
                                 </label>
@@ -875,13 +897,13 @@ const PheleBotomistRegisteration = () => {
                                         onChange={handleSelectChange}
                                         value={formData?.P_Pincode}
                                     />
-                                        {formData?.P_Pincode !="" && formData?.P_Pincode?.length != 6 && (
+                                    {formData?.P_Pincode != "" && formData?.P_Pincode?.length != 6 && (
                                         <span className="golbal-Error">{errors?.PincodeLength}</span>
                                     )}
 
                                 </div>
                                 <label className="col-sm-1" htmlFor="inputEmail3" >
-                                 Mobile:
+                                    Mobile:
                                 </label>
                                 <div className="col-sm-2">
                                     <Input
@@ -921,7 +943,7 @@ const PheleBotomistRegisteration = () => {
 
                             </div>
                             <div className="row">
-                                
+
                                 <label className="col-sm-1" htmlFor="inputEmail3" >
                                     Email:
                                 </label>
@@ -985,7 +1007,7 @@ const PheleBotomistRegisteration = () => {
 
                             </div>
                             <div className="row">
-                                
+
 
                             </div>
                         </div>
@@ -1053,8 +1075,11 @@ const PheleBotomistRegisteration = () => {
                                     name='PanNo'
                                     onChange={handleSelectChange}
                                     value={formData?.PanNo}
+                                    max={10}
                                 />
-
+                                {formData?.PanNo != "" && (
+                                    <span className="golbal-Error">{errors?.PanLength}</span>
+                                )}
                             </div>
                         </div>
                         <div className="row">
@@ -1074,9 +1099,9 @@ const PheleBotomistRegisteration = () => {
                                     selectedValue={formData?.DocumentType}
                                 />
                                 {formData?.DocumentType === "" && (
-                                            <span className="golbal-Error">{errors?.DocumentType}</span>
-                                        )}
-                         </div>
+                                    <span className="golbal-Error">{errors?.DocumentType}</span>
+                                )}
+                            </div>
                             <label className="col-sm-1" htmlFor="inputEmail3">
                                 Document No.:
                             </label>
@@ -1089,12 +1114,12 @@ const PheleBotomistRegisteration = () => {
                                     value={formData?.DocumentNo}
                                     max={20}
                                 />
-                               {formData?.DocumentNo === "" && (
-                                            <span className="golbal-Error">{errors?.DocumentNo}</span>
-                                        )}
-                               { formData?.DocumentNo !="" && formData?.DocumentNo.length <= 6 && (
-                                        <span className="golbal-Error">{errors?.DocumentNolength}</span>
-                                    )}
+                                {formData?.DocumentNo === "" && (
+                                    <span className="golbal-Error">{errors?.DocumentNo}</span>
+                                )}
+                                {formData?.DocumentNo != "" && formData?.DocumentNo.length <= 6 && (
+                                    <span className="golbal-Error">{errors?.DocumentNolength}</span>
+                                )}
                             </div>
 
                         </div>
@@ -1121,7 +1146,7 @@ const PheleBotomistRegisteration = () => {
                                     name="JoiningDate"
                                     date={formData?.JoiningDate}
                                     onChange={dateSelect}
-                                    maxDate={new Date()}
+
                                 />
 
                             </div>
@@ -1172,7 +1197,7 @@ const PheleBotomistRegisteration = () => {
 
                             </div>
                             <div className="col-sm-1">
-                            <Image src={Reload} />
+                                <Image src={Reload} />
                             </div>
                         </div>
                         <div className="row">
@@ -1210,7 +1235,7 @@ const PheleBotomistRegisteration = () => {
                                     <span className="golbal-Error">{errors?.Password}</span>
                                 )}
                                 {
-                                    formData?.Password.length>0 && formData?.Password.length<=3 && (
+                                    formData?.Password.length > 0 && formData?.Password.length <= 3 && (
                                         <span className="golbal-Error">{errors?.Passwordl}</span>
                                     )
                                 }
@@ -1237,9 +1262,9 @@ const PheleBotomistRegisteration = () => {
                             <div className="col-sm-2">
                                 <SelectBox
                                     className="form-control input-sm"
-                                    options={[{label:'Select Week off',value:''},
+                                    options={[{ label: 'Select Week off', value: '' },
 
-                                        ...Phelboweekoff
+                                    ...Phelboweekoff
                                     ]}
                                     selectedValue={formData?.WeakOff}
                                     name='WeakOff'
@@ -1263,7 +1288,7 @@ const PheleBotomistRegisteration = () => {
                                     onChange={handleSelectChange}
                                     value={formData?.LoginTime}
                                 />
-                                     {formData?.LoginTime === "" && (
+                                {formData?.LoginTime === "" && (
                                     <span className="golbal-Error">{errors?.LoginTime}</span>
                                 )}
                             </div>
@@ -1279,7 +1304,7 @@ const PheleBotomistRegisteration = () => {
                                     value={formData?.LogoutTime}
                                     min="08:00"
                                 />
-                                    {formData?.LogoutTime === "" && (
+                                {formData?.LogoutTime === "" && (
                                     <span className="golbal-Error">{errors?.LogoutTime}</span>
                                 )}
 
@@ -1447,38 +1472,38 @@ const PheleBotomistRegisteration = () => {
 
                 </div> */}
                 <div
-                            className="row"
+                    className="row"
 
-                        >
-                            {loading ? (
-                                <div className="col-sm-1">
-                                    <Loading />
-                                </div>
+                >
+                    {loading ? (
+                        <div className="col-sm-1">
+                            <Loading />
+                        </div>
 
-                            ) : (
-                                <div className="col-sm-1 col-xs-12">
+                    ) : (
+                        <div className="col-sm-1 col-xs-12">
 
-                                    {
-                                        formData?.PhelebotomistId ? <button
-                                            type="button"
-                                            className="btn btn-block btn-warning btn-sm"
-                                            onClick={formdataUpdateHandler}
-                                        >
-                                            {t("Update")}
-                                        </button> : <button
-                                            type="button"
-                                            className="btn btn-block btn-success btn-sm"
-                                            onClick={formdataSaveHandler}
-                                        >
-                                            {t("Save")}
-                                        </button>
-                                    }
-
-                                </div>
-                            )}
-
+                            {
+                                formData?.PhelebotomistId ? <button
+                                    type="button"
+                                    className="btn btn-block btn-warning btn-sm"
+                                    onClick={formdataUpdateHandler}
+                                >
+                                    {t("Update")}
+                                </button> : <button
+                                    type="button"
+                                    className="btn btn-block btn-success btn-sm"
+                                    onClick={formdataSaveHandler}
+                                >
+                                    {t("Save")}
+                                </button>
+                            }
 
                         </div>
+                    )}
+
+
+                </div>
             </div>
 
 
@@ -1596,7 +1621,7 @@ const PheleBotomistRegisteration = () => {
                     className="box-body divResult boottable table-responsive"
                     id="no-more-tables"
                 >
-                  {PhleboTable.length>0 &&  <div className="row">
+                    {PhleboTable.length > 0 && <div className="row">
                         <table
                             className="table table-bordered table-hover table-striped tbRecord"
                             cellPadding="{0}"

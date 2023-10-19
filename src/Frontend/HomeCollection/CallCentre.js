@@ -177,7 +177,7 @@ const CallCentre = () => {
                   onChange={handleMobile}
                   autoComplete="off"
                 />
-
+                &nbsp;
                 <div className="input-group-append">
                   <button
                     className=" btn-primary btn-sm"
@@ -251,11 +251,10 @@ const CallCentre = () => {
                   <label>{t("City")} : &nbsp;</label>
                   {showPatientData?.City}
                 </div>
-                
               </div>
 
               <div className="row">
-              <div className="col-md-2">
+                <div className="col-md-2">
                   <label>{t("State")} : &nbsp;</label>
                   {showPatientData?.StateName}
                 </div>

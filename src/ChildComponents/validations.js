@@ -106,12 +106,18 @@ export const PhelbotomistValidationSchema = (formData) => {
     err = { ...err, LogoutTime: "This Field is Required" };
   }
   if (formData?.P_Pincode != "") {
-    if (formData?.P_Pincode.length != 6) {
+     
+    if (formData?.P_Pincode?.length != 6) {
       err = { ...err, PincodeLength: "Invalid Pincode" };
+    } 
+  }
+  if (formData?.PanNo != "") {
+    if (formData?.PanNo?.length != 10) {
+      err = { ...err, PanLength: "Invalid Pan No." };
     }
   }
   if (formData?.Other_Contact != "") {
-    if (formData?.Other_Contact.length != 10) {
+    if (formData?.Other_Contact?.length != 10) {
       err = { ...err, OtherContact: "Invalid Phone no. " };
     }
   }
@@ -146,10 +152,10 @@ export const PhelboAuthenticationSchema = (formData) => {
   if (formData?.DocumentNo.trim() === "") {
     err = { ...err, DocumentNo: "This Field is Required" };
   }
-  if (formData?.StateId.length == 0) {
+  if (formData?.StateId?.length == 0) {
     err = { ...err, State: "Select atleast one State" };
   }
-  if (formData?.CityId.length == 0) {
+  if (formData?.CityId?.length == 0) {
     err = { ...err, City: "Select atleast one City" };
   }
   {
@@ -160,14 +166,19 @@ export const PhelboAuthenticationSchema = (formData) => {
   if (formData?.mobile === "") {
     err = { ...err, Mobileempty: "This Field is Required" };
   }
-  if (formData?.mobile.length !== 10) {
+  if (formData?.mobile?.length !== 10) {
     err = { ...err, Mobileinvalid: "Please enter valid number" };
   }
   if (formData?.P_Pincode == "") {
     err = { ...err, Pincode: "This FIeld is Required" };
   }
-  if (formData?.P_Pincode.length != 6) {
+  if (formData?.P_Pincode?.length != 6) {
     err = { ...err, PincodeInvalid: "Please enter valid pincode" };
+  }
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formData?.Email)) {
+    err = { ...err, Emailvalid: "Enter a valid email address" };
   }
   return err;
 };

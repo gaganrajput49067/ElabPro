@@ -34,7 +34,7 @@ function HomeCollectionDetailModal({
     const [testDetails, setTestDetails] = useState([]);
     const [bindSourceCall, setBindSourceCall] = useState([]);
     const [PatientDetails, setPatientDetails] = useState({});
-    
+    const [fetchData,setFetchData]=useState(false);
 
     console.log(ele)
 
@@ -240,7 +240,7 @@ function HomeCollectionDetailModal({
                                 </label>
                                 <div className="col-sm-2" style={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <span>{formData?.PreBookingId}</span>
-                                    <button type="button" className="btn btn-primary btn-sm" onClick={() => {
+                                    <button type="button" className="btn btn-primary btn-sm" style={{ display:'flex',alignItems:'center', height:'22px'}} onClick={() => {
                                         setShowViewLog(true)
                                     }}>View Log</button>
                                 </div>

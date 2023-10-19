@@ -276,7 +276,11 @@ const TemporaryPhelebotomist = () => {
 
     }
     
-   
+    const onTimerFinish = () => {
+        
+        setShowTimer(false); 
+      };
+      
 
     return (
         <div className="box box-success form-horizontal">
@@ -557,7 +561,7 @@ const TemporaryPhelebotomist = () => {
                     {showTimer &&
                         <div className="col-sm-2" style={{ display: "flex"}}>
                             <span style={{marginRight:"10px"}}>Otp Expires in</span>
-                            <span><Timer /></span>
+                            <span><Timer onTimerFinish={onTimerFinish} /></span>
                         </div>
 
                     }
