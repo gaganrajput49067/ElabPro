@@ -179,6 +179,9 @@ const RouteMaster = () => {
     if (name === "NoofRecord") {
       handleSearch(value);
     }
+    if (name === "Route") {
+      setSearchData({ ...searchData, [name]: value });
+    }
   };
 
   const handleUpdate = () => {
@@ -229,10 +232,14 @@ const RouteMaster = () => {
     handleCancel();
     setSearchLoad(true);
     axios
-      .post("/api/v1/RouteMaster/GetRouteData", {
-        ...searchData,
-        NoofRecord: NoofRecord,
-      })
+      .post(
+        "/api/v1/RouteMaster/GetRouteData",
+
+        getTrimmedData({
+          ...searchData,
+          NoofRecord: NoofRecord,
+        })
+      )
       .then((res) => {
         setRouteTable(res?.data?.message);
         setSearchLoad(false);
@@ -429,7 +436,7 @@ const RouteMaster = () => {
                 value={formData?.Route}
                 onChange={handleChange}
               />
-              {formData?.Route === "" && (
+              {formData?.Route.trim() === "" && (
                 <span className="golbal-Error">{errors?.Route}</span>
               )}
             </div>

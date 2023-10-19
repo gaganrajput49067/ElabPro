@@ -153,6 +153,9 @@ import HomeCollectionPatientEdit from "../HomeCollection/HomeCollectionPatientEd
 import PhelboLoginDetails from "../HomeCollection/PhelboLoginDetails";
 import HomeCollectionChangePhlebotomist from "../HomeCollection/HomeCollectionChangePhlebotomist";
 import HomeCollectionChangeDropLocation from "../HomeCollection/HomeCollectionChangeDropLocation";
+import CouponMasterApproval from "../CouponMaster/CouponMasterApproval";
+import CouponManageApproval from "../CouponMaster/CouponManageApproval";
+import CouponMaster from "../CouponMaster/CouponMaster";
 const Navigation = () => {
   return (
     <div>
@@ -167,13 +170,34 @@ const Navigation = () => {
 
           {/* after login routes */}
           <Route path="/" element={<ProtectedRoute />}>
-          <Route path="/HomeCollectionMapping" element={<ImportHomeCollectionMapping/>}/>
-          <Route path="/PhelebotomistCallTransfer" element={<PhlebotomistCallTransfer/>}/>
-           <Route path="/TemporaryPhelebotomist" element={<TemporaryPhelebotomist/>}/>
-            <Route path="/CentreAppointmentSearch" element={<CentreAppointmentSearch/>}/>
-            <Route path="/HomeCollectionLocationMaster" element={<HomeCollectionLocationMaster/>}/>
-            <Route path="/HomeCollectionSearcH" element={<HomeCollectionSearch/>}/>
-            <Route path='/PhelebotomistRegisteration' element={<PheleBotomistRegisteration/>}/>
+            <Route
+              path="/HomeCollectionMapping"
+              element={<ImportHomeCollectionMapping />}
+            />
+            <Route
+              path="/PhelebotomistCallTransfer"
+              element={<PhlebotomistCallTransfer />}
+            />
+            <Route
+              path="/TemporaryPhelebotomist"
+              element={<TemporaryPhelebotomist />}
+            />
+            <Route
+              path="/CentreAppointmentSearch"
+              element={<CentreAppointmentSearch />}
+            />
+            <Route
+              path="/HomeCollectionLocationMaster"
+              element={<HomeCollectionLocationMaster />}
+            />
+            <Route
+              path="/HomeCollectionSearcH"
+              element={<HomeCollectionSearch />}
+            />
+            <Route
+              path="/PhelebotomistRegisteration"
+              element={<PheleBotomistRegisteration />}
+            />
             <Route path="/SampleCollection1" element={<SampleCollection1 />} />
             <Route path="/SampleCollection" element={<SampleCollection />} />
             <Route path="/DepartmentReceive" element={<DepartmentReceive />} />
@@ -272,8 +296,8 @@ const Navigation = () => {
               path="/ManageDeliveryDays"
               element={<ManageDeliveryDays />}
             />
-            <Route path="/GlobalTypeMaster" element={<GlobalTypeMaster />}/>
-            <Route path="/ViewGlobalMaster" element={<ViewGlobalMaster />}/>
+            <Route path="/GlobalTypeMaster" element={<GlobalTypeMaster />} />
+            <Route path="/ViewGlobalMaster" element={<ViewGlobalMaster />} />
             <Route path="/FormulaMaster" element={<FormulaMaster />} />
             <Route path="/LoadData" element={<LoadData />} />
             <Route path="/ReportBill" element={<ReportBill />} />
@@ -381,7 +405,19 @@ const Navigation = () => {
               path="/PhelebotomistMapping"
               element={<PhelebotomistMapping />}
             />
-	      <Route path="/CallCentre" element={<CallCentre />} />
+            <Route path="/CallCentre" element={<CallCentre />} />
+
+            <Route
+              path="/CouponMasterApproval"
+              element={<CouponMasterApproval />}
+            />
+
+            <Route
+              path="/CouponManageApproval"
+              element={<CouponManageApproval />}
+            />
+
+            <Route path="/CouponMaster" element={<CouponMaster />} />
             <Route
               path="/InvestigationRequiredMaster"
               element={<InvestigationRequiredMaster />}
@@ -402,7 +438,7 @@ const Navigation = () => {
               path="/InvestigationRange"
               element={<InvestigationRange />}
             />
-            
+
             <Route
               path="/InvestigationsList"
               element={<InvestigationsList />}
@@ -422,19 +458,40 @@ const Navigation = () => {
               element={<UpdateInvestigation />}
             />
             <Route path="/Dept" element={<Dept />} />
-            <Route path="/EditDeptPage" element={<EditDeptPage/>} />
+            <Route path="/EditDeptPage" element={<EditDeptPage />} />
             <Route path="/CreateDept" element={<CreateDept />} />
             <Route path="/CompanyMaster" element={<CompanyMaster />} />
             <Route path="/CompanyMasterList" element={<CompanyMasterList />} />
-            <Route path="/BillingCategoryMaster" element={<BillingCategoryMaster />} />
+            <Route
+              path="/BillingCategoryMaster"
+              element={<BillingCategoryMaster />}
+            />
             <Route path="/centerAccess" element={<CenterAccess />} />
             <Route path="/mergeDoctor" element={<MergeDoctor />} />
- <Route path="/HCPatientEdit" element={<HomeCollectionPatientEdit />} />
-            <Route path="/HCPhlebotomistHoliday" element={<PhlebotomistHoliday />} />
-            <Route path="/HCPhelboLoginDetails" element={<PhelboLoginDetails />} />
-            <Route path="/HCImportHomeCollectionMapping" element={<ImportHomeCollectionMapping />} />
-            <Route path="/HCChangePhlebotomist" element={<HomeCollectionChangePhlebotomist />} />
-            <Route path="/HCChangeDropLocation" element={<HomeCollectionChangeDropLocation />} />
+            <Route
+              path="/HCPatientEdit"
+              element={<HomeCollectionPatientEdit />}
+            />
+            <Route
+              path="/HCPhlebotomistHoliday"
+              element={<PhlebotomistHoliday />}
+            />
+            <Route
+              path="/HCPhelboLoginDetails"
+              element={<PhelboLoginDetails />}
+            />
+            <Route
+              path="/HCImportHomeCollectionMapping"
+              element={<ImportHomeCollectionMapping />}
+            />
+            <Route
+              path="/HCChangePhlebotomist"
+              element={<HomeCollectionChangePhlebotomist />}
+            />
+            <Route
+              path="/HCChangeDropLocation"
+              element={<HomeCollectionChangeDropLocation />}
+            />
             <Route path="/centerAccess" element={<CenterAccess />} />
           </Route>
           <Route path="/*" element={<BlankPage />} />

@@ -192,7 +192,8 @@ const AppointmentModal = ({
                 // label: handleSplit(ele?.centreid, "^")[1],
                 // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
                 SelectedRouteName: handleSplit(ele?.route, "@")[0],
-
+                LoginTime: "11:00",
+                LogoutTime: "20:00",
                 SelectedRouteId: handleSplit(ele?.route, "@")[1],
                 PheleboNumber: handleSplit(ele?.NAME, " ")[1],
                 PheleboName: handleSplit(ele?.NAME, " ")[0],
@@ -202,7 +203,7 @@ const AppointmentModal = ({
                 TimeslotData: slotTime[0].NoofSlotForApp,
               };
             });
-            // console.log(SetPhelebo);
+            console.log(SetPhelebo);
             setShowPhelebo(SetPhelebo);
             GetPatientDetailonSlot(SetPhelebo);
           })
@@ -215,8 +216,7 @@ const AppointmentModal = ({
                 : "Error Occured"
             );
           });
-      } 
-      else {
+      } else {
         const generatedError = AppointmentModalValidationSchema(searchData);
         if (generatedError == "") {
           obj = {
@@ -259,7 +259,8 @@ const AppointmentModal = ({
                   // label: handleSplit(ele?.centreid, "^")[1],
                   // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
                   SelectedRouteName: handleSplit(ele?.route, "@")[0],
-
+                  LoginTime: "11:00",
+                  LogoutTime: "20:00",
                   SelectedRouteId: handleSplit(ele?.route, "@")[1],
                   PheleboNumber: handleSplit(ele?.NAME, " ")[1],
                   PheleboName: handleSplit(ele?.NAME, " ")[0],
@@ -269,7 +270,7 @@ const AppointmentModal = ({
                   TimeslotData: slotTime[0].NoofSlotForApp,
                 };
               });
-              // console.log(SetPhelebo);
+              console.log(SetPhelebo);
               setShowPhelebo(SetPhelebo);
               GetPatientDetailonSlot(SetPhelebo);
             })
@@ -289,13 +290,16 @@ const AppointmentModal = ({
     }
   };
   const DoAppointment = (match, data, selectedPhelebo) => {
-    // console.log(match, data,selectedPhelebo);
+    console.log(match, data, selectedPhelebo);
     const currentTime = new Date();
     const currentHours = currentTime.getHours();
     const currentMinutes = currentTime.getMinutes();
 
     const [dataHours, dataMinutes] = data.split(":").map(Number);
-
+    const [loginHour, loginMinute] =
+      selectedPhelebo?.LoginTime?.split(":").map(Number);
+    const [logoutHour, logoutMinute] =
+      selectedPhelebo?.LogoutTime?.split(":").map(Number);
     const appointmentDate = new Date(searchData.AppointmentDate);
     const currentDate = new Date();
 
@@ -312,6 +316,8 @@ const AppointmentModal = ({
         (dataHours === currentHours && dataMinutes < currentMinutes)
       ) {
         toast.error("You can't book an appointment for this time");
+      } else if (dataHours <= loginHour || dataHours >= logoutHour) {
+        toast.error("Phelebo Not Available for this time");
       } else if (match >= selectedPhelebo?.TimeslotData) {
         toast.error("Booking is Filled for given Slot");
       } else {
@@ -362,48 +368,52 @@ const AppointmentModal = ({
     } else if (match >= selectedPhelebo?.TimeslotData) {
       toast.error("Booking is Filled for given Slot");
     } else {
-      setSelectedPhelebo({
-        ...selectedPhelebo,
-        centreid: searchData.DropLocationId,
-        SelectedTime: data,
-        Address: searchData.Address,
-        AppointmentDate: searchData.AppointmentDate,
-        CityID: searchData.CityID,
-        DropLocationId: searchData.DropLocationId,
-        // DropLocationLabel: searchData?.DropLocationLabel,
-        Email: searchData.Email,
-        Landmark: searchData.Landmark,
-        LocalityID: searchData.LocalityID,
-        Pincode: searchData.Pincode,
-        RouteId: searchData.RouteId
-          ? searchData?.RouteId
-          : dropLocation[0]?.SelectedRouteId,
-        SelectedBindRoute: searchData.SelectedBindRoute,
-        StateID: searchData.StateID,
-        uhid: showPatientData.Patientid,
-        Title: showPatientData.title,
-        Patient_ID: showPatientData.Patientid,
-        Mobile: showPatientData.Mobile,
-        DOB: moment(showPatientData.DOB).format("YYYY-MMM-DD"),
-        Age: showPatientData.Age,
-        NAME: showPatientData?.FirstName,
-        Gender: showPatientData.Gender,
-        House_No: showPatientData.HouseNo,
-        Locality: showPatientData.LocalityName,
-        State: showPatientData.StateName,
-        City: showPatientData.City,
-        Landmark: showPatientData.Landmark,
-        AgeYear: showPatientData?.AgeYear,
-        AgeMonth: showPatientData?.AgeMonth,
-        AgeDays: showPatientData?.AgeDays,
-        TotalAgeInDays: showPatientData?.TotalAgeInDays,
-      });
-      if (searchData.Address === "") {
-        toast.error("Please Enter Proper Address");
-      } else if (searchData?.DropLocationId === "") {
-        toast.error("Please Pick Any DropLocation");
+      if (dataHours <= loginHour || dataHours >= logoutHour) {
+        toast.error("Phelebo Not Available for this time");
       } else {
-        setAppointment(true);
+        setSelectedPhelebo({
+          ...selectedPhelebo,
+          centreid: searchData.DropLocationId,
+          SelectedTime: data,
+          Address: searchData.Address,
+          AppointmentDate: searchData.AppointmentDate,
+          CityID: searchData.CityID,
+          DropLocationId: searchData.DropLocationId,
+          // DropLocationLabel: searchData?.DropLocationLabel,
+          Email: searchData.Email,
+          Landmark: searchData.Landmark,
+          LocalityID: searchData.LocalityID,
+          Pincode: searchData.Pincode,
+          RouteId: searchData.RouteId
+            ? searchData?.RouteId
+            : dropLocation[0]?.SelectedRouteId,
+          SelectedBindRoute: searchData.SelectedBindRoute,
+          StateID: searchData.StateID,
+          uhid: showPatientData.Patientid,
+          Title: showPatientData.title,
+          Patient_ID: showPatientData.Patientid,
+          Mobile: showPatientData.Mobile,
+          DOB: moment(showPatientData.DOB).format("YYYY-MMM-DD"),
+          Age: showPatientData.Age,
+          NAME: showPatientData?.FirstName,
+          Gender: showPatientData.Gender,
+          House_No: showPatientData.HouseNo,
+          Locality: showPatientData.LocalityName,
+          State: showPatientData.StateName,
+          City: showPatientData.City,
+          Landmark: showPatientData.Landmark,
+          AgeYear: showPatientData?.AgeYear,
+          AgeMonth: showPatientData?.AgeMonth,
+          AgeDays: showPatientData?.AgeDays,
+          TotalAgeInDays: showPatientData?.TotalAgeInDays,
+        });
+        if (searchData.Address === "") {
+          toast.error("Please Enter Proper Address");
+        } else if (searchData?.DropLocationId === "") {
+          toast.error("Please Pick Any DropLocation");
+        } else {
+          setAppointment(true);
+        }
       }
     }
   };

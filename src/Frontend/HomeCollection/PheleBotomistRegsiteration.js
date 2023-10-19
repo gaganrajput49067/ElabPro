@@ -23,7 +23,7 @@ import {
     PhelbosearchDefault
 } from "../../ChildComponents/Constants";
 
-import { PreventSpecialCharacterandNumber, PreventSpecialCharacter, PreventNumber } from "../util/Commonservices";
+import { PreventSpecialCharacterandNumber, PreventSpecialCharacter, PreventNumber, PreventCharacter } from "../util/Commonservices";
 import { Link } from 'react-router-dom';
 import { SimpleCheckbox } from "../../ChildComponents/CheckBox";
 
@@ -232,14 +232,46 @@ const PheleBotomistRegisteration = () => {
             if (name === 'NoOfRecord') {
                 setSearchData({ ...searchData, [name]: Number(value) })
             }
-        else {
+            else if(name==='SearchValue')
+            {
+               if(searchData?.SearchType=='Mobile')
+               { 
+                if(value.length<=10)
+                {
+                 setSearchData({...searchData,[name]:PreventCharacter(value)?value:searchData[name]})
+                }
+                
+               }
+               else if(searchData?.SearchType=='Name')
+               {
+                setSearchData({...searchData,[name]:PreventSpecialCharacterandNumber(value)?value:searchData[name]})
+               }
+               else if(searchData?.SearchType=='PanNo.')
+               {
+                if(value.length<=10)
+                {
+                 setSearchData({...searchData,[name]:PreventSpecialCharacter(value)?value:searchData[name]})
+                }
+               }
+               else
+               {
+                setSearchData({ ...searchData, [name]: value })
+               }
+            }
+            else if(name==='SearchType')
+            {
+              setSearchData({...searchData,[name]:value,SearchValue:''})  
+              setPhleboTable([]) 
+            }
+           else {
                 setSearchData({ ...searchData, [name]: value })
             }
 
         }
 
     }
-
+   
+    
 
 
     const formdataSaveHandler = () => {
@@ -808,7 +840,7 @@ const PheleBotomistRegisteration = () => {
                                             onChange={handleSelectChange}
                                             value={formData?.Name}
                                         />
-                                        {formData?.Name === "" && (
+                                        {formData?.Name.trim() === "" && (
                                             <span className="golbal-Error">{errors?.Name}</span>
                                         )}
 
@@ -955,7 +987,7 @@ const PheleBotomistRegisteration = () => {
                                         onChange={handleSelectChange}
                                         value={formData?.Email}
                                     />
-                                    {formData?.Email === "" && (
+                                    {formData?.Email.trim() === "" && (
                                         <span className="golbal-Error">{errors?.Emailempty}</span>
                                     )}
                                     {
@@ -1037,7 +1069,7 @@ const PheleBotomistRegisteration = () => {
                                     onChange={handleSelectChange}
                                     value={formData?.Qualification}
                                 />
-                                {formData?.Qualification === "" && (
+                                {formData?.Qualification.trim() === "" && (
                                     <span className="golbal-Error">{errors?.Qualification}</span>
                                 )}
 
@@ -1213,7 +1245,7 @@ const PheleBotomistRegisteration = () => {
                                     value={formData?.UserName}
 
                                 />
-                                {formData?.UserName === "" && (
+                                {formData?.UserName.trim() === "" && (
                                     <span className="golbal-Error">{errors?.UserName}</span>
                                 )}
 

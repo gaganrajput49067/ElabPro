@@ -267,7 +267,7 @@ export const RouteMasterValidationSchema = (formData) => {
   if (formData?.CityId.trim() === "") {
     err = { ...err, CityId: "This Field is Required" };
   }
-  if (formData?.Route.trim() === "") {
+  if (!formData?.Route || formData?.Route.trim() === "") {
     err = { ...err, Route: "This Field is Required" };
   }
   return err;

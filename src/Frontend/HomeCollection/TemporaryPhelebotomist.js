@@ -244,7 +244,16 @@ const TemporaryPhelebotomist = () => {
             .catch((err) => {
                 toast.error(err?.res?.data ? err?.res?.data : 'Something Went wrong')
             });
-    };
+    }; 
+
+
+    useEffect(() => {
+        const generatedError =  PhelboAuthenticationSchema(formData);
+        setErros({
+            ...errors,
+            Emailvalid: generatedError.Emailvalid,
+        });
+    }, [formData?.Email]);
 
     useEffect(() => {
         getDropDownData('Gender')
