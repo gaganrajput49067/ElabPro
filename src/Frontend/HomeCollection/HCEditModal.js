@@ -12,16 +12,8 @@ import { HCPaymentMode } from "../../ChildComponents/Constants";
 import { autocompleteOnBlur } from "../util/Commonservices";
 import { number } from "../util/Commonservices/number";
 import { HandleHCEditBooking } from "../../ChildComponents/validations";
-const HCEditModal = ({
-  showEdit,
-  handleCloseEdit,
-  details,
-  testDetails,
-  PatientDetails,
-  Discamount,
-  changeFlow,
-}) => {
-  const [errors, setError] = useState({});
+const HCEditModal = ({ showEdit, handleCloseEdit, details, testDetails, PatientDetails, Discamount, changeFlow }) => {
+  const [errors, setError] = useState({})
   const [showDOS, setShowDOS] = useState(false);
   const [bindSourceCall, setBindSourceCall] = useState([]);
   const [discountApproval, setDiscountApproval] = useState([]);
@@ -71,10 +63,10 @@ const HCEditModal = ({
     hcrequestid: "",
     VIP: details?.Vip === 0 ? false : true,
     followupcallid: "",
-    PreBookingId: details?.PreBookingId,
+    PreBookingId: details?.PreBookingId
     // phelboshare: pheleboCharge?.value,
   });
-  console.log(appointData);
+  console.log(appointData)
 
   const [testData, setTestData] = useState({
     Title: PatientDetails[0]?.Title,
@@ -102,17 +94,18 @@ const HCEditModal = ({
     Panel_ID: "",
     GrossAmt: "",
     // DiscAmt: 0,
-    DisReason: "",
+    DisReason: details?.DiscReason,
+    
     NetAmt: "",
     DiscountTypeID: "",
     AdrenalinEmpID: 0,
     MRP: 0,
     TestCode: "",
     SubCategoryID: "",
-    DoctorID: "",
+    DoctorID: details?.DoctorId,
     RefDoctor: "SELF",
     OtherDoctor: "",
-    Remarks:details?.Remarks,
+    Remarks: details?.Remarks,
     isUrgent: false,
     isPediatric: "",
   });
@@ -123,7 +116,8 @@ const HCEditModal = ({
 
   console.log(details);
   console.log(testDetails);
-  console.log(PatientDetails);
+  console.log(PatientDetails)
+  console.log(testData);
   const { t } = useTranslation();
 
   function onValueChange(event) {
@@ -140,9 +134,9 @@ const HCEditModal = ({
     const total = tableData.reduce(
       (accumulator, currentValue) => accumulator + currentValue.Rate,
       0
-    );
-    console.log(discountamount, total);
-    console.log(tableData);
+    )
+    console.log(discountamount, total)
+    console.log(tableData)
 
     const datas = tableData.map((ele) => {
       const DiscountPercentage = (Number(discountamount) / Number(total)) * 100;
@@ -160,15 +154,22 @@ const HCEditModal = ({
             ? (ele?.Rate - NetAmount).toFixed(2)
             : ele?.DiscAmt,
         NetAmt: NetAmount,
+
       };
+
+
     });
-    setTableData(datas);
-    console.log(datas);
+    setTableData(datas)
+    
     if (tableData.length === 0) {
-      setNet(0);
-      setDiscountAmount(0);
+      setNet(0)
+      setDiscountAmount(0)
     }
+
+
+
   }, [tableData.length]);
+
 
   useEffect(() => {
     setNet(
@@ -185,8 +186,9 @@ const HCEditModal = ({
   }, []);
 
   useEffect(() => {
-    setDiscount(Number(net) - Number(disAmt));
+    setDiscount(Number(net) - Number(disAmt))
     setDiscountAmount(disAmt);
+
   }, [disAmt]);
 
   useEffect(() => {
@@ -196,6 +198,8 @@ const HCEditModal = ({
       setDiscount(Number(net) - Number(discountAmount));
     }
   }, [discountPercentage]);
+
+
 
   const getBindSourceCall = () => {
     axios
@@ -236,6 +240,7 @@ const HCEditModal = ({
       );
   };
   const handleSplit = (id, symbol) => {
+
     const data = id?.split(symbol);
     return data;
   };
@@ -243,7 +248,8 @@ const HCEditModal = ({
   const handleBooking = () => {
     if (tableData.length === 0) {
       toast.error("Please Select Any Test");
-    } else if (appointData?.SourceofCollection == "") {
+    }
+    else if (appointData?.SourceofCollection == "") {
       toast.error("Select Source of Collection");
     } else {
       if (appointData?.PaymentMode) {
@@ -262,7 +268,9 @@ const HCEditModal = ({
     }
   };
 
+
   const handleUpdate = () => {
+
     console.log(appointData);
     console.log(tableData);
 
@@ -275,16 +283,19 @@ const HCEditModal = ({
 
       return {
         ...ele,
+        DisReason: testData?.DisReason,
+        DoctorID: testData?.DoctorID,
         DiscountPercentage: DiscountPercentage,
         GrossAmt: ele?.Rate,
         DiscAmt:
           tableData?.length > 1
             ? (ele?.Rate - NetAmount).toFixed(2)
             : discountamount,
-        NetAmt: tableData?.length > 1 ? NetAmount : discount,
+        NetAmt:  NetAmount ,
         isUrgent: ele?.isUrgent ? 1 : 0,
         Remarks: testData?.Remarks,
         isPediatric: ele?.isPediatric ? 1 : 0,
+        RefDoctor: testData?.RefDoctor
       };
     });
 
@@ -296,7 +307,7 @@ const HCEditModal = ({
           datatosave: datas,
           ...appointData,
           HardCopyRequired: appointData.HardCopyRequired ? 1 : 0,
-          VIP: appointData.VIP ? 1 : 0,
+          VIP: appointData.VIP ? 1 : 0
         })
         .then((res) => {
           console.log(res?.data?.message);
@@ -305,6 +316,8 @@ const HCEditModal = ({
           // callhandleOnRouteValue(routeValueData);
           handleCloseEdit();
           changeFlow(appointData);
+
+
         })
         .catch((err) => {
           toast.error(
@@ -313,9 +326,13 @@ const HCEditModal = ({
               : "Something Went Wrong"
           );
         });
-    } else {
+    }
+    else {
       setError(generatedError);
     }
+
+
+
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -326,13 +343,14 @@ const HCEditModal = ({
 
   const handleAppointChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setAppointData({
-      ...appointData,
-      [name]: type === "checkbox" ? checked : value,
-    });
+    setAppointData({ ...appointData, [name]: type === 'checkbox' ? checked : value });
 
     console.log(bookingData);
   };
+
+
+
+
 
   const SearchTest = (e) => {
     const val = e.target.value;
@@ -365,6 +383,7 @@ const HCEditModal = ({
           )
         );
     }
+
   };
 
   const handleIndex = (e) => {
@@ -430,12 +449,12 @@ const HCEditModal = ({
 
   //   return Number(rate - deductedAmount.toFixed(2));
 
+
   // }
   console.log(showLog);
   const getTableData = (data) => {
-    const ItemIndex = tableData.findIndex(
-      (e) => e.InvestigationID === data.InvestigationID
-    );
+
+    const ItemIndex = tableData.findIndex((e) => e.InvestigationID === data.InvestigationID)
 
     if (ItemIndex === -1) {
       axios
@@ -469,19 +488,24 @@ const HCEditModal = ({
                 deleiveryDate: ele?.deleiveryDate,
                 refRateValue: ele?.refRateValue,
                 DiscAmt: 0,
-                SampleRemarks: ele?.SampleRemarks,
+                SampleRemarks: ele?.SampleRemarks
+
+
               };
             }),
           ];
           console.log(appendedData);
-          setDiscountAmount("");
-          setDiscountPercentage("");
+          setDiscountAmount('');
+          setDiscountPercentage('');
           setTableData(appendedData);
         })
         .catch((err) => console.log(err));
-    } else {
-      toast.error("Duplicate Test Found");
     }
+
+    else {
+      toast.error("Duplicate Test Found")
+    }
+
   };
 
   const handleFilter = (data) => {
@@ -489,32 +513,35 @@ const HCEditModal = ({
       (ele) => ele.InvestigationID !== data.InvestigationID
     );
     console.log(value);
-    setDiscountAmount("");
-    setDiscountPercentage("");
+    setDiscountAmount('');
+    setDiscountPercentage('');
     const value2 = value.map((item) => {
-      return { ...item, DiscAmt: 0 };
-    });
+      return { ...item, DiscAmt: 0 }
+    })
     setTableData(value2);
     toast.success("Successfully Removed");
   };
 
+
+
+
   const fillTableData = () => {
-    console.log(testData);
+    console.log(testData)
     console.log(testDetails);
     const testdetails2 = testDetails.map(({ Discamt, ...rest }) => {
       return {
-        ...rest,
-        DiscAmt: Discamt,
+        ...rest, DiscAmt: Discamt
       };
     });
     const testDetails3 = testdetails2.map((item) => {
-      return { ...item, InvestigationID: item?.ItemId };
-    });
+      return { ...item, InvestigationID: item?.ItemId }
+    })
     const tableData = testDetails3.map((item) => {
-      return { ...testData, ...item };
-    });
-    console.log(tableData);
-    setTableData(tableData);
+      return { ...testData, ...item }
+    })
+    console.log(tableData)
+    setTableData(tableData)
+
   };
   console.log(tableData);
 
@@ -526,6 +553,7 @@ const HCEditModal = ({
       [name]: type === "checkbox" ? checked : value,
     });
   };
+
 
   const handleCheckBox = (index, e) => {
     const { name, checked } = e.target;
@@ -543,10 +571,14 @@ const HCEditModal = ({
     getBindSourceCall();
     fillTableData();
     getDiscountApproval();
-    setDiscountAmount(Discamount.toFixed(2));
+    setDiscountAmount(Discamount.toFixed(2))
   }, []);
 
-  useEffect(() => {});
+  useEffect(() => {
+
+  },)
+
+
 
   console.log(tableData);
 
@@ -735,7 +767,7 @@ const HCEditModal = ({
                 <Input
                   name="totalAmount"
                   className="select-input-box form-control input-sm"
-                  value={net - discountamount}
+                  value={(net - discountamount).toFixed(2)}
                 />
               </div>
             </div>
@@ -787,6 +819,7 @@ const HCEditModal = ({
                   >
                     Count : {tableData.length}
                   </button>
+
                 </div>
                 <div
                   className="row"
@@ -815,9 +848,8 @@ const HCEditModal = ({
                           <li
                             onClick={() => handleListSearch(data)}
                             key={index}
-                            className={`${
-                              index === indexMatch && "matchIndex"
-                            }`}
+                            className={`${index === indexMatch && "matchIndex"
+                              }`}
                           >
                             {data.TestCode}~{data.TestName}
                           </li>
@@ -826,12 +858,12 @@ const HCEditModal = ({
                     )}
                   </div>
                   <div className="col-sm-8">
-                    <span style={{ fontWeight: "bold" }}>
+                    <span style={{ fontWeight: 'bold' }}>
                       Total Amount :&nbsp;
                       {net}
                     </span>
                     &nbsp;&nbsp;
-                    <span style={{ fontWeight: "bold" }}>
+                    <span style={{ fontWeight: 'bold' }}>
                       Disc Amount :&nbsp;
                       {Number(discountamount).toFixed(2)}
                     </span>
@@ -845,7 +877,7 @@ const HCEditModal = ({
                     <div
                       className=" box-body divResult table-responsive"
                       id="no-more-tables"
-                      // style={{ paddingTop: "3px", paddingBottom: "3px" }}
+                    // style={{ paddingTop: "3px", paddingBottom: "3px" }}
                     >
                       <div className="row">
                         <table
@@ -870,8 +902,10 @@ const HCEditModal = ({
                           {console.log(tableData)}
                           {tableData.length > 0 && (
                             <tbody>
+
                               {tableData.map((ele, index) => (
                                 <>
+
                                   <tr key={index}>
                                     <td data-title="S.No">
                                       {index + 1}
@@ -901,11 +935,13 @@ const HCEditModal = ({
                                           className="fa fa-search"
                                           style={{ cursor: "pointer" }}
                                           onClick={() => {
+
                                             setShowLog({
                                               status: true,
                                               data: ele?.SampleRemarks,
-                                            });
-                                          }}
+                                            })
+                                          }
+                                          }
                                         />
                                       )}
                                     </td>
@@ -957,6 +993,7 @@ const HCEditModal = ({
                         </table>
                         {showLog && (
                           <Modal show={showLog.status} size="lg" id="ShowLog">
+
                             <div
                               style={{
                                 marginTop: "250px",
@@ -972,10 +1009,7 @@ const HCEditModal = ({
                                   type="button"
                                   className="close"
                                   onClick={() =>
-                                    setShowLog({
-                                      status: false,
-                                      data: showLog.data,
-                                    })
+                                    setShowLog({ status: false, data: showLog.data })
                                   }
                                 >
                                   ×
@@ -1085,21 +1119,21 @@ const HCEditModal = ({
                 <div className="row">
                   <label className="col-sm-4">Discount Amt :</label>
                   <div className="col-sm-6">
+
                     <Input
                       name="DiscAmt"
-                      value={discountamount != 0 ? discountamount : ""}
+                      value={discountamount != 0 ? discountamount : ''}
                       type="number"
                       className="select-input-box form-control input-sm"
                       onInput={(e) => number(e, 20)}
                       placeholder="Disc Amt"
                       onChange={(e) => {
-                        if (e?.target.value == "") {
-                          setTestData({
-                            ...testData,
-                            DoctorID: "",
-                            DisReason: "",
-                          });
+
+                        if (e?.target.value == '') {
+                          setTestData({ ...testData, DoctorID: '',DisReason:'' })
+
                         }
+
 
                         if (
                           tableData?.reduce(
@@ -1119,9 +1153,11 @@ const HCEditModal = ({
                           toast.error("Discount Already Given");
                         }
                       }}
+
                     />
                   </div>
                 </div>
+
 
                 <div className="row">
                   <label className="col-sm-4">Discount in % :</label>
@@ -1129,18 +1165,16 @@ const HCEditModal = ({
                     <Input
                       name="discountPercentage"
                       type="number"
+
                       onInput={(e) => number(e, 3)}
                       value={discountPercentage}
                       placeholder="Disc Perc"
                       className="select-input-box form-control input-sm"
                       onChange={(e) => {
                         console.log(tableData);
-                        if (e?.target.value == "") {
-                          setTestData({
-                            ...testData,
-                            DoctorID: "",
-                            DisReason: "",
-                          });
+                        if (e?.target.value == '') {
+                          setTestData({ ...testData, DoctorID: '',DisReason:'' })
+
                         }
                         if (
                           tableData?.reduce(
@@ -1176,7 +1210,7 @@ const HCEditModal = ({
                         ...discountApproval,
                       ]}
                       selectedValue={testData?.DoctorID}
-                      isDisabled={discountamount == ""}
+                      isDisabled={discountamount == ''}
                       className="select-input-box form-control input-sm"
                       onChange={handleTestChange}
                     />
@@ -1187,10 +1221,11 @@ const HCEditModal = ({
                   <div className="col-sm-6">
                     <Input
                       name="DisReason"
-                      disabled={discountamount == ""}
+                      disabled={discountamount == ''}
                       className="select-input-box form-control input-sm"
                       value={testData?.DisReason}
                       onChange={handleTestChange}
+
                     />
                   </div>
                 </div>

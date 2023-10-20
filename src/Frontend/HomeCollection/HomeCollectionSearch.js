@@ -508,7 +508,7 @@ const HomeCollectionSearch = () => {
                             name="PreBookingId"
                             onChange={formChangeHandler}
                             value={formData?.PreBookingId}
-                            placeholder={'Preebooking Id'} />
+                            placeholder={'Prebooking Id'} />
                     </div>
 
 

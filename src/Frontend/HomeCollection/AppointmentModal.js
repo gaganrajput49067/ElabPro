@@ -294,7 +294,6 @@ const AppointmentModal = ({
     const currentTime = new Date();
     const currentHours = currentTime.getHours();
     const currentMinutes = currentTime.getMinutes();
-
     const [dataHours, dataMinutes] = data.split(":").map(Number);
     const [loginHour, loginMinute] =
       selectedPhelebo?.LoginTime?.split(":").map(Number);
@@ -302,10 +301,8 @@ const AppointmentModal = ({
       selectedPhelebo?.LogoutTime?.split(":").map(Number);
     const appointmentDate = new Date(searchData.AppointmentDate);
     const currentDate = new Date();
-
     const appointmentDay = appointmentDate.getDate();
     const currentDay = currentDate.getDate();
-
     console.log(appointmentDay, currentDay);
 
     if (appointmentDay < currentDay) {
@@ -1337,7 +1334,7 @@ const AppointmentModal = ({
                                                       width: "120px",
                                                       // fontWeight: "bold",
                                                       left: "500px",
-                                                      // right:"50px",
+                                                      // right:"350px",
                                                       fontFamily: "arial",
                                                       height: "auto",
                                                       fontSize: "10px",

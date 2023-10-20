@@ -11,6 +11,7 @@ import ViewCoupon from "./ViewCoupon";
 import ViewTest from "./ViewTest";
 import CouponMasterEdit from "./CouponMasterEdit";
 import { toast } from "react-toastify";
+import moment from "moment";
 const CouponMasterApproval = () => {
   const { t } = useTranslation();
 
@@ -60,7 +61,12 @@ const CouponMasterApproval = () => {
     toast.success("Done");
   };
   const handleSearch = () => {
-    console.log(formData);
+    const updatedFormData = {
+      ...formData,
+      FromDate: moment(formData?.FromDate).format("DD-MMM-YYYY"),
+      ToDate: moment(formData?.ToDate).format("DD-MMM-YYYY"),
+    };
+    console.log(updatedFormData);
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -74,7 +80,6 @@ const CouponMasterApproval = () => {
       <ViewTest show={show} setShow={setShow} />
       <CouponMasterEdit show={show} setShow={setShow} />
 
-      
       <div className="box with-border">
         <div className="box box-header with-border box-success">
           <h3 className="box-title text-center">
@@ -153,7 +158,7 @@ const CouponMasterApproval = () => {
           <br></br>
           <div
             className="row"
-            style={{ display: "flex", justifyContent: "space-around" }}
+            style={{ display: "flex", justifyContent: "space-between" }}
           >
             <div className="col-sm-2" style={{ textAlign: "end" }}>
               {loading ? (
@@ -161,8 +166,9 @@ const CouponMasterApproval = () => {
               ) : (
                 <button
                   type="button"
-                  className="btn btn-block btn-success btn-sm"
+                  className="btn btn-success btn-sm"
                   onClick={handleSearch}
+                  style={{ width: "70px" }}
                 >
                   {t("Search")}
                 </button>

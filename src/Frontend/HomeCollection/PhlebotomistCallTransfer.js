@@ -18,7 +18,12 @@ const PhlebotomistCallTransfer = () => {
   const [formData, setFormData] = useState({
     State: "",
     City: "",
+    LocalityId:"",
+    date:new Date(),
+    PhelboId:''
     });
+    const [localities,setLocalities]=useState([]);
+    const [phelbos,setPhelbos]=useState([]);
 
   const fetchStates = () => {
     axios
@@ -66,13 +71,69 @@ const PhlebotomistCallTransfer = () => {
         console.log(err);
       });
   };
+  const getLocality = (value) => {
+    axios
+      .post("/api/v1/CustomerCare/BindLocality", {
+       "cityid":value
+      })
+      .then((res) => {
+        const data = res.data.message;
+        const localities = data.map((ele) => {
+          return {
+            value: ele.id,
+            label: ele.NAME,
+          };
+        });
+        setLocalities(localities);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const getPhelbo=(value)=>{
+    axios
+    .post("/api/v1/PhelebotomistMapping/BindPhelbo", {
+      CityId:value
+    })
+    .then((res) => {
+      const data = res.data.message;
+      const phelbos = data.map((ele) => {
+        return {
+          value: ele.PheleboId,
+          label: ele.Name,
+        };
+      });
+      setPhelbos(phelbos);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
   const handleChange=(e)=>{
   const { name, value, type, checked } = e.target;
    if(name=="State")
+   {
     getCity(value)
-      setFormData({ ...formData, [name]: type === "checkbox" ? checked : value, CityID: '' });
-      setCity([])
+    setFormData({ ...formData, [name]: type === "checkbox" ? checked : value, City: '' });
+    setCity([])
+   }
+   else if(name=="City")
+   {
+    getLocality(value);
+    getPhelbo(value)
+    setFormData({ ...formData, [name]: type === "checkbox" ? checked : value, LocalityId: '',PhelboId:'' });
+   }
+    
   }
+  const dateSelect = (date, name, value) => {
+    
+     setFormData({
+            ...formData,
+            [name]: date,
+        });
+    }
+
+
   useEffect(() => {
     fetchStates();
   }, []);
@@ -99,9 +160,10 @@ const PhlebotomistCallTransfer = () => {
                 className="form-control input-sm"
                 options={[{ label: "Select State", value: "" }, ...states]}
                 onChange={handleChange}
+                selectedValue={formData?.State}
               />
             </div>
-            <div className="col-sm-3"></div>
+            <div className="col-sm-4"></div>
 
             <label className="col-sm-2" htmlFor="City">
               {t("City")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -109,10 +171,15 @@ const PhlebotomistCallTransfer = () => {
             </label>
             <div className="col-sm-2">
               <SelectBox name="City" className="form-control input-sm" 
-               options={[{label:'Select City',value:''},...cities]}/>
+               options={[{label:'Select City',value:''},...cities]}
+               onChange={handleChange}
+               selectedValue={formData?.City}/>
             </div>
           </div>
           <div className="row">
+          <label className="col-sm-2">{t("Area")}:</label>
+            <div className="col-sm-2"><SelectBox options={[{label:'Select Area',value:''},...localities]} /></div>
+            <div className="col-sm-4"></div>
             <label className="col-sm-2" htmlFor="Phlebotomist">
               {t("Phlebotomist")}
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -122,19 +189,22 @@ const PhlebotomistCallTransfer = () => {
               <SelectBox
                 name="Phlebotomist"
                 className="form-control input-sm"
+                options={[{label:'Select Phelbo',value:''},...phelbos]}
               />
             </div>
             <div className="col-sm-3"></div>
-
-            <label className="col-sm-2" htmlFor="Date">
+               </div>
+          <div className="row">
+          <label className="col-sm-2" htmlFor="Date">
               {t("Date")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
             </label>
             <div className="col-sm-2">
               <DatePicker
                 name="date"
-                date={new Date()}
+                date={formData?.date}
                 className="form-control input-sm"
+                onChange={dateSelect}
               />
             </div>
           </div>
@@ -152,19 +222,28 @@ const PhlebotomistCallTransfer = () => {
               &nbsp;&nbsp;&nbsp;&nbsp;:
             </label>
             <div className="col-sm-2">
-              <SelectBox name="city" className="form-control input-sm" />
+              <SelectBox
+                name="State"
+                className="form-control input-sm"
+                options={[{ label: "Select State", value: "" }, ...states]}
+                onChange={handleChange}
+              />
             </div>
-            <div className="col-sm-3"></div>
+            <div className="col-sm-4"></div>
 
-            <label className="col-sm-2" htmlFor="State">
+            <label className="col-sm-2" htmlFor="City">
               {t("City")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
             </label>
             <div className="col-sm-2">
-              <SelectBox name="state" className="form-control input-sm" />
+              <SelectBox name="City" className="form-control input-sm" 
+               options={[{label:'Select City',value:''},...cities]}/>
             </div>
           </div>
           <div className="row">
+          <label className="col-sm-2">{t("Area")}:</label>
+            <div className="col-sm-2"><SelectBox  /></div>
+            <div className="col-sm-4"></div>
             <label className="col-sm-2" htmlFor="Phlebotomist">
               {t("Phlebotomist")}
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -177,6 +256,19 @@ const PhlebotomistCallTransfer = () => {
               />
             </div>
             <div className="col-sm-3"></div>
+               </div>
+          <div className="row">
+          <label className="col-sm-2" htmlFor="Date">
+              {t("Date")}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+            </label>
+            <div className="col-sm-2">
+              <DatePicker
+                name="date"
+                date={new Date()}
+                className="form-control input-sm"
+              />
+            </div>
           </div>
           <div
             className="row"

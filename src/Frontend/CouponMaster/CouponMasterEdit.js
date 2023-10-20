@@ -8,11 +8,16 @@ import Modal from "react-bootstrap/Modal";
 
 const CouponMasterEdit = ({ show, setShow }) => {
   const { t } = useTranslation();
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const [billingType, setBillingType] = useState("Total Bill");
   const handleRadioChange = (event) => {
     setBillingType(event.target.value);
   };
+  const handleRadioChange2=(event)=>{
+    setSelectedOption(event.target.value)
+  }
+  
   return (
     <Modal show={show?.Edit} id="HomeCollectionDetailModal">
       <div
@@ -169,20 +174,34 @@ const CouponMasterEdit = ({ show, setShow }) => {
                   className="col-sm-3"
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <div>
-                    <label htmlFor="IsActive" className="control-label">
-                      {t("For Multiple Patient")}&nbsp;
-                    </label>
-                    <SimpleCheckbox name="IsActive" type="checkbox" />
-                  </div>
+                <div>
+        <label htmlFor="MultiplePatient" className="control-label">
+          {t("For Multiple Patient")}&nbsp;
+        </label>
+        <input 
+          type="radio" 
+          id="MultiplePatient" 
+          name="patientType" 
+          value="multiple" 
+          checked={selectedOption === 'multiple'} 
+          onChange={handleRadioChange2} 
+        />
+      </div>
 
-                  <div>
-                    <label htmlFor="IsActive" className="control-label">
-                      {t("For One Time Patient")}&nbsp;
-                    </label>
-                    <SimpleCheckbox name="IsActive" type="checkbox" />
-                  </div>
-                </div>
+      <div>
+        <label htmlFor="OneTimePatient" className="control-label">
+          {t("For One Time Patient")}&nbsp;
+        </label>
+        <input 
+          type="radio" 
+          id="OneTimePatient" 
+          name="patientType" 
+          value="oneTime" 
+          checked={selectedOption === 'oneTime'} 
+          onChange={handleRadioChange2} 
+        />
+      </div>
+    </div>
 
                 <label className="col-sm-1" htmlFor="inputEmail3">
                   {t("Coupon Count")}:
