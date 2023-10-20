@@ -73,6 +73,8 @@ const CouponMasterApproval = () => {
       <ViewCoupon show={show} setShow={setShow} />
       <ViewTest show={show} setShow={setShow} />
       <CouponMasterEdit show={show} setShow={setShow} />
+
+      
       <div className="box with-border">
         <div className="box box-header with-border box-success">
           <h3 className="box-title text-center">

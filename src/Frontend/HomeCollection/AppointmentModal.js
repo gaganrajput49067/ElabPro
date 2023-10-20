@@ -192,8 +192,8 @@ const AppointmentModal = ({
                 // label: handleSplit(ele?.centreid, "^")[1],
                 // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
                 SelectedRouteName: handleSplit(ele?.route, "@")[0],
-                LoginTime: "11:00",
-                LogoutTime: "20:00",
+                LoginTime: "00:00",
+                LogoutTime: "16:00",
                 SelectedRouteId: handleSplit(ele?.route, "@")[1],
                 PheleboNumber: handleSplit(ele?.NAME, " ")[1],
                 PheleboName: handleSplit(ele?.NAME, " ")[0],
@@ -259,8 +259,8 @@ const AppointmentModal = ({
                   // label: handleSplit(ele?.centreid, "^")[1],
                   // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
                   SelectedRouteName: handleSplit(ele?.route, "@")[0],
-                  LoginTime: "11:00",
-                  LogoutTime: "20:00",
+                  LoginTime: "00:00",
+                  LogoutTime: "16:00",
                   SelectedRouteId: handleSplit(ele?.route, "@")[1],
                   PheleboNumber: handleSplit(ele?.NAME, " ")[1],
                   PheleboName: handleSplit(ele?.NAME, " ")[0],
@@ -316,7 +316,14 @@ const AppointmentModal = ({
         (dataHours === currentHours && dataMinutes < currentMinutes)
       ) {
         toast.error("You can't book an appointment for this time");
-      } else if (dataHours <= loginHour || dataHours >= logoutHour) {
+      } else if (
+        !(
+          (dataHours > loginHour ||
+            (dataHours === loginHour && dataMinutes >= loginMinute)) &&
+          (dataHours < logoutHour ||
+            (dataHours === logoutHour && dataMinutes <= logoutMinute))
+        )
+      ) {
         toast.error("Phelebo Not Available for this time");
       } else if (match >= selectedPhelebo?.TimeslotData) {
         toast.error("Booking is Filled for given Slot");
@@ -368,7 +375,14 @@ const AppointmentModal = ({
     } else if (match >= selectedPhelebo?.TimeslotData) {
       toast.error("Booking is Filled for given Slot");
     } else {
-      if (dataHours <= loginHour || dataHours >= logoutHour) {
+      if (
+        !(
+          (dataHours > loginHour ||
+            (dataHours === loginHour && dataMinutes >= loginMinute)) &&
+          (dataHours < logoutHour ||
+            (dataHours === logoutHour && dataMinutes <= logoutMinute))
+        )
+      ) {
         toast.error("Phelebo Not Available for this time");
       } else {
         setSelectedPhelebo({
@@ -1320,8 +1334,10 @@ const AppointmentModal = ({
                                                   <span
                                                     style={{
                                                       position: "absolute",
-                                                      width: "auto",
+                                                      width: "120px",
                                                       // fontWeight: "bold",
+                                                      left: "500px",
+                                                      // right:"50px",
                                                       fontFamily: "arial",
                                                       height: "auto",
                                                       fontSize: "10px",
