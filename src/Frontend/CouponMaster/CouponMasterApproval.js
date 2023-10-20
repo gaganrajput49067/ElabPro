@@ -10,6 +10,7 @@ import ViewCentre from "./ViewCentre";
 import ViewCoupon from "./ViewCoupon";
 import ViewTest from "./ViewTest";
 import CouponMasterEdit from "./CouponMasterEdit";
+import { toast } from "react-toastify";
 const CouponMasterApproval = () => {
   const { t } = useTranslation();
 
@@ -55,7 +56,9 @@ const CouponMasterApproval = () => {
     const { name, value } = e?.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  const handleStatus = () => {
+    toast.success("Done");
+  };
   const handleSearch = () => {
     console.log(formData);
     setLoading(true);
@@ -394,7 +397,12 @@ const CouponMasterApproval = () => {
                     ></div>
                   </td>
                   <td data-title="#" className="text-center">
-                    <button className="btn btn-success btn-sm">------</button>
+                    <button
+                      className="btn btn-success btn-sm"
+                      onClick={handleStatus}
+                    >
+                      Status
+                    </button>
                   </td>
                   <td data-title="Reject" className="text-center">
                     <button
