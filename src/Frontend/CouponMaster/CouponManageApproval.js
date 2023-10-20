@@ -7,8 +7,46 @@ import Input from "../../ChildComponents/Input";
 // import Loading from "../util/Loading";
 import Loading from "../../util/Loading";
 import { SimpleCheckbox } from "../../ChildComponents/CheckBox";
-import { Link } from "react-router-dom";
+const AuthorityType = [
+  {
+    label: "Coupon",
+    value: "Coupon",
+  },
+];
 const CouponManageApproval = () => {
+  const [formData, setFromData] = useState({
+    EmployeeName: "",
+    AuthorityType: "Coupon",
+    Maker: 0,
+    Checker: 0,
+    Approval: 0,
+    Reject: 0,
+    StatusChange: 0,
+    Edit: 0,
+    NotApproval: 0,
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFromData({
+      ...formData,
+      [name]: type === "checkbox" ? (checked ? 1 : 0) : value,
+    });
+  };
+
+  const handleSave = () => {
+    console.log(formData);
+    // setFromData({
+    //   ...formData,
+    //   Maker: formData?.Maker ? 1 : 0,
+    //   Checker: formData?.Checker ? 1 : 0,
+    //   Approval: formData?.Approval ? 1 : 0,
+    //   Reject: formData?.Reject ? 1 : 0,
+    //   StatusChange: formData?.StatusChange ? 1 : 0,
+    //   Edit: formData?.Edit ? 1 : 0,
+    //   NotApproval: formData?.NotApproval ? 1 : 0,
+    // });
+  };
   const { t } = useTranslation();
   return (
     <>
@@ -37,6 +75,8 @@ const CouponManageApproval = () => {
                 autoComplete="off"
                 placeholder="Employee Name"
                 name="EmployeeName"
+                value={formData?.EmployeeName}
+                onChange={handleChange}
               />
             </div>
 
@@ -47,6 +87,9 @@ const CouponManageApproval = () => {
               <SelectBox
                 name="AuthorityType"
                 className="form-control input-sm"
+                onChange={handleChange}
+                selectedValue={formData?.AuthorityType}
+                options={AuthorityType}
               />
             </div>
           </div>
@@ -59,31 +102,66 @@ const CouponManageApproval = () => {
               {t("For Approval")} :
             </label>
             <div className="col-sm-1">
-              <SimpleCheckbox name="Maker" type="checkbox" />
+              <SimpleCheckbox
+                name="Maker"
+                type="checkbox"
+                onChange={handleChange}
+                checked={formData?.Maker}
+              />
               &nbsp;{t("Maker")}
             </div>
             <div className="col-sm-1">
-              <SimpleCheckbox name="Checker" type="checkbox" />
+              <SimpleCheckbox
+                name="Checker"
+                type="checkbox"
+                onChange={handleChange}
+                checked={formData?.Checker}
+              />
               &nbsp;{t("Checker")}
             </div>
             <div className="col-sm-1">
-              <SimpleCheckbox name="Approval" type="checkbox" />
+              <SimpleCheckbox
+                name="Approval"
+                type="checkbox"
+                onChange={handleChange}
+                checked={formData?.Approval}
+              />
               &nbsp; {t("Approval")}
             </div>
             <div className="col-sm-1">
-              <SimpleCheckbox name="Reject" type="checkbox" />
+              <SimpleCheckbox
+                name="Reject"
+                type="checkbox"
+                onChange={handleChange}
+                checked={formData?.Reject}
+              />
               &nbsp;{t("Reject")}
             </div>
             <div className="col-sm-2">
-              <SimpleCheckbox name="StatusChange" type="checkbox" />
+              <SimpleCheckbox
+                name="StatusChange"
+                type="checkbox"
+                onChange={handleChange}
+                checked={formData?.StatusChange}
+              />
               &nbsp;{t("StatusChange")}
             </div>
             <div className="col-sm-1">
-              <SimpleCheckbox name="Edit" type="checkbox" />
+              <SimpleCheckbox
+                name="Edit"
+                type="checkbox"
+                onChange={handleChange}
+                checked={formData?.Edit}
+              />
               &nbsp;{t("Edit")}
             </div>
             <div className="col-sm-2">
-              <SimpleCheckbox name="NotApproval" type="checkbox" />
+              <SimpleCheckbox
+                name="NotApproval"
+                type="checkbox"
+                onChange={handleChange}
+                checked={formData?.NotApproval}
+              />
               &nbsp;{t("NotApproval")}
             </div>
           </div>
@@ -96,6 +174,7 @@ const CouponManageApproval = () => {
               <button
                 type="button"
                 className="btn btn-block btn-success btn-sm"
+                onClick={handleSave}
               >
                 {t("Add")}
               </button>
@@ -118,7 +197,9 @@ const CouponManageApproval = () => {
             {t("All Selected Approval")}
           </h3>
           &nbsp;&nbsp;
-          <a style={{ cursor: "pointer" }}>{t("Search All")}</a>
+          <a style={{ cursor: "pointer", textDecoration: "underline" }}>
+            {t("Search All")}
+          </a>
         </div>
         <div
           className="box-body divResult boottable table-responsive"
@@ -141,7 +222,36 @@ const CouponManageApproval = () => {
                 </tr>
               </thead>
 
-              <tbody></tbody>
+              <tbody>
+                <td data-title="Employee Name" className="text-center">
+                  &nbsp;NaN
+                </td>
+                <td data-title="Authority Type" className="text-center">
+                  &nbsp;NaN
+                </td>
+                <td data-title="Approval" className="text-center">
+                  &nbsp;NaN
+                </td>
+                <td data-title="Created By" className="text-center">
+                  &nbsp;NaN
+                </td>
+                <td data-title="Created Date" className="text-center">
+                  &nbsp;NaN
+                </td>
+                <td data-title="Remove" className="text-center">
+                  &nbsp;
+                  <span
+                    style={{
+                      fontSize: "13px",
+                      color: "#8B0000",
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                    }}
+                  >
+                    X
+                  </span>
+                </td>
+              </tbody>
             </table>
           </div>
         </div>

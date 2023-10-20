@@ -4,19 +4,38 @@ import { useTranslation } from "react-i18next";
 import { SelectBox } from "../../ChildComponents/SelectBox";
 import DatePicker from "../Components/DatePicker";
 import Input from "../../ChildComponents/Input";
-// import Loading from "../util/Loading";
-import Loading from "../../util/Loading";
+import Loading from "../util/Loading";
 import CouponMasterReject from "./CouponMasterReject";
 import ViewCentre from "./ViewCentre";
 import ViewCoupon from "./ViewCoupon";
 import ViewTest from "./ViewTest";
+import CouponMasterEdit from "./CouponMasterEdit";
 const CouponMasterApproval = () => {
   const { t } = useTranslation();
+
+  const StatusType = [
+    {
+      label: "Made",
+      value: "Made",
+    },
+    {
+      label: "Checked",
+      value: "Checked",
+    },
+    {
+      label: "Approved",
+      value: "Approved",
+    },
+    {
+      label: "Rejected",
+      value: "Rejected",
+    },
+  ];
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     FromDate: new Date(),
     ToDate: new Date(),
-    Status: "",
+    Status: "Made",
     CouponType: "",
     CouponName: "",
   });
@@ -26,6 +45,7 @@ const CouponMasterApproval = () => {
     ViewCentre: false,
     ViewTest: false,
     ViewCoupon: false,
+    Edit: false,
   });
 
   const dateSelect = (date, name) => {
@@ -49,6 +69,7 @@ const CouponMasterApproval = () => {
       <ViewCentre show={show} setShow={setShow} />
       <ViewCoupon show={show} setShow={setShow} />
       <ViewTest show={show} setShow={setShow} />
+      <CouponMasterEdit show={show} setShow={setShow} />
       <div className="box with-border">
         <div className="box box-header with-border box-success">
           <h3 className="box-title text-center">
@@ -90,8 +111,8 @@ const CouponMasterApproval = () => {
               <SelectBox
                 name="Status"
                 className="form-control input-sm"
-                // options={DateType}
                 onChange={formChangeHandler}
+                options={StatusType}
                 selectedValue={formData?.Status}
               />
             </div>
@@ -104,7 +125,6 @@ const CouponMasterApproval = () => {
               <SelectBox
                 name="CouponType"
                 className="form-control input-sm"
-                // options={DateType}
                 onChange={formChangeHandler}
                 selectedValue={formData?.CouponType}
               />
@@ -225,63 +245,183 @@ const CouponMasterApproval = () => {
               <thead className="cf text-center" style={{ zIndex: 99 }}>
                 <tr>
                   <th className="text-center">{t("S.No")}</th>
-                  <th className="text-center">{t("Coupon Name")}</th>
-                  <th className="text-center">{t("Coupon Type")}</th>
-                  <th className="text-center">{t("Discount Share Type")}</th>
-                  <th className="text-center">{t("Valid From")}</th>
-                  <th className="text-center">{t("Valid To")}</th>
-                  <th className="text-center">{t("Min. Billing Amount")}</th>
-                  <th className="text-center">{t("Issue For")}</th>
+                  <th className="text-center">
+                    <div>{t("Coupon")}</div>
+                    <div>{t("Name")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("Coupon")}</div>
+                    <div>{t("Type")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("Discount")}</div>
+                    <div>{t("ShareType")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("Valid")}</div>
+                    <div>{t("From")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("Valid")}</div>
+                    <div>{t("To")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("Minimum")}</div>
+                    <div>{t("BillingAmount")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("Issue")}</div>
+                    <div>{t("For")}</div>
+                  </th>
                   <th className="text-center">{t("Applicable")}</th>
-                  <th className="text-center">{t("Discount Amt.")}</th>
-                  <th className="text-center">{t("Discount(%)")}</th>
-                  <th className="text-center">{t("Multiple Coupon")}</th>
-                  <th className="text-center">{t("TotalCoupon")}</th>
-                  <th className="text-center">{t("UsedCoupon")}</th>
-                  <th className="text-center">{t("Rem.Coupon")}</th>
-                  <th className="text-center">{t("View Center/PUP")}</th>
-                  <th className="text-center">{t("View Test")}</th>
-                  <th className="text-center">{t("View Coupon")}</th>
+                  <th className="text-center">
+                    <div>{t("Discount")}</div>
+                    <div>{t("Amount")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("Discount")}</div>
+                    <div>{t("Percentage")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("Multiple")}</div>
+                    <div>{t("Coupon")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("Total")}</div>
+                    <div>{t("Coupon")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("Used")}</div>
+                    <div>{t("Coupon")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("Remaining")}</div>
+                    <div>{t("Coupon")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("ViewCentre/")}</div>
+                    <div>{t("PUP")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("View")}</div>
+                    <div>{t("Test")}</div>
+                  </th>
+                  <th className="text-center">
+                    <div>{t("View")}</div>
+                    <div>{t("Coupon")}</div>
+                  </th>
                   <th className="text-center">{t("#")}</th>
                   <th className="text-center">{t("Reject")}</th>
                   <th className="text-center">{t("Edit")}</th>
                 </tr>
               </thead>
 
-              <tbody></tbody>
+              <tbody>
+                <>
+                  <td data-title="S.No" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Coupon Name" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Coupon Type" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Discount ShareType" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Valid From" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Valid To" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td
+                    data-title="Minimum BillingAmount"
+                    className="text-center"
+                  >
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Issue For" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Applicable" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Discount Amount" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Discount(%)" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Multiple Coupon" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Total Coupon" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Used Coupon" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="Remaining Coupon" className="text-center">
+                    &nbsp;NaN
+                  </td>
+                  <td data-title="View Center/PUP" className="text-center ">
+                    <div
+                      className="fa fa-search"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setShow({ ...show, ViewCentre: true });
+                      }}
+                    ></div>
+                  </td>
+                  <td data-title="View Test" className="text-center">
+                    <div
+                      className="fa fa-search"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setShow({ ...show, ViewTest: true });
+                      }}
+                    ></div>
+                  </td>
+                  <td data-title="View Coupon" className="text-center">
+                    <div
+                      className="fa fa-search"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setShow({ ...show, ViewCoupon: true });
+                      }}
+                    ></div>
+                  </td>
+                  <td data-title="#" className="text-center">
+                    <button className="btn btn-success btn-sm">------</button>
+                  </td>
+                  <td data-title="Reject" className="text-center">
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => {
+                        setShow({ ...show, rejectShow: true });
+                      }}
+                    >
+                      Reject
+                    </button>
+                  </td>
+                  <td data-title="Edit" className="text-center">
+                    <button
+                      className="btn btn-primary btn-sm"
+                      onClick={() => {
+                        setShow({ ...show, Edit: true });
+                      }}
+                    >
+                      Edit
+                    </button>
+                  </td>
+                </>
+              </tbody>
             </table>
           </div>
         </div>
       </div>
-
-      <button
-        onClick={() => {
-          setShow({ ...show, rejectShow: true });
-        }}
-      >
-        Check
-      </button>
-      <button
-        onClick={() => {
-          setShow({ ...show, ViewCentre: true });
-        }}
-      >
-        Check1
-      </button>
-      <button
-        onClick={() => {
-          setShow({ ...show, ViewCoupon: true });
-        }}
-      >
-        Check2
-      </button>
-      <button
-        onClick={() => {
-          setShow({ ...show, ViewTest: true });
-        }}
-      >
-        Check3
-      </button>
     </>
   );
 };

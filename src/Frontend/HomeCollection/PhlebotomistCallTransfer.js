@@ -14,6 +14,11 @@ import { toast } from "react-toastify";
 const PhlebotomistCallTransfer = () => {
   const { t } = useTranslation();
   const [states, setStates] = useState([]);
+  const [cities,setCity]=useState([])
+  const [formData, setFormData] = useState({
+    State: "",
+    City: "",
+    });
 
   const fetchStates = () => {
     axios
@@ -37,6 +42,37 @@ const PhlebotomistCallTransfer = () => {
       });
   };
 
+  const handleSplitData = (id) => {
+    const data = id.split("#")[0];
+    return data;
+  };
+
+  const getCity = (value) => {
+    axios
+      .post("/api/v1/CommonHC/GetCityData", {
+        StateId: value,
+      })
+      .then((res) => {
+        const data = res.data.message;
+        const cities = data.map((ele) => {
+          return {
+            value: handleSplitData(ele.ID),
+            label: ele.City,
+          };
+        });
+        setCity(cities);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleChange=(e)=>{
+  const { name, value, type, checked } = e.target;
+   if(name=="State")
+    getCity(value)
+      setFormData({ ...formData, [name]: type === "checkbox" ? checked : value, CityID: '' });
+      setCity([])
+  }
   useEffect(() => {
     fetchStates();
   }, []);
@@ -61,7 +97,8 @@ const PhlebotomistCallTransfer = () => {
               <SelectBox
                 name="State"
                 className="form-control input-sm"
-                options={[{ label: "Select", value: "" }, ...states]}
+                options={[{ label: "Select State", value: "" }, ...states]}
+                onChange={handleChange}
               />
             </div>
             <div className="col-sm-3"></div>
@@ -71,7 +108,8 @@ const PhlebotomistCallTransfer = () => {
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
             </label>
             <div className="col-sm-2">
-              <SelectBox name="City" className="form-control input-sm" />
+              <SelectBox name="City" className="form-control input-sm" 
+               options={[{label:'Select City',value:''},...cities]}/>
             </div>
           </div>
           <div className="row">

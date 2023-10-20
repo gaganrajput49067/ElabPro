@@ -455,18 +455,31 @@ const AppointmentModal = ({
     }
 
     if (name === "LocalityID") {
-      getPincode(value, name);
-      setSearchData({
-        ...searchData,
-        [name]: value,
-        // Pincode: "",
-        // DropLocationId: "",
-        // SelectedBindRoute: "",
-        RouteId: "",
-      });
+      if (value) {
+        getPincode(value, name);
+        setSearchData({
+          ...searchData,
+          [name]: value,
+          // Pincode: "",
+          // DropLocationId: "",
+          // SelectedBindRoute: "",
+          RouteId: "",
+        });
+      } else {
+        setSearchData({
+          ...searchData,
+          LocalityID: "",
+          Pincode: "",
+          DropLocationId: "",
+          SelectedBindRoute: "",
+          RouteId: "",
+        });
+        setShowPhelebo([]);
+        setDropLocation([]);
+      }
 
       // setShowPhelebo([]);
-      // setDropLocation([]);
+      //
     }
 
     if (name === "RouteId") {
