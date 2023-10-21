@@ -1331,7 +1331,7 @@ const PatientRegister = () => {
         );
       });
   };
-
+console.log(state)
   const handleSubmitApi = () => {
     const { DocumentFlag, message } = handleFileValidationUpload();
     if (!filterUnPaidRcData()) {

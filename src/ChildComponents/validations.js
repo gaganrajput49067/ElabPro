@@ -106,10 +106,9 @@ export const PhelbotomistValidationSchema = (formData) => {
     err = { ...err, LogoutTime: "This Field is Required" };
   }
   if (formData?.P_Pincode != "") {
-     
     if (formData?.P_Pincode?.length != 6) {
       err = { ...err, PincodeLength: "Invalid Pincode" };
-    } 
+    }
   }
   if (formData?.PanNo != "") {
     if (formData?.PanNo?.length != 10) {
@@ -175,7 +174,7 @@ export const PhelboAuthenticationSchema = (formData) => {
   if (formData?.P_Pincode?.length != 6) {
     err = { ...err, PincodeInvalid: "Please enter valid pincode" };
   }
-  
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(formData?.Email)) {
     err = { ...err, Emailvalid: "Enter a valid email address" };
@@ -270,6 +269,9 @@ export const RouteMasterValidationSchema = (formData) => {
   if (!formData?.Route || formData?.Route.trim() === "") {
     err = { ...err, Route: "This Field is Required" };
   }
+  if (formData?.Route.trim().length < 2) {
+    err = { ...err, Routes: "Must Have 2 length" };
+  }
   return err;
 };
 export const LocationMasterValidationSchema = (formData) => {
@@ -321,7 +323,9 @@ export const NewPatientModalValidationSchema = (formData) => {
   if (!formData.PName || formData.PName.trim() === "") {
     err = { ...err, PName: "This Field is Required" };
   }
-
+  if (formData?.PName.trim().length < 3) {
+    err = { ...err, PNames: "Must Have 3 length" };
+  }
   if (!formData.DOB || formData.DOB === "") {
     err = { ...err, DOB: "This Field is Required" };
   }
@@ -343,7 +347,17 @@ export const NewPatientModalValidationSchema = (formData) => {
   if (formData?.Email.trim().length > 0 && !emailRegex.test(formData?.Email)) {
     err = { ...err, Emailvalid: "Please enter a valid email address" };
   }
- 
+  if (formData?.HouseNo.trim().length > 0  &&
+  formData?.HouseNo.trim().length < 3) {
+    err = { ...err, HouseNo: "Must Have 3 length" };
+  }
+  
+  if (
+    formData?.Landmark.trim().length > 0 &&
+    formData?.Landmark.trim().length < 3
+  ) {
+    err = { ...err, Landmark: "Must Have 3 length" };
+  }
   return err;
 };
 export const HandleHCBooking = (appointData) => {
@@ -354,7 +368,12 @@ export const HandleHCBooking = (appointData) => {
   if (appointData?.Alternatemobileno.length !== 10) {
     err = { ...err, Alternatemobilenum: "Please enter valid number" };
   }
-
+  if (
+    appointData?.Address.trim().length > 0 &&
+    appointData?.Address.trim().length < 3
+  ) {
+    err = { ...err, Address: "Must Have 3 length" };
+  }
   return err;
 };
 export const HandleHCEditBooking = (appointData) => {
@@ -391,9 +410,26 @@ export const AppointmentModalValidationSchema = (searchData) => {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (searchData?.Email.trim().length > 0 && !emailRegex.test(searchData?.Email)) {
+  if (
+    searchData?.Email.trim().length > 0 &&
+    !emailRegex.test(searchData?.Email)
+  ) {
     err = { ...err, Emailvalid: "Please enter a valid email address" };
   }
+
+  if (
+    searchData?.Landmark.trim().length > 0 &&
+    searchData?.Landmark.trim().length < 3
+  ) {
+    err = { ...err, Landmark: "Must Have 3 length" };
+  }
+  if (
+    searchData?.Address.trim().length > 0 &&
+    searchData?.Address.trim().length < 3
+  ) {
+    err = { ...err, Address: "Must Have 3 length" };
+  }
+  return err;
   // if (!searchData.DropLocationId) {
   //   err = { ...err, DropLocationId: "Pick any DropLocation" };
   // }

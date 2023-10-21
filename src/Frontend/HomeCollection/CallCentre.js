@@ -10,6 +10,7 @@ import moment from "moment";
 import { number } from "../util/Commonservices/number";
 import AppointmentModal from "./AppointmentModal";
 import HCHistoryModal from "./HCHistoryModal";
+
 const CallCentre = () => {
   const { t } = useTranslation();
   const [mobile, setMobile] = useState("");
@@ -20,6 +21,7 @@ const CallCentre = () => {
   const [hcHistoryShow, sethcHistoryShow] = useState(false);
   const [showPatientData, setShowPatientData] = useState({});
   const [hcStatusShow, setHcStatusShow] = useState([]);
+
   const handleClose = () => {
     setShow(false);
     setShowPatientData({});
@@ -128,6 +130,7 @@ const CallCentre = () => {
           handleSelectData={handleSelectData}
         />
       )}
+      
       {appointShow && (
         <AppointmentModal
           showPatientData={showPatientData}

@@ -80,18 +80,18 @@ const AppointmentModal = ({
     });
   };
 
-  useEffect(() => {
-    const generatedError = AppointmentModalValidationSchema(searchData);
-    setError({
-      ...errors,
-      Emailvalid: generatedError.Emailvalid,
-    });
-  }, [searchData?.Email]);
+  // useEffect(() => {
+  //   const generatedError = AppointmentModalValidationSchema(searchData);
+  //   setError({
+  //     ...errors,
+  //     Emailvalid: generatedError.Emailvalid,
+  //   });
+  // }, [searchData?.Email]);
 
-  useEffect(() => {
-    console.log(searchData?.LocalityID);
-    console.log(searchData);
-  }, [searchData?.LocalityID]);
+  // useEffect(() => {
+  //   console.log(searchData?.LocalityID);
+  //   console.log(searchData);
+  // }, [searchData?.LocalityID]);
 
   const GetPatientDetailonSlot = (SetPhelebo) => {
     const phleboIds = SetPhelebo.map((phelebo) => phelebo.SelectedPheleboId);
@@ -135,9 +135,9 @@ const AppointmentModal = ({
     console.log(payload);
     // console.log(searchData);
     const Today = searchData?.AppointmentDate.getDay();
-    const generatedError = AppointmentModalValidationSchema(searchData);
+
     console.log(searchData);
-    console.log(generatedError);
+    // console.log(generatedError);
     let obj = {
       areaid: "",
       pincode: "",
@@ -151,71 +151,76 @@ const AppointmentModal = ({
       toast.error("You Cannot Book appointment on Sunday");
     } else {
       if (payload) {
-        obj = {
-          areaid: payload.areaid,
-          pincode: payload.pincode,
+        const generatedError = AppointmentModalValidationSchema(searchData);
+        if (generatedError == "") {
+          obj = {
+            areaid: payload.areaid,
+            pincode: payload.pincode,
 
-          fromdate: moment(searchData.AppointmentDate).format("DD-MMM-YYYY"),
-          freeslot: searchData?.freeslot,
-          phelboid: searchData?.phelboid,
-        };
-        setLoad(true);
-        axios
-          .post("/api/v1/CustomerCare/BindSlot", obj)
-          .then((res) => {
-            setLoad(false);
-            const data = res.data.Data;
-            const slot = res?.data?.Slot;
-            const TimeslotData = res?.data?.TimeslotData;
+            fromdate: moment(searchData.AppointmentDate).format("DD-MMM-YYYY"),
+            freeslot: searchData?.freeslot,
+            phelboid: searchData?.phelboid,
+          };
+          setLoad(true);
+          axios
+            .post("/api/v1/CustomerCare/BindSlot", obj)
+            .then((res) => {
+              setLoad(false);
+              const data = res.data.Data;
+              const slot = res?.data?.Slot;
+              const TimeslotData = res?.data?.TimeslotData;
 
-            const slotTime = TimeslotData.map((e) => {
-              return {
-                NoofSlotForApp: e.NoofSlotForApp,
-              };
-            });
+              const slotTime = TimeslotData.map((e) => {
+                return {
+                  NoofSlotForApp: e.NoofSlotForApp,
+                };
+              });
 
-            const SlotArray = [];
-            for (
-              let i = 0;
-              i < slot.length;
-              i += parseInt(slotTime[0].NoofSlotForApp, 10)
-            ) {
-              SlotArray.push(
-                slot.slice(i, i + parseInt(slotTime[0].NoofSlotForApp, 10))
+              const SlotArray = [];
+              for (
+                let i = 0;
+                i < slot.length;
+                i += parseInt(slotTime[0].NoofSlotForApp, 10)
+              ) {
+                SlotArray.push(
+                  slot.slice(i, i + parseInt(slotTime[0].NoofSlotForApp, 10))
+                );
+              }
+
+              const SetPhelebo = data?.map((ele) => {
+                return {
+                  SelectedPheleboId: ele?.ID,
+                  // value: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[1],
+                  // label: handleSplit(ele?.centreid, "^")[1],
+                  // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
+                  SelectedRouteName: handleSplit(ele?.route, "@")[0],
+                  LoginTime: "00:00",
+                  LogoutTime: "16:00",
+                  SelectedRouteId: handleSplit(ele?.route, "@")[1],
+                  PheleboNumber: handleSplit(ele?.NAME, " ")[1],
+                  PheleboName: handleSplit(ele?.NAME, " ")[0],
+                  istemp: ele?.istemp,
+                  Slotdata: slot,
+                  SlotArray: SlotArray,
+                  TimeslotData: slotTime[0].NoofSlotForApp,
+                };
+              });
+              console.log(SetPhelebo);
+              setShowPhelebo(SetPhelebo);
+              GetPatientDetailonSlot(SetPhelebo);
+            })
+            .catch((err) => {
+              setLoad(false);
+              setShowPhelebo([]);
+              toast.error(
+                err?.response?.data?.message
+                  ? err?.response?.data?.message
+                  : "Error Occured"
               );
-            }
-
-            const SetPhelebo = data?.map((ele) => {
-              return {
-                SelectedPheleboId: ele?.ID,
-                // value: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[1],
-                // label: handleSplit(ele?.centreid, "^")[1],
-                // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
-                SelectedRouteName: handleSplit(ele?.route, "@")[0],
-                LoginTime: "00:00",
-                LogoutTime: "16:00",
-                SelectedRouteId: handleSplit(ele?.route, "@")[1],
-                PheleboNumber: handleSplit(ele?.NAME, " ")[1],
-                PheleboName: handleSplit(ele?.NAME, " ")[0],
-                istemp: ele?.istemp,
-                Slotdata: slot,
-                SlotArray: SlotArray,
-                TimeslotData: slotTime[0].NoofSlotForApp,
-              };
             });
-            console.log(SetPhelebo);
-            setShowPhelebo(SetPhelebo);
-            GetPatientDetailonSlot(SetPhelebo);
-          })
-          .catch((err) => {
-            setLoad(false);
-            setShowPhelebo([]);
-            toast.error(
-              err?.response?.data?.message
-                ? err?.response?.data?.message
-                : "Error Occured"
-            );
-          });
+        } else {
+          setError(generatedError);
+        }
       } else {
         const generatedError = AppointmentModalValidationSchema(searchData);
         if (generatedError == "") {
@@ -369,8 +374,6 @@ const AppointmentModal = ({
           setAppointment(true);
         }
       }
-    } else if (match >= selectedPhelebo?.TimeslotData) {
-      toast.error("Booking is Filled for given Slot");
     } else {
       if (
         !(
@@ -381,6 +384,8 @@ const AppointmentModal = ({
         )
       ) {
         toast.error("Phelebo Not Available for this time");
+      } else if (match >= selectedPhelebo?.TimeslotData) {
+        toast.error("Booking is Filled for given Slot");
       } else {
         setSelectedPhelebo({
           ...selectedPhelebo,
@@ -909,10 +914,15 @@ const AppointmentModal = ({
                       autoComplete="off"
                       type="text"
                       name="Address"
+                      max={30}
                       value={searchData.Address}
                       onChange={handleChange}
                       disabled={updateAddressDisable ? false : true}
                     />
+                    {searchData?.Address.trim().length > 0 &&
+                      searchData?.Address.trim().length < 3 && (
+                        <span className="golbal-Error">{errors?.Address}</span>
+                      )}
                   </div>
 
                   <label
@@ -1011,10 +1021,15 @@ const AppointmentModal = ({
                       className="select-input-box form-control input-sm"
                       type="text"
                       name="Landmark"
+                      max={30}
                       onChange={handleChange}
                       value={searchData.Landmark}
                       disabled={updateAddressDisable ? false : true}
                     />
+                    {searchData?.Landmark.trim().length > 0 &&
+                      searchData?.Landmark.trim().length < 3 && (
+                        <span className="golbal-Error">{errors?.Landmark}</span>
+                      )}
                   </div>
 
                   <label
@@ -1029,12 +1044,13 @@ const AppointmentModal = ({
                       className="select-input-box form-control input-sm"
                       type="email"
                       name="Email"
+                      max={30}
                       onChange={handleChange}
                       value={searchData.Email}
                       disabled={updateAddressDisable ? false : true}
                     />
 
-                    {errors?.Emailvalid && (
+                    {searchData?.Email.trim().length > 0 && (
                       <span className="golbal-Error">{errors?.Emailvalid}</span>
                     )}
                   </div>

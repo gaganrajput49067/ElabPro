@@ -34,24 +34,38 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
   const [country, setCountry] = useState([]);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const generatedError = NewPatientModalValidationSchema(formData);
-    setErros({
-      ...errors,
-      Emailvalid: generatedError.Emailvalid,
-    });
-  }, [formData?.Email]);
-
+  // useEffect(() => {
+  //   const generatedError = NewPatientModalValidationSchema(formData);
+  //   setErros({
+  //     ...errors,
+  //     Emailvalid: generatedError.Emailvalid,
+  //   });
+  // }, [formData?.Email]);
+  console.log(formData);
   const handleSave = () => {
     const generatedError = NewPatientModalValidationSchema(formData);
-    // console.log(formData);
+    console.log(formData);
+    const updatedFormData = {
+      ...formData,
+      AgeDays: ageCount(formData.AgeYear, formData.AgeMonth, formData.AgeDays),
+      Age: `${formData.AgeYear == "" ? 0 : formData.AgeYear} Y ${
+        formData.AgeMonth == "" ? 0 : formData.AgeMonth
+      } M ${ageCount(
+        formData.AgeYear,
+        formData.AgeMonth,
+        formData.AgeDays
+      )} D `,
+
+      AgeMonth: formData.AgeMonth == "" ? 0 : formData.AgeMonth,
+      AgeYear: formData.AgeYear == "" ? 0 : formData.AgeYear,
+    };
     console.log(generatedError);
     if (generatedError === "") {
       axios
         .post(
           "/api/v1/CustomerCare/SaveNewPatient",
           getTrimmedData({
-            NewPatientData: formData,
+            NewPatientData: updatedFormData,
           })
         )
         .then((res) => {
@@ -75,7 +89,13 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
       setErros(generatedError);
     }
   };
-
+  const ageCount = (y, m, d) => {
+    if (y == 0 && m == 0 && d == 0) {
+      return 1;
+    } else {
+      return d;
+    }
+  };
   // console.log(formData);
 
   // const getId = (names, value) => {
@@ -114,11 +134,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
     if (
       name === "Mobile" ||
       name === "Title" ||
-      name === "AgeYear" ||
-      name === "AgeMonth" ||
-      name === "AgeDays" ||
       name === "AgeWise" ||
-      name === "DOB" ||
       name === "HouseNo" ||
       name === "Gender" ||
       name === "CountryID" ||
@@ -128,9 +144,15 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
     )
       setFormData({ ...formData, [name]: value });
 
-    if (name === "AgeYear" || name === "AgeMonth" || name === "AgeDays") {
-      handleDOBCalculation(name, value);
-    }
+    // if (name === "AgeYear" || name === "AgeMonth" || name === "AgeDays") {
+    //   if (value) handleDOBCalculation(name, value);
+    //   else {
+    //     setFormData({
+    //       ...formData,
+    //       DOB: "",
+    //     });
+    //   }
+    // }
 
     if (name === "PName") {
       setFormData({
@@ -152,6 +174,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
   // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const handleDOBCalculation = (e) => {
     const { name, value } = e.target;
+
     let diff = {};
     let subtractType = getSubtractType(name);
 
@@ -226,9 +249,11 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
     var days = a.diff(b, "days");
     return { years, months, days };
   };
+
   const calculateTotalNumberOfDays = (value) => {
     return moment(moment().format("YYYY-MM-DD")).diff(value, "days");
   };
+
   const dateSelect = (value, name) => {
     const { years, months, days } = calculateDOB(value);
     setFormData({
@@ -480,13 +505,18 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                         className="select-input-box form-control input-sm "
                         name="PName"
                         type="text"
+                        max={30}
                         value={formData.PName}
                         autoComplete="off"
                         onChange={handleSelectChange}
                       />
-                      {formData?.PName === "" && (
+                      {formData?.PName.trim() === "" && (
                         <span className="golbal-Error">{errors?.PName}</span>
                       )}
+                      {formData?.PName.trim().length > 0 &&
+                        formData?.PName.trim().length < 3 && (
+                          <span className="golbal-Error">{errors?.PNames}</span>
+                        )}
                     </div>
                   </div>
                 </div>
@@ -508,34 +538,62 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                       className="select-input-box form-control input-sm "
                       name="AgeYear"
                       type="number"
-                      placeholder="Y"
+                      style={{ width: "10%" }}
                       value={formData?.AgeYear}
                       onInput={(e) => number(e, 3, 120)}
                       disabled={RadioDefaultSelect === "DOB" ? true : false}
                       onChange={handleDOBCalculation}
                     />
-
+                    <span
+                      className="input-group-text select-input-box form-control input-sm justify-content-center"
+                      style={{ width: "20px" }}
+                    >
+                      {t("Y")}
+                    </span>
                     <Input
                       className="select-input-box form-control input-sm "
                       name="AgeMonth"
                       type="number"
-                      placeholder="M"
+                      // placeholder="M"
                       onInput={(e) => number(e, 2, 12)}
-                      disabled={RadioDefaultSelect === "DOB" ? true : false}
+                      disabled={
+                        RadioDefaultSelect === "DOB"
+                          ? true
+                          : formData?.AgeYear
+                          ? false
+                          : true
+                      }
                       value={formData?.AgeMonth}
                       onChange={handleDOBCalculation}
                     />
-
+                    <span
+                      className="input-group-text form-control pull-right reprint-date input-sm justify-content-center"
+                      style={{ width: "20px" }}
+                    >
+                      {t("M")}
+                    </span>
                     <Input
                       className="select-input-box form-control input-sm"
                       name="AgeDays"
                       type="number"
-                      placeholder="D"
+                      // placeholder="D"
                       onInput={(e) => number(e, 2, 31)}
-                      disabled={RadioDefaultSelect === "DOB" ? true : false}
+                      disabled={
+                        RadioDefaultSelect === "DOB"
+                          ? true
+                          : formData?.AgeMonth
+                          ? false
+                          : true
+                      }
                       value={formData.AgeDays}
                       onChange={handleDOBCalculation}
                     />
+                    <span
+                      className="input-group-text form-control pull-right reprint-date input-sm justify-content-center"
+                      style={{ width: "20px" }}
+                    >
+                      {t("D")}
+                    </span>
                   </div>
                 </div>
                 <label className="col-sm-1 ">
@@ -595,11 +653,15 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     className="select-input-box form-control input-sm"
                     name="HouseNo"
                     type="text"
+                    max={20}
                     autoComplete="off"
                     placeholder="House No."
                     value={formData.HouseNo}
                     onChange={handleSelectChange}
                   />
+                  {formData?.HouseNo.trim().length > 0 && formData?.HouseNo.trim().length < 3 && (
+                    <span className="golbal-Error">{errors?.HouseNo}</span>
+                  )}
                 </div>
                 <label className="  col-sm-1" htmlFor="State">
                   {t("State")} :
@@ -668,6 +730,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                   <Input
                     className="select-input-box form-control input-sm"
                     name="Email"
+                    max={30}
                     value={formData.Email}
                     type="text"
                     autoComplete="off"
@@ -675,7 +738,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     onChange={handleSelectChange}
                   />
 
-                  {errors?.Emailvalid && (
+                  {formData?.Email.trim().length > 0 && (
                     <span className="golbal-Error">{errors?.Emailvalid}</span>
                   )}
                 </div>
@@ -687,11 +750,17 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     className="select-input-box form-control input-sm"
                     name="Landmark"
                     type="text"
+                    max={30}
                     autoComplete="off"
                     value={formData?.Landmark}
                     placeholder="Landmark"
                     onChange={handleSelectChange}
                   />
+
+                  {formData?.Landmark.trim().length > 0 &&
+                    formData?.Landmark.trim().length < 3 && (
+                      <span className="golbal-Error">{errors?.Landmark}</span>
+                    )}
                 </div>
               </div>
             </div>

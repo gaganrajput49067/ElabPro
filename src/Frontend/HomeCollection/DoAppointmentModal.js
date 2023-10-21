@@ -122,7 +122,6 @@ const DoAppointmentModal = ({
     isPediatric: "",
   });
 
-  
   const [showLog, setShowLog] = useState({ status: false, data: "" });
   const [errors, setError] = useState([]);
 
@@ -184,7 +183,7 @@ const DoAppointmentModal = ({
       });
       setDiscountApproval([]);
       getDiscountApproval();
-      // 
+      //
     }
   }, [discountamount]);
 
@@ -437,7 +436,7 @@ const DoAppointmentModal = ({
     console.log(data);
     getTableData(data);
   };
-// console.log(testData?.Gender)
+  // console.log(testData?.Gender)
   const CheckageTest = (gender, ToAge, FromAge) => {
     let genderCheck = false;
     let ageCheck = true;
@@ -486,8 +485,8 @@ const DoAppointmentModal = ({
               ...newData.map((ele) => {
                 return {
                   ...testData,
-                  TestGender:ele?.Gender,
-  
+                  TestGender: ele?.Gender,
+
                   DataType: ele?.DataType,
                   SubCategoryID: ele?.DepartmentID,
                   FromAge: ele?.FromAge,
@@ -509,14 +508,11 @@ const DoAppointmentModal = ({
               }),
             ];
             setTableData(appendedData);
-          }
-
-          else {
+          } else {
             !genderCheck &&
               toast.error("This Test is Not for " + testData?.Gender);
             !ageCheck && toast.error(message);
           }
-         
         })
         .catch((err) => console.log(err));
     } else {
@@ -706,7 +702,6 @@ const DoAppointmentModal = ({
                         { label: "Select Source Of Collection", value: "" },
                         ...bindSourceCall,
                       ]}
-                      
                       onChange={handleChange}
                     />
                   </div>
@@ -721,6 +716,7 @@ const DoAppointmentModal = ({
                       className="select-input-box form-control input-sm"
                       type="text"
                       name="Remarks"
+                      max={30}
                       onChange={handleTestChange}
                       value={testData?.Remarks}
                     />
@@ -749,10 +745,15 @@ const DoAppointmentModal = ({
                     <Input
                       className="select-input-box form-control input-sm"
                       type="Address"
+                      max={30}
                       name="Address"
                       onChange={handleChange}
                       value={appointData?.Address}
                     />
+
+                    {appointData?.Address.trim().length > 0 && (
+                      <span className="golbal-Error">{errors?.Address}</span>
+                    )}
                   </div>
                 </div>
 
@@ -1164,6 +1165,7 @@ const DoAppointmentModal = ({
                     </div>
                     <Input
                       name="DisReason"
+                      max={30}
                       disabled={tableData.length === 0 || discountamount == 0}
                       className="select-input-box form-control input-sm"
                       value={testData?.DisReason}

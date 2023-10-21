@@ -166,9 +166,9 @@ const CouponMasterApproval = () => {
               ) : (
                 <button
                   type="button"
-                  className="btn btn-success btn-sm"
+                  className="btn btn-block btn-success btn-sm"
                   onClick={handleSearch}
-                  style={{ width: "70px" }}
+                //   style={{ width: "70px" }}
                 >
                   {t("Search")}
                 </button>

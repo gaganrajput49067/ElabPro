@@ -432,6 +432,7 @@ const RouteMaster = () => {
                 type="text"
                 autoComplete="off"
                 placeholder="Route"
+                max={20}
                 name="Route"
                 value={formData?.Route}
                 onChange={handleChange}
@@ -439,6 +440,8 @@ const RouteMaster = () => {
               {formData?.Route.trim() === "" && (
                 <span className="golbal-Error">{errors?.Route}</span>
               )}
+              {formData?.Route.trim().length > 0 &&
+                formData?.Route.trim().length <2 && (<span className="golbal-Error">{errors?.Routes}</span>)}
             </div>
 
             <div className="col-md-2">
