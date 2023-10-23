@@ -481,7 +481,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
             <div className="box-body">
               <div className="row">
                 <label className="col-sm-1" htmlFor="Mobile No">
-                  {t("MobileNo")}:
+                  {t("Mobile No.")} :
                 </label>
                 <div className="col-sm-2">
                   <Input
@@ -553,7 +553,15 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                       style={{ width: "10%" }}
                       value={formData?.AgeYear}
                       onInput={(e) => number(e, 3, 120)}
-                      disabled={RadioDefaultSelect === "DOB" ? true : false}
+                      disabled={
+                        RadioDefaultSelect === "DOB"
+                          ? true
+                          : formData?.AgeMonth
+                          ? true
+                          : formData?.AgeDays
+                          ? true
+                          : false
+                      }
                       onChange={handleDOBCalculation}
                     />
                     <span
@@ -570,6 +578,8 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                       onInput={(e) => number(e, 2, 12)}
                       disabled={
                         RadioDefaultSelect === "DOB"
+                          ? true
+                          : formData?.AgeDays
                           ? true
                           : formData?.AgeYear
                           ? false
@@ -609,7 +619,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                   </div>
                 </div>
                 <label className="col-sm-1 ">
-                  D.O.B :
+                  D.O.B :&nbsp;
                   <input
                     type="radio"
                     value={"DOB"}
@@ -658,7 +668,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                   />
                 </div>
                 <label className="  col-sm-1" htmlFor="House No.">
-                  {t("H No.")} :
+                  {t("House No.")} :
                 </label>
                 <div className="col-sm-2 ">
                   <Input
@@ -752,12 +762,14 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                   />
 
                   {formData?.Email.trim().length > 0 &&
-                    !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData?.Email) && (
+                    !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+                      formData?.Email
+                    ) && (
                       <span className="golbal-Error">{errors?.Emailvalid}</span>
                     )}
                 </div>
                 <label className="  col-sm-1" htmlFor="Landmark">
-                  {t("Landmark")}:
+                  {t("Landmark")} :
                 </label>
                 <div className="col-sm-2 ">
                   <Input
