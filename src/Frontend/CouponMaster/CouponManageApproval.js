@@ -7,6 +7,8 @@ import Input from "../../ChildComponents/Input";
 // import Loading from "../util/Loading";
 import Loading from "../../util/Loading";
 import { SimpleCheckbox } from "../../ChildComponents/CheckBox";
+import { toast } from "react-toastify";
+import axios from "axios";
 const AuthorityType = [
   {
     label: "Coupon",
@@ -35,7 +37,33 @@ const CouponManageApproval = () => {
   };
 
   const handleSave = () => {
-    console.log(formData);
+    if (!formData?.EmployeeName) {
+      toast.error("Please Select Any Employee");
+    } else if (
+      formData.Maker === 0 &&
+      formData.Checker === 0 &&
+      formData.Approval === 0 &&
+      formData.Reject === 0 &&
+      formData.StatusChange === 0 &&
+      formData.Edit === 0 &&
+      formData.NotApproval === 0
+    ) {
+      toast.error("Please Select Atleast One Approval Type");
+    } else {
+      console.log(formData);
+      axios
+        .post("", formData)
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => {
+          toast.error(
+            err?.response?.data?.message
+              ? err?.response?.data?.message
+              : "Error Occured"
+          );
+        });
+    }
     // setFromData({
     //   ...formData,
     //   Maker: formData?.Maker ? 1 : 0,
@@ -46,6 +74,24 @@ const CouponManageApproval = () => {
     //   Edit: formData?.Edit ? 1 : 0,
     //   NotApproval: formData?.NotApproval ? 1 : 0,
     // });
+  };
+
+  const handleRemove = () => {
+    toast.success("Removed");
+  };
+  const handleSearch = () => {
+    axios
+      .post("")
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        toast.error(
+          err?.response?.data?.message
+            ? err?.response?.data?.message
+            : "Error Occured"
+        );
+      });
   };
   const { t } = useTranslation();
   return (
@@ -94,10 +140,7 @@ const CouponManageApproval = () => {
             </div>
           </div>
 
-          <div
-            className="row"
-            // style={{ display: "flex", justifyContent: "space-around" }}
-          >
+          <div className="row">
             <label className="col-sm-2" style={{ textAlign: "end" }}>
               {t("For Approval")} :
             </label>
@@ -197,7 +240,10 @@ const CouponManageApproval = () => {
             {t("All Selected Approval")}
           </h3>
           &nbsp;&nbsp;
-          <a style={{ cursor: "pointer", textDecoration: "underline" }}>
+          <a
+            style={{ cursor: "pointer", textDecoration: "underline" }}
+            onClick={handleSearch}
+          >
             {t("Search All")}
           </a>
         </div>
@@ -247,6 +293,7 @@ const CouponManageApproval = () => {
                       fontWeight: "bold",
                       cursor: "pointer",
                     }}
+                    onClick={handleRemove}
                   >
                     X
                   </span>

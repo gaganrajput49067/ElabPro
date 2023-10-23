@@ -220,6 +220,7 @@ const AppointmentModal = ({
             });
         } else {
           setError(generatedError);
+          setShowPhelebo([])
         }
       } else {
         const generatedError = AppointmentModalValidationSchema(searchData);
@@ -296,6 +297,7 @@ const AppointmentModal = ({
             });
         } else {
           setError(generatedError);
+          setShowPhelebo([])
         }
       }
     }

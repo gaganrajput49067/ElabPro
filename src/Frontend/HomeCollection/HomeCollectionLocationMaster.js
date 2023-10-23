@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { LocationMasterValidationSchema, LocationUpdateSchema } from "../../ChildComponents/validations";
+import {
+  LocationMasterValidationSchema,
+  LocationUpdateSchema,
+} from "../../ChildComponents/validations";
 import { toast } from "react-toastify";
 import Input from "../../ChildComponents/Input";
 
@@ -8,12 +11,19 @@ import { SelectBox } from "../../ChildComponents/SelectBox";
 import { useTranslation } from "react-i18next";
 import Loading from "../util/Loading";
 import { SimpleCheckbox } from "../../ChildComponents/CheckBox";
-import { Locality, NoofRecord,TimeSlots, AvgTimes } from "../../ChildComponents/Constants"
-
+import {
+  Locality,
+  NoofRecord,
+  TimeSlots,
+  AvgTimes,
+} from "../../ChildComponents/Constants";
 
 import { changeLanguage } from "i18next";
 import { number } from "../util/Commonservices/number";
-import { PreventSpecialCharacter } from "../util/Commonservices";
+import {
+  PreventSpecialCharacter,
+  getTrimmedData,
+} from "../util/Commonservices";
 
 const HomeCollectionLocationMaster = () => {
   const [errors, setErros] = useState({});
@@ -30,98 +40,91 @@ const HomeCollectionLocationMaster = () => {
     StateId: "",
     CityId: "",
     NoofRecord: "40",
-    searchvalue: ''
+    searchvalue: "",
   });
   const [formData, setFormData] = useState({
     BusinessZoneID: "",
     StateID: "",
     CityID: "",
     IsActive: true,
-    edit: false
+    edit: false,
   });
-  const [localities, setLocalities] = useState([{
-    IsHomeColection: "1",
-    HeadquarterID: "",
-    CityZoneId: "",
-    NoofSlotForApp: "1",
-    OpenTime: "00:00",
-    CloseTime: "23:30",
-    AvgTime: "15",
-    AreaName: "",
-    Pincode: ""
-  }]);
+  const [localities, setLocalities] = useState([
+    {
+      isHomeColection: true,
+      HeadquarterID: "",
+      CityZoneId: "",
+      NoofSlotForApp: "1",
+      OpenTime: "00:00",
+      CloseTime: "23:30",
+      AvgTime: "15",
+      AreaName: "",
+      Pincode: "",
+    },
+  ]);
   const [currentLocality, setCurrentLocality] = useState({
-    isHomeCollection: "1",
+    isHomeCollection: true,
     HeadquarterID: "",
     CityZoneId: "",
-
-  })
+  });
 
   const TimeSlot = [
-    { label: '00:00', value: '00:00' },
-    { label: '00:30', value: '00:30' },
-    { label: '01:00', value: '01:00' },
-    { label: '01:30', value: '01:30' },
-    { label: '02:00', value: '02:00' },
-    { label: '02:30', value: '02:30' },
-    { label: '03:00', value: '03:00' },
-    { label: '03:30', value: '03:30' },
-    { label: '04:00', value: '04:00' },
-    { label: '04:30', value: '04:30' },
-    { label: '05:00', value: '05:00' },
-    { label: '05:30', value: '05:30' },
-    { label: '06:00', value: '06:00' },
-    { label: '06:30', value: '06:30' },
-    { label: '07:00', value: '07:00' },
-    { label: '07:30', value: '07:30' },
-    { label: '08:00', value: '08:00' },
-    { label: '08:30', value: '08:30' },
-    { label: '09:00', value: '09:00' },
-    { label: '09:30', value: '09:30' },
-    { label: '10:00', value: '10:00' },
-    { label: '10:30', value: '10:30' },
-    { label: '11:00', value: '11:00' },
-    { label: '11:30', value: '11:30' },
-    { label: '12:00', value: '12:00' },
-    { label: '12:30', value: '12:30' },
-    { label: '13:00', value: '13:00' },
-    { label: '13:30', value: '13:30' },
-    { label: '14:00', value: '14:00' },
-    { label: '14:30', value: '14:30' },
-    { label: '15:00', value: '15:00' },
-    { label: '15:30', value: '15:30' },
-    { label: '16:00', value: '16:00' },
-    { label: '16:30', value: '16:30' },
-    { label: '17:00', value: '17:00' },
-    { label: '17:30', value: '17:30' },
-    { label: '18:00', value: '18:00' },
-    { label: '18:30', value: '18:30' },
-    { label: '19:00', value: '19:00' },
-    { label: '19:30', value: '19:30' },
-    { label: '20:00', value: '20:00' },
-    { label: '20:30', value: '20:30' },
-    { label: '21:00', value: '21:00' },
-    { label: '21:30', value: '21:30' },
-    { label: '22:00', value: '22:00' },
-    { label: '22:30', value: '22:30' },
-    { label: '23:00', value: '23:00' },
-    { label: '23:30', value: '23:30' }
+    { label: "00:00", value: "00:00" },
+    { label: "00:30", value: "00:30" },
+    { label: "01:00", value: "01:00" },
+    { label: "01:30", value: "01:30" },
+    { label: "02:00", value: "02:00" },
+    { label: "02:30", value: "02:30" },
+    { label: "03:00", value: "03:00" },
+    { label: "03:30", value: "03:30" },
+    { label: "04:00", value: "04:00" },
+    { label: "04:30", value: "04:30" },
+    { label: "05:00", value: "05:00" },
+    { label: "05:30", value: "05:30" },
+    { label: "06:00", value: "06:00" },
+    { label: "06:30", value: "06:30" },
+    { label: "07:00", value: "07:00" },
+    { label: "07:30", value: "07:30" },
+    { label: "08:00", value: "08:00" },
+    { label: "08:30", value: "08:30" },
+    { label: "09:00", value: "09:00" },
+    { label: "09:30", value: "09:30" },
+    { label: "10:00", value: "10:00" },
+    { label: "10:30", value: "10:30" },
+    { label: "11:00", value: "11:00" },
+    { label: "11:30", value: "11:30" },
+    { label: "12:00", value: "12:00" },
+    { label: "12:30", value: "12:30" },
+    { label: "13:00", value: "13:00" },
+    { label: "13:30", value: "13:30" },
+    { label: "14:00", value: "14:00" },
+    { label: "14:30", value: "14:30" },
+    { label: "15:00", value: "15:00" },
+    { label: "15:30", value: "15:30" },
+    { label: "16:00", value: "16:00" },
+    { label: "16:30", value: "16:30" },
+    { label: "17:00", value: "17:00" },
+    { label: "17:30", value: "17:30" },
+    { label: "18:00", value: "18:00" },
+    { label: "18:30", value: "18:30" },
+    { label: "19:00", value: "19:00" },
+    { label: "19:30", value: "19:30" },
+    { label: "20:00", value: "20:00" },
+    { label: "20:30", value: "20:30" },
+    { label: "21:00", value: "21:00" },
+    { label: "21:30", value: "21:30" },
+    { label: "22:00", value: "22:00" },
+    { label: "22:30", value: "22:30" },
+    { label: "23:00", value: "23:00" },
+    { label: "23:30", value: "23:30" },
   ];
-
-
-
-
-
 
   const { t } = useTranslation();
 
-
   const getStates = (value) => {
     if (value === "") {
-      return
-    }
-
-    else {
+      return;
+    } else {
       axios
         .post("/api/v1/CommonHC/GetStateData", {
           BusinessZoneID: value,
@@ -140,10 +143,7 @@ const HomeCollectionLocationMaster = () => {
           console.log(err);
         });
     }
-
   };
-
-
 
   const getCity = (value) => {
     axios
@@ -170,39 +170,45 @@ const HomeCollectionLocationMaster = () => {
     return data;
   };
 
-
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     if (name === "BusinessZoneID") {
-      getStates(value)
-      setFormData({ ...formData, [name]: type === "checkbox" ? checked : value, StateID: '', CityID: '' });
-      setStates([])
-      setCity([])
-
+      getStates(value);
+      setFormData({
+        ...formData,
+        [name]: type === "checkbox" ? checked : value,
+        StateID: "",
+        CityID: "",
+      });
+      setStates([]);
+      setCity([]);
     }
 
     if (name === "StateID") {
-      getCity(value)
-      setFormData({ ...formData, [name]: type === "checkbox" ? checked : value, CityID: '' });
-      setCity([])
-
+      getCity(value);
+      setFormData({
+        ...formData,
+        [name]: type === "checkbox" ? checked : value,
+        CityID: "",
+      });
+      setCity([]);
     }
 
     if (name === "CityID") {
-      setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
+      setFormData({
+        ...formData,
+        [name]: type === "checkbox" ? checked : value,
+      });
     }
-    if(type==="checkbox")
-    {
-      setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
+    if (type === "checkbox") {
+      setFormData({
+        ...formData,
+        [name]: type === "checkbox" ? checked : value,
+      });
     }
-
   };
 
-  
-
   const getSearchCities = (id) => {
-
     axios
       .post("/api/v1/CommonHC/GetCityData", {
         StateId: id,
@@ -216,46 +222,52 @@ const HomeCollectionLocationMaster = () => {
           };
         });
 
-        setSearchCities(cities)
+        setSearchCities(cities);
       })
       .catch((err) => {
         console.log(err);
       });
-
-  }
+  };
 
   const handleSearchChange = (e) => {
     const { name, value } = e.target;
 
-
     if (name === "StateId") {
-      console.log(value)
+      console.log(value);
       getSearchCities(value);
-      console.log(searchData)
+      console.log(searchData);
       setSearchData({
-        ...searchData, StateId: value, CityId: '', searchvalue: ''
-      })
-    }
-    else if (name === 'searchvalue') {
-      if (PreventSpecialCharacter(value)) { setSearchData({ ...searchData, [name]: value }) }
-    }
-    else {
+        ...searchData,
+        StateId: value,
+        CityId: "",
+        searchvalue: "",
+      });
+    } else if (name === "searchvalue") {
+      if (PreventSpecialCharacter(value)) {
+        setSearchData({ ...searchData, [name]: value });
+      }
+    } else {
       setSearchData({ ...searchData, [name]: value });
     }
   };
 
   const handleUpdate = () => {
+    let obj = { ...formData, ...currentLocality };
 
-
-    let obj = { ...formData, ...currentLocality }
-    const generatedError = LocationUpdateSchema(obj)
+    const generatedError = LocationUpdateSchema(obj);
+    const obj2 = getTrimmedData(obj);
     console.log(generatedError);
     if (generatedError == "") {
       setLoad(true);
       axios
-        .post("/api/v1/HCLocation/UpdateLocality", { ...obj, isHomeCollection: currentLocality.isHomeCollection === true ? "1" : "0", IsActive: formData.IsActive === true ? "1" : "0" })
+        .post("/api/v1/HCLocation/UpdateLocality", {
+          ...obj2,
+          isHomeCollection:
+            currentLocality.isHomeCollection === true ? "1" : "0",
+          IsActive: formData.IsActive === true ? "1" : "0",
+        })
         .then((res) => {
-          delete formData.edit
+          delete formData.edit;
           toast.success("Updated Successfully");
           handleCancel();
           handleSearch();
@@ -266,45 +278,39 @@ const HomeCollectionLocationMaster = () => {
           setLoad(false);
           toast.error("Error Occurred");
         });
-
-    }
-    else {
-      console.log(generatedError)
-      setErros(generatedError)
+    } else {
+      console.log(generatedError);
+      setErros(generatedError);
       setLoad(false);
     }
-
   };
 
   const editLocation = (ele) => {
-
     getStates(ele?.BusinessZoneID);
-    getCity(ele?.StateID)
-
+    getCity(ele?.StateID);
 
     setFormData({
       BusinessZoneID: `${ele?.BusinessZoneID}`,
       StateID: `${ele?.StateID}`,
       CityID: `${ele?.CityID}`,
       IsActive: ele?.active === 0 ? false : true,
-      edit: true
-
+      edit: true,
     });
 
     setCurrentLocality({
       ...currentLocality,
       Locality: ele?.NAME,
       Pincode: ele?.PinCode,
-      startTime: ele?.StartTime || '00:00',
-      endTime: ele?.EndTime || '23:59',
-      AvgTime: ele?.AvgTime || '15',
+      startTime: ele?.StartTime || "00:00",
+      endTime: ele?.EndTime || "23:59",
+      AvgTime: ele?.AvgTime || "15",
       TimeSlot: ele?.NoofSlotForApp,
-      isHomeCollection: ele?.isHomeCollection === '1' ? true : false,
-      TimeSlot: ele?.NoofSlotForApp || '1',
+      isHomeCollection: ele?.isHomeCollection === "1" ? true : false,
+      TimeSlot: ele?.NoofSlotForApp || "1",
       HeadquarterID: ele?.HeadquarterID,
-      LocalityId: `${ele?.ID}`
-    })
-    window.scroll(0, 0)
+      LocalityId: `${ele?.ID}`,
+    });
+    window.scroll(0, 0);
   };
 
   const handleSearch = () => {
@@ -319,13 +325,11 @@ const HomeCollectionLocationMaster = () => {
         if (res?.data?.message.length > 0) {
           setLocationTable(res?.data?.message);
           setSearchLoad(false);
-        }
-        else {
-          setLocationTable([])
-          toast.error('No Record Found...')
+        } else {
+          setLocationTable([]);
+          toast.error("No Record Found...");
           setSearchLoad(false);
         }
-
       })
       .catch((err) => {
         console.log(err);
@@ -333,7 +337,6 @@ const HomeCollectionLocationMaster = () => {
         setSearchLoad(false);
       });
   };
-
 
   const formatTimeTo24Hour = (time12Hour) => {
     const [time, period] = time12Hour.split(" ");
@@ -347,40 +350,51 @@ const HomeCollectionLocationMaster = () => {
   };
 
   const handleCancel = () => {
-
     setFormData({
       BusinessZoneID: "",
       StateID: "",
       CityID: "",
-
     });
     setCurrentLocality({
       IsActive: false,
-      Locality: '',
-      Pincode: '',
-      endTime: '',
-      startTime: '',
-      AvgTime: '',
-      IsHomeCollection: '',
-      TimeSlot: '',
-      HeadquarterID: '',
-      LocalityId: '',
-      CityZoneId: ''
-    })
+      Locality: "",
+      Pincode: "",
+      endTime: "",
+      startTime: "",
+      AvgTime: "",
+      isHomeCollection: "",
+      TimeSlot: "",
+      HeadquarterID: "",
+      LocalityId: "",
+      CityZoneId: "",
+    });
+    setLocalities([
+      {
+        IsHomeColection: "1",
+        HeadquarterID: "",
+        CityZoneId: "",
+        NoofSlotForApp: "1",
+        OpenTime: "00:00",
+        CloseTime: "23:30",
+        AvgTime: "15",
+        AreaName: "",
+        Pincode: "",
+      },
+    ]);
     setStates([]);
     setCity([]);
     setErros({});
   };
 
   const checkLocalitydata = () => {
-    const msg = ""
-  // let i=0;
+    const msg = "";
+    // let i=0;
     // let flag=true;
     // console.log(localities)
     // while(i<localities.length)
     // {
     //  if(localities[i].AreaName=="" || localities[i].Pincode==""||localities[i].OpenTime==""||
-    //  localities[i].CloseTime==""||localities[i].AvgTime=="" || localities[i].NoofSlotForApp=="") 
+    //  localities[i].CloseTime==""||localities[i].AvgTime=="" || localities[i].NoofSlotForApp=="")
     //  {
     //   flag=false;
     //   return flag;
@@ -388,115 +402,130 @@ const HomeCollectionLocationMaster = () => {
     //  i++
     // }
     // return flag;
-  }
-  function checkAreaname(data){
+  };
+  function checkAreaname(data) {
     for (let i = 0; i < data.length; i++) {
-      if (data[i].AreaName.trim() =='') {
-          return false
+      if (data[i].AreaName.trim() == "") {
+        return false;
       }
-      
+    }
+    return true;
   }
-  return true;
+  function checkAreaLength(data) {
+    for (let i of data) {
+      if (i.AreaName.trim().length < 3) {
+        return i.AreaName;
+      }
+    }
+    return true;
   }
 
   const handleSubmit = () => {
     const generatedError = LocationMasterValidationSchema(formData);
 
     const checkLocalities = localities;
-console.log(checkLocalities);
-    checkLocalities.forEach(object => {
-      delete object['HeadquarterID'];
-      delete object['CityZoneId'];
-    }); 
     console.log(checkLocalities);
-         console.log(checkAreaname(checkLocalities))
-    if(checkAreaname(checkLocalities))
-    {
-      const emptyKeys = checkLocalities.flatMap(obj =>
-        Object.keys(obj).filter(key => !obj[key])
-      );
-  
-      const Pincodelist = checkLocalities.filter(item => {
-        return item.Pincode.length != 6
-      })
-     
-  
-      const wrongPincodes = Pincodelist.flatMap((item) => {
-        if (item.Pincode.length != 6) {
-          return item.AreaName;
-        }
-      })
-  
-      const DuplicateLocality = checkDuplicateLocality();
-  
-      const concatenatedAreaName = wrongPincodes.join(',');
-      const concatenatedKeys = emptyKeys.join(',');
-      let DuplicateLocalityError;
-      if (typeof (DuplicateLocality) == 'object') {
-        DuplicateLocalityError = DuplicateLocality.join(',')
-      }
-  
-      if (concatenatedKeys === "" && concatenatedAreaName === "" && DuplicateLocality === "") {
-        if (generatedError === "") {
-          setLoad(true);
-          delete formData.edit;
-  
-          const AriaDetailsData = localities.map((item) => {
-            return { ...item, ...formData }
-          })
-          axios.post("/api/v1/HCLocation/SaveLocality", {
-            AriaDetailsData
-          })
-            .then((res) => {
-              if (res.data.message) {
-                console.log(res.data.message)
-                setLoad(false);
-                handleCancel();
-                setLocalities([{
-                  isHomeColection: "1",
-                  HeadquarterID: "",
-                  CityZoneId: "",
-                  NoofSlotForApp: "",
-                  OpenTime: "00:00",
-                  CloseTime: "23:30",
-                  AvgTime: "",
-                  AreaName: "",
-                  Pincode: ""
-                }])
-                toast.success(res.data.message ? res.data.message : "Saved Successfully");
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-              setLoad(false);
-              toast.error(err?.response?.data?.message);
-            });
-        } else {
-          setErros(generatedError);
-          setLoad(false);
-        }
-  
-      }
-      else {
-  
-        if (concatenatedKeys.length > 0) {
-          toast.error(`${concatenatedKeys} not filled`)
-        }
-        else if (concatenatedAreaName.length > 0) {
-  
-          toast.error(`Wrong Pincode at ${concatenatedAreaName}`)
-        }
-        else if (DuplicateLocality.length > 0) {
-          toast.error(DuplicateLocalityError);
-        }
-      }
-    }
-    else{
-      toast.error("Enter Area Name")
-    }
-    
-  };
+    checkLocalities.forEach((object) => {
+      delete object["HeadquarterID"];
+      delete object["CityZoneId"];
+    });
 
+    if (checkAreaname(checkLocalities)) {
+      const checkLength = checkAreaLength(checkLocalities);
+      console.log(checkLength);
+      if (checkLength == true) {
+        const emptyKeys = checkLocalities.flatMap((obj) =>
+          Object.keys(obj).filter((key) => !obj[key])
+        );
+
+        const Pincodelist = checkLocalities.filter((item) => {
+          return item.Pincode.length != 6;
+        });
+
+        const wrongPincodes = Pincodelist.flatMap((item) => {
+          if (item.Pincode.length != 6) {
+            return item.AreaName;
+          }
+        });
+
+        const DuplicateLocality = checkDuplicateLocality();
+        const concatenatedAreaName = wrongPincodes.join(",");
+        const concatenatedKeys = emptyKeys.join(",");
+        let DuplicateLocalityError;
+        if (typeof DuplicateLocality == "object") {
+          DuplicateLocalityError = DuplicateLocality.join(",");
+        }
+
+        if (
+          concatenatedKeys === "" &&
+          concatenatedAreaName === "" &&
+          DuplicateLocality === ""
+        ) {
+          if (generatedError === "") {
+            setLoad(true);
+            delete formData.edit;
+
+            const AriaDetailsData = localities.map((item) => {
+              return {
+                ...item,
+
+                ...formData,
+                // isHomeColection: localities?.isHomeColection ? "1" : "0",
+                IsActive: formData?.IsActive ? "1" : "0",
+              };
+            });
+            axios
+              .post("/api/v1/HCLocation/SaveLocality", {
+                AriaDetailsData,
+              })
+              .then((res) => {
+                if (res.data.message) {
+                  console.log(res.data.message);
+                  setLoad(false);
+                  handleCancel();
+                  setLocalities([
+                    {
+                      IsHomeColection: true,
+                      HeadquarterID: "",
+                      CityZoneId: "",
+                      NoofSlotForApp: "1",
+                      OpenTime: "00:00",
+                      CloseTime: "23:30",
+                      AvgTime: "15",
+                      AreaName: "",
+                      Pincode: "",
+                    },
+                  ]);
+                  toast.success(
+                    res.data.message ? res.data.message : "Saved Successfully"
+                  );
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+                setLoad(false);
+                toast.error(err?.response?.data?.message);
+              });
+          } else {
+            setErros(generatedError);
+            setLoad(false);
+          }
+        } else {
+          if (concatenatedKeys.length > 0) {
+            toast.error(`${concatenatedKeys} not filled`);
+          } else if (concatenatedAreaName.length > 0) {
+            toast.error(`Wrong Pincode at ${concatenatedAreaName}`);
+          } else if (DuplicateLocality.length > 0) {
+            toast.error(DuplicateLocalityError);
+          }
+        }
+      } else {
+        toast.error(`Invalid length of entered location "${checkLength}"`);
+      }
+    } else {
+      toast.error("Enter Area Name");
+    }
+  };
 
   const getBusinessZones = () => {
     axios
@@ -517,13 +546,12 @@ console.log(checkLocalities);
       );
   };
   const checkDuplicateLocality = () => {
-
     const seenCombinations = {};
     const duplicateEntries = [];
 
     for (let item of localities) {
-      const areaName = item['AreaName'].trim().toLowerCase();
-      const pincode = item['Pincode'];
+      const areaName = item["AreaName"].trim().toLowerCase();
+      const pincode = item["Pincode"];
       const combination = `${areaName}-${pincode}`;
 
       if (seenCombinations[combination]) {
@@ -534,14 +562,10 @@ console.log(checkLocalities);
     }
     if (duplicateEntries.length > 0) {
       return duplicateEntries;
+    } else {
+      return "";
     }
-    else {
-      return '';
-    }
-
-  }
-
-
+  };
 
   const getSearchStates = () => {
     axios
@@ -562,126 +586,95 @@ console.log(checkLocalities);
       .catch((err) => {
         console.log(err);
       });
-
-  }
-   
+  };
 
   console.log(formData);
 
   const localityChangeHander = (index, e) => {
     const { name, value, type, checked } = e?.target;
-    const newData = [...localities]
+    const newData = [...localities];
     if (formData?.edit) {
-      if (name === 'Pincode') {
+      if (name === "Pincode") {
         if (value.length <= 6) {
-          setCurrentLocality({ ...currentLocality, [name]: value })
+          setCurrentLocality({ ...currentLocality, [name]: value });
         }
-
-      }
-      else if(name==='startTime')
-      {
+      } else if (name === "startTime") {
         if (value < currentLocality?.endTime) {
-            
           setCurrentLocality({
-            ...currentLocality, [name]: value
-          })
+            ...currentLocality,
+            [name]: value,
+          });
         }
-      }
-      else if(name==='endTime')
-      {
-        if(value>currentLocality?.startTime)
-        {
+      } else if (name === "endTime") {
+        if (value > currentLocality?.startTime) {
           setCurrentLocality({
-            ...currentLocality,[name]:value
-          })
+            ...currentLocality,
+            [name]: value,
+          });
         }
-      }
-      else {
+      } else {
         setCurrentLocality({
-          ...currentLocality, [name]: type === "checkbox" ?
-            checked : value
-        })
+          ...currentLocality,
+          [name]: type === "checkbox" ? checked : value,
+        });
       }
-
-    }
-
-    else {
-      if (name == 'Pincode') {
-
+    } else {
+      if (name == "Pincode") {
         if (value.length <= 6) {
           newData[index] = {
             ...newData[index],
-            [name]: `${value}`
-          }
+            [name]: `${value}`,
+          };
         }
-
-
-      }
-      else if (name === 'AreaName') {
+      } else if (name === "AreaName") {
         if (PreventSpecialCharacter(value)) {
           newData[index] = {
             ...newData[index],
-            [name]: value
-          }
+            [name]: value,
+          };
         }
-      }
-      else if (name === 'OpenTime') {
-        console.log(value, localities[index]['CloseTime'])
-        if (value < localities[index]['CloseTime']) {
+      } else if (name === "OpenTime") {
+        console.log(value, localities[index]["CloseTime"]);
+        if (value < localities[index]["CloseTime"]) {
           newData[index] = {
             ...newData[index],
-            [name]: value
-          }
-        };
-
-      }
-      else if (name === 'CloseTime') {
-        if (value > localities[index]['OpenTime']) {
+            [name]: value,
+          };
+        }
+      } else if (name === "CloseTime") {
+        if (value > localities[index]["OpenTime"]) {
           newData[index] = {
             ...newData[index],
-            [name]: value
-          }
-        };
-      }
-      else {
-
-
+            [name]: value,
+          };
+        }
+      } else {
         newData[index] = {
           ...newData[index],
-          [name]: value
-        }
+          [name]: value,
+        };
+      }
 
-      };
-
-      setLocalities(newData)
+      setLocalities(newData);
     }
-
-
-  }
-
-
-
-
+  };
 
   const addLocalityHandler = (index) => {
-
-
     const checkLocalities = localities;
 
-    checkLocalities.forEach(object => {
-      delete object['HeadquarterID'];
-      delete object['CityZoneId'];
+    checkLocalities.forEach((object) => {
+      delete object["HeadquarterID"];
+      delete object["CityZoneId"];
     });
 
-    const emptyKeys = checkLocalities.flatMap(obj =>
-      Object.keys(obj).filter(key => !obj[key].trim())
+    const emptyKeys = checkLocalities.flatMap((obj) =>
+      Object.keys(obj).filter((key) => !obj[key].trim())
     );
 
-    const concatenatedKeys = emptyKeys.join(',');
+    const concatenatedKeys = emptyKeys.join(",");
     console.log(concatenatedKeys);
     if (concatenatedKeys == "" || containsOnlyOneCharacter(concatenatedKeys)) {
-      const nextLocality =
-      {
+      const nextLocality = {
         IsHomeColection: "1",
         HeadquarterID: "",
         CityZoneId: "",
@@ -690,43 +683,37 @@ console.log(checkLocalities);
         CloseTime: "23:30",
         AvgTime: "15",
         AreaName: "",
-        Pincode: ""
-      }
-      setLocalities([...localities, nextLocality])
-
-
+        Pincode: "",
+      };
+      setLocalities([...localities, nextLocality]);
+    } else {
+      toast.error(`${concatenatedKeys} not filled`);
     }
-    else {
-      toast.error(`${concatenatedKeys} not filled`)
-    }
-  }
-
-
+  };
 
   const removeLocality = (i) => {
-
     if (localities.length > 1) {
-      const newLocalities = localities.filter((ele, index) => {
-        return index !== i
-      })
-      console.log(newLocalities)
-      setLocalities(newLocalities)
+      const newLocalities = localities.filter((_, index) => {
+        return index !== i;
+      });
+      console.log(newLocalities);
+      setLocalities(newLocalities);
+    } else if (localities.length == 1) {
+      setLocalities([
+        {
+          IsHomeColection: true,
+          HeadquarterID: "",
+          CityZoneId: "",
+          NoofSlotForApp: "1",
+          OpenTime: "00:00",
+          CloseTime: "23:30",
+          AvgTime: "15",
+          AreaName: "",
+          Pincode: "",
+        },
+      ]);
     }
-    else if (localities.length == 1) {
-      setLocalities([{
-        IsHomeColection: "1",
-        HeadquarterID: "",
-        CityZoneId: "",
-        NoofSlotForApp: "1",
-        OpenTime: "00:00",
-        CloseTime: "23:30",
-        AvgTime: "15",
-        AreaName: "",
-        Pincode: ""
-      }])
-    }
-  }
-
+  };
 
   function containsOnlyOneCharacter(str) {
     for (let i = 1; i < str.length; i++) {
@@ -742,12 +729,13 @@ console.log(checkLocalities);
     getSearchStates();
   }, []);
 
-
   return (
     <>
       <div className="box with-border">
         <div className="box box-header with-border box-success">
-          <h3 className="box-title text-center">{t("Home Collection Location Master")}</h3>
+          <h3 className="box-title text-center">
+            {t("Home Collection Location Master")}
+          </h3>
         </div>
         <div className="box-body">
           <div className="row">
@@ -780,7 +768,7 @@ console.log(checkLocalities);
             </label>
             <div className="col-sm-2">
               <SelectBox
-                options={[{ label: 'Select State', value: '' }, ...states]}
+                options={[{ label: "Select State", value: "" }, ...states]}
                 name="StateID"
                 className="input-sm"
                 selectedValue={formData?.StateID}
@@ -799,7 +787,7 @@ console.log(checkLocalities);
             </label>
             <div className="col-sm-2 ">
               <SelectBox
-                options={[{ label: 'Select City', value: '' }, ...cities]}
+                options={[{ label: "Select City", value: "" }, ...cities]}
                 name="CityID"
                 className="input-sm"
                 selectedValue={formData.CityID}
@@ -821,9 +809,8 @@ console.log(checkLocalities);
               </label>
             </div>
           </div>
-          {formData.edit &&
+          {formData.edit && (
             <div className="row">
-
               <label
                 className="col-sm-2"
                 htmlFor="State"
@@ -836,44 +823,43 @@ console.log(checkLocalities);
                   name="Locality"
                   className="form-control input-sm"
                   value={currentLocality?.Locality}
-
                   onChange={(e) => {
-                    localityChangeHander(0, e)
+                    localityChangeHander(0, e);
                   }}
                 />
-                  {currentLocality?.Locality =="" && (
-                <span className="golbal-Error">{errors?.Locality}</span>
-              )}
+                {currentLocality?.Locality.trim() == "" && (
+                  <span className="golbal-Error">{errors?.Locality}</span>
+                )}
               </div>
               <label
                 className="col-sm-1"
                 htmlFor="City"
                 style={{ textAlign: "end" }}
               >
-                {t('Pincode')} :
+                {t("Pincode")} :
               </label>
               <div className="col-sm-2 ">
                 <Input
-
                   name="Pincode"
+                  type="number"
                   className="form-control input-sm"
                   value={currentLocality?.Pincode}
                   onInput={(e) => number(e, 6)}
                   onChange={(e) => {
-                    localityChangeHander(0, e)
+                    localityChangeHander(0, e);
                   }}
-
-                
                 />
-                
-                {currentLocality?.Pincode =="" && (
-                <span className="golbal-Error">{errors?.Pincode}</span>
-              )}
-              
-              {currentLocality?.Pincode != "" && currentLocality?.Pincode.trim().length!=6 && (
-                <span className="golbal-Error">{errors?.PincodeLength}</span>
-              )}
 
+                {currentLocality?.Pincode == "" && (
+                  <span className="golbal-Error">{errors?.Pincode}</span>
+                )}
+
+                {currentLocality?.Pincode != "" &&
+                  currentLocality?.Pincode.trim().length != 6 && (
+                    <span className="golbal-Error">
+                      {errors?.PincodeLength}
+                    </span>
+                  )}
               </div>
 
               <div className="col-md-2">
@@ -882,19 +868,17 @@ console.log(checkLocalities);
                   type="checkbox"
                   checked={currentLocality.isHomeCollection}
                   onChange={(e) => {
-                    localityChangeHander(0, e)
+                    localityChangeHander(0, e);
                   }}
-
                 />
                 <label htmlFor="IsHomeCollection" className="control-label">
                   {t("IsHomeCollection")}
                 </label>
               </div>
-            </div>}
-          {
-            formData.edit && currentLocality.isHomeCollection == '1' &&
+            </div>
+          )}
+          {formData.edit && currentLocality.isHomeCollection == "1" && (
             <div className="row">
-
               <label
                 className="col-sm-2"
                 htmlFor="OpeningTime"
@@ -904,16 +888,14 @@ console.log(checkLocalities);
               </label>
               <div className="col-sm-2">
                 <SelectBox
-
                   name="startTime"
                   className="form-control input-sm"
                   selectedValue={currentLocality?.startTime}
                   onChange={(e) => {
-                    localityChangeHander(0, e)
+                    localityChangeHander(0, e);
                   }}
                   options={TimeSlot}
                 />
-
               </div>
               <label
                 className="col-sm-1"
@@ -924,16 +906,14 @@ console.log(checkLocalities);
               </label>
               <div className="col-sm-2">
                 <SelectBox
-
                   name="endTime"
                   className="form-control input-sm"
                   selectedValue={currentLocality?.endTime}
                   onChange={(e) => {
-                    localityChangeHander(0, e)
+                    localityChangeHander(0, e);
                   }}
                   options={TimeSlot}
                 />
-
               </div>
               <label
                 className="col-sm-1"
@@ -944,16 +924,14 @@ console.log(checkLocalities);
               </label>
               <div className="col-sm-1">
                 <SelectBox
-
                   name="AvgTime"
                   className="form-control input-sm"
                   selectedValue={currentLocality?.AvgTime}
                   options={AvgTimes}
                   onChange={(e) => {
-                    localityChangeHander(0, e)
+                    localityChangeHander(0, e);
                   }}
                 />
-
               </div>
               <label
                 className="col-sm-1"
@@ -964,140 +942,126 @@ console.log(checkLocalities);
               </label>
               <div className="col-sm-1">
                 <SelectBox
-
                   name="TimeSlot"
                   className="form-control input-sm"
                   selectedValue={currentLocality?.TimeSlot}
                   options={TimeSlots}
                   onChange={(e) => {
-                    localityChangeHander(0, e)
+                    localityChangeHander(0, e);
                   }}
                 />
-
-              </div>
-
-
-
-            </div>
-          }
-
-          {!formData.edit && <div className="box  form-horizontal">
-            <div className="box-header with-border">
-              <h3 className="box-title">Area Details</h3>
-            </div>
-            <div
-              className="box-body"
-
-            >
-
-
-              <div className="row d-flex">
-                <table
-                  className="table table-bordered table-hover table-striped tbRecord"
-                  cellPadding="{0}"
-                  cellSpacing="{0}"
-                >
-                  <thead className="cf text-center" style={{ zIndex: 99 }}>
-                    <tr>
-                      <th className="text-center">{t("Add")}</th>
-                      <th className="text-center">{t("Location")}</th>
-                      <th className="text-center">{t("Pincode")}</th>
-                      <th className="text-center">&nbsp;&nbsp;{t("Start Time")}&nbsp;</th>
-                      <th className="text-center">{t("Closing Time")}</th>
-                      <th className="text-center">{t("Avg Time")}</th>
-                      <th className="text-center">{t("Time Slot")}</th>
-                      <th className="text-center">{t("Remove")}</th>
-                    </tr>
-                    <>
-                      {localities.map((locality, index) => (
-                        <tr key={index}>
-                          <td data-title="Add">
-                            <button disabled={localities.length !== index + 1} style={{ fontSize: '15px' }} onClick={() => {
-                              addLocalityHandler(index)
-                            }}>+</button>
-                          </td>
-                          <td>
-                            <Input
-                              className="form-control input-sm"
-                              name="AreaName"
-                              value={localities[index]?.AreaName}
-                              onChange={(e) =>
-                                localityChangeHander(index, e)
-                              }
-                            />
-                          </td>
-                          <td>
-                            <Input
-                              className="form-control input-sm"
-                              name="Pincode"
-                              type="number"
-                              value={locality?.Pincode}
-                              onInput={(e) => number(e, 6)}
-
-
-                              onChange={(e) =>
-                                localityChangeHander(index, e)
-                              }
-                            />
-                          </td>
-                          <td >
-                            <SelectBox
-                              className="form-control input-sm"
-                              name="OpenTime"
-                              options={[...TimeSlot]}
-                              onChange={(e) =>
-                                localityChangeHander(index, e)
-                              }
-                              selectedValue={locality?.OpenTime} />
-                          </td>
-                          <td>
-                            <SelectBox
-                              className="form-control input-sm"
-                              name="CloseTime"
-                              options={[...TimeSlot]}
-                              onChange={(e) =>
-                                localityChangeHander(index, e)
-                              }
-                              selectedValue={locality?.CloseTime} />
-                          </td>
-                          <td>
-                            <SelectBox
-                              className="form-control input-sm"
-                              name="AvgTime"
-                              value={locality.AvgTime}
-                              onChange={(e) =>
-                                localityChangeHander(index, e)
-                              }
-                              options={[...AvgTimes]}
-                            />
-
-                          </td>
-                          <td>
-                            <SelectBox
-                              className="form-control input-sm"
-                              name="NoofSlotForApp"
-                              value={locality.NoofSlotForApp}
-                              onChange={(e) =>
-                                localityChangeHander(index, e)
-                              }
-                              options={[...TimeSlots]}
-                            />
-
-
-                          </td>
-                          <td>
-                            <button onClick={() => removeLocality(index)}>X</button>
-                          </td>
-                        </tr>
-                      ))}
-
-                    </>
-                  </thead>
-
-                </table>
               </div>
             </div>
-          </div>}
+          )}
+
+          {!formData.edit && (
+            <div className="box  form-horizontal">
+              <div className="box-header with-border">
+                <h3 className="box-title">Area Details</h3>
+              </div>
+              <div className="box-body">
+                <div className="row d-flex">
+                  <table
+                    className="table table-bordered table-hover table-striped tbRecord"
+                    cellPadding="{0}"
+                    cellSpacing="{0}"
+                  >
+                    <thead className="cf text-center" style={{ zIndex: 99 }}>
+                      <tr>
+                        <th className="text-center">{t("Add")}</th>
+                        <th className="text-center">{t("Location")}</th>
+                        <th className="text-center">{t("Pincode")}</th>
+                        <th className="text-center">
+                          &nbsp;&nbsp;{t("Start Time")}&nbsp;
+                        </th>
+                        <th className="text-center">{t("Closing Time")}</th>
+                        <th className="text-center">{t("Avg Time")}</th>
+                        <th className="text-center">{t("Time Slot")}</th>
+                        <th className="text-center">{t("Remove")}</th>
+                      </tr>
+                      <>
+                        {localities.map((locality, index) => (
+                          <tr key={index}>
+                            <td data-title="Add">
+                              <button
+                                disabled={localities.length !== index + 1}
+                                style={{ fontSize: "15px" }}
+                                onClick={() => {
+                                  addLocalityHandler(index);
+                                }}
+                              >
+                                +
+                              </button>
+                            </td>
+                            <td>
+                              <Input
+                                className="form-control input-sm"
+                                name="AreaName"
+                                max={20}
+                                value={localities[index]?.AreaName}
+                                onChange={(e) => localityChangeHander(index, e)}
+                              />
+                            </td>
+                            <td>
+                              <Input
+                                className="form-control input-sm"
+                                name="Pincode"
+                                type="number"
+                                value={locality?.Pincode}
+                                onInput={(e) => number(e, 6)}
+                                onChange={(e) => localityChangeHander(index, e)}
+                              />
+                            </td>
+                            <td>
+                              <SelectBox
+                                className="form-control input-sm"
+                                name="OpenTime"
+                                options={[...TimeSlot]}
+                                onChange={(e) => localityChangeHander(index, e)}
+                                selectedValue={locality?.OpenTime}
+                              />
+                            </td>
+                            <td>
+                              <SelectBox
+                                className="form-control input-sm"
+                                name="CloseTime"
+                                options={[...TimeSlot]}
+                                onChange={(e) => localityChangeHander(index, e)}
+                                selectedValue={locality?.CloseTime}
+                              />
+                            </td>
+                            <td>
+                              <SelectBox
+                                className="form-control input-sm"
+                                name="AvgTime"
+                                value={locality.AvgTime}
+                                onChange={(e) => localityChangeHander(index, e)}
+                                options={[...AvgTimes]}
+                              />
+                            </td>
+                            <td>
+                              <SelectBox
+                                className="form-control input-sm"
+                                name="NoofSlotForApp"
+                                value={locality.NoofSlotForApp}
+                                onChange={(e) => localityChangeHander(index, e)}
+                                options={[...TimeSlots]}
+                              />
+                            </td>
+                            <td>
+                              <button onClick={() => removeLocality(index)}>
+                                X
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
           <div
             className="row"
             style={{ display: "flex", justifyContent: "center" }}
@@ -1108,8 +1072,9 @@ console.log(checkLocalities);
               ) : (
                 <button
                   type="button"
-                  className={`btn btn-block ${formData?.edit ? "btn-warning" : "btn-success"
-                    } btn-sm`}
+                  className={`btn btn-block ${
+                    formData?.edit ? "btn-warning" : "btn-success"
+                  } btn-sm`}
                   onClick={formData?.edit ? handleUpdate : handleSubmit}
                 >
                   {formData?.edit ? t("Update") : t("Save")}
@@ -1127,7 +1092,6 @@ console.log(checkLocalities);
             </div>
           </div>
         </div>
-
 
         <div className="box">
           <div className="box-body">
@@ -1190,8 +1154,7 @@ console.log(checkLocalities);
                   </button>
                 )}
               </div>
-              <div className="col-md-1">
-              </div>
+              <div className="col-md-1"></div>
             </div>
           </div>
           <div className="box">
@@ -1199,92 +1162,106 @@ console.log(checkLocalities);
               className="box-body divResult boottable table-responsive"
               id="no-more-tables"
             >
-              {locationTable?.length > 0 && <div className="row">
-                <table
-                  className="table table-bordered table-hover table-striped tbRecord"
-                  cellPadding="{0}"
-                  cellSpacing="{0}"
-                >
-                  <thead className="cf text-center" style={{ zIndex: 99 }}>
-                    <tr>
-                      <th className="text-center">{t("#")}</th>
-                      <th className="text-center">{t("Select")}</th>
-                      <th className="text-center">{t("Location Name")}</th>
-                      <th className="text-center">{t("Business Zone")}</th>
-                      <th className="text-center">{t("State")}</th>
-                      <th className="text-center">{t("City")}</th>
-                      <th className="text-center">{t("Pincode")}</th>
-                      <th className="text-center">{t("Status")}</th>
-                      <th className="text-center">{t("IsHomecollection")}</th>
-                      <th className="text-center">{t("Opening Time")}</th>
-                      <th className="text-center">{t("Closing Time")}</th>
-                      <th className="text-center">{t("Avg Time")}</th>
-                      <th className="text-center">{t("Time Slot")}</th>
-                    </tr>
-                  </thead>
+              {locationTable?.length > 0 && (
+                <div className="row">
+                  <table
+                    className="table table-bordered table-hover table-striped tbRecord"
+                    cellPadding="{0}"
+                    cellSpacing="{0}"
+                  >
+                    <thead className="cf text-center" style={{ zIndex: 99 }}>
+                      <tr>
+                        <th className="text-center">{t("#")}</th>
+                        <th className="text-center">{t("Select")}</th>
+                        <th className="text-center">{t("Location Name")}</th>
+                        <th className="text-center">{t("Business Zone")}</th>
+                        <th className="text-center">{t("State")}</th>
+                        <th className="text-center">{t("City")}</th>
+                        <th className="text-center">{t("Pincode")}</th>
+                        <th className="text-center">{t("Status")}</th>
+                        <th className="text-center">{t("IsHomecollection")}</th>
+                        <th className="text-center">{t("Opening Time")}</th>
+                        <th className="text-center">{t("Closing Time")}</th>
+                        <th className="text-center">{t("Avg Time")}</th>
+                        <th className="text-center">{t("Time Slot")}</th>
+                      </tr>
+                    </thead>
 
-                  <tbody>
-                    {locationTable.map((ele, index) => (
-                      <>
-                        <tr key={ele.ID}>
-                          <td data-title="#" className="text-center">
-                            {index + 1}
-                          </td>
-                          <td data-title="Select" className="text-center">
-                            <button
-                              type="button"
-                              className="btn btn-primary btn-sm"
-                              onClick={() => editLocation(ele)}
+                    <tbody>
+                      {locationTable.map((ele, index) => (
+                        <>
+                          <tr key={ele.ID}>
+                            <td data-title="#" className="text-center">
+                              {index + 1}
+                            </td>
+                            <td data-title="Select" className="text-center">
+                              <button
+                                type="button"
+                                className="btn btn-primary btn-sm"
+                                onClick={() => editLocation(ele)}
+                              >
+                                Select
+                              </button>
+                            </td>
+                            <td
+                              data-title="Location Name"
+                              className="text-center"
                             >
-                              Select
-                            </button>
-                          </td>
-                          <td data-title="Location Name" className="text-center">
-                            {ele.NAME}
-                          </td>
-                          <td data-title="Business Zone" className="text-center">
-                            {ele.BusinessZoneName}
-                          </td>
-                          <td data-title="State" className="text-center">
-                            {ele.state}
-                          </td>
-                          <td data-title="City" className="text-center">
-                            {ele.City}
-                          </td>
-                          <td data-title="Pincode" className="text-center">
-                            {ele.PinCode}
-                          </td>
-                          <td data-title="Status" className="text-center">
-                            {ele.active === 1 ? "Active" : "Inactive"}
-                          </td>
-                          <td data-title="IsHomecollection" className="text-center">
-                            {ele.isHomeCollection}
-                          </td>
-                          <td data-title="Opening Time" className="text-center">
-                            {ele.StartTime}
-                          </td>
-                          <td data-title="Closing Time" className="text-center">
-                            {ele.EndTime}
-                          </td>
-                          <td data-title="Avg Time" className="text-center">
-                            {ele.AvgTime}
-                          </td>
-                          <td data-title="Time Slot" className="text-center">
-                            {ele.NoofSlotForApp}
-                          </td>
-                        </tr>
-                      </>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              }
+                              {ele.NAME}
+                            </td>
+                            <td
+                              data-title="Business Zone"
+                              className="text-center"
+                            >
+                              {ele.BusinessZoneName}
+                            </td>
+                            <td data-title="State" className="text-center">
+                              {ele.state}
+                            </td>
+                            <td data-title="City" className="text-center">
+                              {ele.City}
+                            </td>
+                            <td data-title="Pincode" className="text-center">
+                              {ele.PinCode}
+                            </td>
+                            <td data-title="Status" className="text-center">
+                              {ele.active === 1 ? "Active" : "Inactive"}
+                            </td>
+                            <td
+                              data-title="IsHomecollection"
+                              className="text-center"
+                            >
+                              {ele.isHomeCollection}
+                            </td>
+                            <td
+                              data-title="Opening Time"
+                              className="text-center"
+                            >
+                              {ele.StartTime}
+                            </td>
+                            <td
+                              data-title="Closing Time"
+                              className="text-center"
+                            >
+                              {ele.EndTime}
+                            </td>
+                            <td data-title="Avg Time" className="text-center">
+                              {ele.AvgTime}
+                            </td>
+                            <td data-title="Time Slot" className="text-center">
+                              {ele.NoofSlotForApp}
+                            </td>
+                          </tr>
+                        </>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
-
-
     </>
   );
 };

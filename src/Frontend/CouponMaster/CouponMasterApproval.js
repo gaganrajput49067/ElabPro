@@ -12,6 +12,8 @@ import ViewTest from "./ViewTest";
 import CouponMasterEdit from "./CouponMasterEdit";
 import { toast } from "react-toastify";
 import moment from "moment";
+import axios from "axios";
+import { getTrimmedData } from "../util/Commonservices";
 const CouponMasterApproval = () => {
   const { t } = useTranslation();
 
@@ -66,11 +68,24 @@ const CouponMasterApproval = () => {
       FromDate: moment(formData?.FromDate).format("DD-MMM-YYYY"),
       ToDate: moment(formData?.ToDate).format("DD-MMM-YYYY"),
     };
-    console.log(updatedFormData);
+
+    console.log(getTrimmedData(updatedFormData));
+    axios
+      .post("", updatedFormData)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        toast.error(
+          err?.response?.data?.message
+            ? err?.response?.data?.message
+            : "Error Occured"
+        );
+      });
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1000);
   };
   return (
     <>
@@ -168,7 +183,7 @@ const CouponMasterApproval = () => {
                   type="button"
                   className="btn btn-block btn-success btn-sm"
                   onClick={handleSearch}
-                //   style={{ width: "70px" }}
+                  //   style={{ width: "70px" }}
                 >
                   {t("Search")}
                 </button>
