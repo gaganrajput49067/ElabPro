@@ -374,7 +374,7 @@ const HomeCollectionLocationMaster = () => {
 
   const checkLocalitydata = () => {
     const msg = ""
-    // let i=0;
+  // let i=0;
     // let flag=true;
     // console.log(localities)
     // while(i<localities.length)
@@ -389,95 +389,112 @@ const HomeCollectionLocationMaster = () => {
     // }
     // return flag;
   }
+  function checkAreaname(data){
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].AreaName.trim() =='') {
+          return false
+      }
+      
+  }
+  return true;
+  }
 
   const handleSubmit = () => {
     const generatedError = LocationMasterValidationSchema(formData);
 
     const checkLocalities = localities;
-
+console.log(checkLocalities);
     checkLocalities.forEach(object => {
       delete object['HeadquarterID'];
       delete object['CityZoneId'];
-    });
-
-    const emptyKeys = checkLocalities.flatMap(obj =>
-      Object.keys(obj).filter(key => !obj[key])
-    );
-
-    const Pincodelist = checkLocalities.filter(item => {
-      return item.Pincode.length != 6
-    })
-
-
-    const wrongPincodes = Pincodelist.flatMap((item) => {
-      if (item.Pincode.length != 6) {
-        return item.AreaName;
+    }); 
+    console.log(checkLocalities);
+         console.log(checkAreaname(checkLocalities))
+    if(checkAreaname(checkLocalities))
+    {
+      const emptyKeys = checkLocalities.flatMap(obj =>
+        Object.keys(obj).filter(key => !obj[key])
+      );
+  
+      const Pincodelist = checkLocalities.filter(item => {
+        return item.Pincode.length != 6
+      })
+     
+  
+      const wrongPincodes = Pincodelist.flatMap((item) => {
+        if (item.Pincode.length != 6) {
+          return item.AreaName;
+        }
+      })
+  
+      const DuplicateLocality = checkDuplicateLocality();
+  
+      const concatenatedAreaName = wrongPincodes.join(',');
+      const concatenatedKeys = emptyKeys.join(',');
+      let DuplicateLocalityError;
+      if (typeof (DuplicateLocality) == 'object') {
+        DuplicateLocalityError = DuplicateLocality.join(',')
       }
-    })
-
-    const DuplicateLocality = checkDuplicateLocality();
-
-    const concatenatedAreaName = wrongPincodes.join(',');
-    const concatenatedKeys = emptyKeys.join(',');
-    let DuplicateLocalityError;
-    if (typeof (DuplicateLocality) == 'object') {
-      DuplicateLocalityError = DuplicateLocality.join(',')
-    }
-
-    if (concatenatedKeys === "" && concatenatedAreaName === "" && DuplicateLocality === "") {
-      if (generatedError === "") {
-        setLoad(true);
-        delete formData.edit;
-
-        const AriaDetailsData = localities.map((item) => {
-          return { ...item, ...formData }
-        })
-        axios.post("/api/v1/HCLocation/SaveLocality", {
-          AriaDetailsData
-        })
-          .then((res) => {
-            if (res.data.message) {
-              console.log(res.data.message)
-              setLoad(false);
-              handleCancel();
-              setLocalities([{
-                isHomeColection: "1",
-                HeadquarterID: "",
-                CityZoneId: "",
-                NoofSlotForApp: "",
-                OpenTime: "00:00",
-                CloseTime: "23:30",
-                AvgTime: "",
-                AreaName: "",
-                Pincode: ""
-              }])
-              toast.success(res.data.message ? res.data.message : "Saved Successfully");
-            }
+  
+      if (concatenatedKeys === "" && concatenatedAreaName === "" && DuplicateLocality === "") {
+        if (generatedError === "") {
+          setLoad(true);
+          delete formData.edit;
+  
+          const AriaDetailsData = localities.map((item) => {
+            return { ...item, ...formData }
           })
-          .catch((err) => {
-            console.log(err);
-            setLoad(false);
-            toast.error(err?.response?.data?.message);
-          });
-      } else {
-        setErros(generatedError);
-        setLoad(false);
+          axios.post("/api/v1/HCLocation/SaveLocality", {
+            AriaDetailsData
+          })
+            .then((res) => {
+              if (res.data.message) {
+                console.log(res.data.message)
+                setLoad(false);
+                handleCancel();
+                setLocalities([{
+                  isHomeColection: "1",
+                  HeadquarterID: "",
+                  CityZoneId: "",
+                  NoofSlotForApp: "",
+                  OpenTime: "00:00",
+                  CloseTime: "23:30",
+                  AvgTime: "",
+                  AreaName: "",
+                  Pincode: ""
+                }])
+                toast.success(res.data.message ? res.data.message : "Saved Successfully");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              setLoad(false);
+              toast.error(err?.response?.data?.message);
+            });
+        } else {
+          setErros(generatedError);
+          setLoad(false);
+        }
+  
       }
-
+      else {
+  
+        if (concatenatedKeys.length > 0) {
+          toast.error(`${concatenatedKeys} not filled`)
+        }
+        else if (concatenatedAreaName.length > 0) {
+  
+          toast.error(`Wrong Pincode at ${concatenatedAreaName}`)
+        }
+        else if (DuplicateLocality.length > 0) {
+          toast.error(DuplicateLocalityError);
+        }
+      }
     }
-    else {
-
-      if (concatenatedKeys.length > 0) {
-        toast.error(`${concatenatedKeys} not filled`)
-      }
-      else if (concatenatedAreaName.length > 0) {
-
-        toast.error(`Wrong Pincode at ${concatenatedAreaName}`)
-      }
-      else if (DuplicateLocality.length > 0) {
-        toast.error(DuplicateLocalityError);
-      }
+    else{
+      toast.error("Enter Area Name")
     }
+    
   };
 
 
@@ -657,7 +674,7 @@ const HomeCollectionLocationMaster = () => {
     });
 
     const emptyKeys = checkLocalities.flatMap(obj =>
-      Object.keys(obj).filter(key => !obj[key])
+      Object.keys(obj).filter(key => !obj[key].trim())
     );
 
     const concatenatedKeys = emptyKeys.join(',');

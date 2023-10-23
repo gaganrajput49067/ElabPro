@@ -428,7 +428,7 @@ const PheleBotomistRegisteration = () => {
                 name !== "Title" &&
                     value.unshift({ label: 'Select', value: "" });
 
-
+                  value.pop();  
                 setGender(value);
 
             })
@@ -793,13 +793,7 @@ const PheleBotomistRegisteration = () => {
 
     }, [])
 
-    useEffect(() => {
-        const generatedError = PhelbotomistValidationSchema(formData);
-        setErros({
-            ...errors,
-            Emailvalid: generatedError.Emailvalid,
-        });
-    }, [formData?.Email]);
+   
 
     const navigateHandler = () => {
 
@@ -839,10 +833,15 @@ const PheleBotomistRegisteration = () => {
                                             name='Name'
                                             onChange={handleSelectChange}
                                             value={formData?.Name}
+                                            max={30}
                                         />
                                         {formData?.Name.trim() === "" && (
                                             <span className="golbal-Error">{errors?.Name}</span>
                                         )}
+                                        {formData?.Name.trim().length!="" && formData?.Name?.length<3 && (
+                                            <span className="golbal-Error">{errors?.NameLength}</span>
+                                        )}
+
 
                                     </div>
                                     <label className="col-sm-1" htmlFor="inputEmail3" >
@@ -898,8 +897,11 @@ const PheleBotomistRegisteration = () => {
                                             name='P_Address'
                                             onChange={handleSelectChange}
                                             value={formData?.P_Address}
+                                            max={30}
                                         />
-
+                                       {formData?.P_Address!= "" && formData?.P_Address?.length < 3 && (
+                                        <span className="golbal-Error">{errors?.P_Addresslength}</span>
+                                    )}
                                     </div>
 
                                 </div>
@@ -915,8 +917,11 @@ const PheleBotomistRegisteration = () => {
                                         name='P_City'
                                         onChange={handleSelectChange}
                                         value={formData?.P_City}
+                                        max={15}
                                     />
-
+                                 {formData?.P_City!= "" && formData?.P_City?.length < 3 && (
+                                        <span className="golbal-Error">{errors?.P_Citylength}</span>
+                                    )}
                                 </div>
                                 <label className="col-sm-1" htmlFor="inputEmail3 " >
                                     Pincode:
@@ -1022,7 +1027,9 @@ const PheleBotomistRegisteration = () => {
                                         onChange={handleSelectChange}
                                         value={formData?.FatherName}
                                     />
-
+                                      {formData?.FatherName!= "" && formData?.FatherName?.length < 3 && (
+                                        <span className="golbal-Error">{errors?.FatherNameLength}</span>
+                                    )}
                                 </div>
                                 <label className="col-sm-1" htmlFor="inputEmail3" >
                                     Mother Name:
@@ -1034,6 +1041,9 @@ const PheleBotomistRegisteration = () => {
                                         onChange={handleSelectChange}
                                         value={formData?.MotherName}
                                     />
+                                    {formData?.MotherName!= "" && formData?.MotherName?.length < 3 && (
+                                        <span className="golbal-Error">{errors?.MotherNameLength}</span>
+                                    )}
 
                                 </div>
 
@@ -1068,10 +1078,16 @@ const PheleBotomistRegisteration = () => {
                                     name='Qualification'
                                     onChange={handleSelectChange}
                                     value={formData?.Qualification}
+                                    type="text"
+                                    max={10}
                                 />
                                 {formData?.Qualification.trim() === "" && (
                                     <span className="golbal-Error">{errors?.Qualification}</span>
                                 )}
+                                {
+                                    formData?.Qualification.trim().length>0 && formData?.Qualification?.length < 2
+                                    && <span className="golbal-Error">{errors?.QualificationLength}</span>
+                                }
 
                             </div>
                             <label className="col-sm-1" htmlFor="inputEmail3">
@@ -1083,8 +1099,14 @@ const PheleBotomistRegisteration = () => {
                                     name='Vehicle_Num'
                                     onChange={handleSelectChange}
                                     value={formData?.Vehicle_Num}
+                                    type="text"
+                                    max={12}
                                 />
-
+                                 {
+                                    formData?.Vehicle_Num.trim().length>0 &&
+                                    formData?.Vehicle_Num.trim().length<5
+                                    && <span className="golbal-Error">{errors?.Vehicle_NumLength}</span>
+                                }
                             </div>
                             <label className="col-sm-1" htmlFor="inputEmail3">
                                 Driving License:
@@ -1095,8 +1117,14 @@ const PheleBotomistRegisteration = () => {
                                     className="select-input-box form-control input-sm"
                                     onChange={handleSelectChange}
                                     value={formData?.DrivingLicence}
+                                    type="text"
+                                    max={16}
                                 />
-
+                                {
+                                    formData?.DrivingLicence.trim().length>0 &&
+                                    formData?.DrivingLicence.trim().length<11
+                                    && <span className="golbal-Error">{errors?.Vehicle_NumLength}</span>
+                                }
                             </div>
                             <label className="col-sm-1" htmlFor="inputEmail3">
                                 Pan No:
@@ -1109,7 +1137,7 @@ const PheleBotomistRegisteration = () => {
                                     value={formData?.PanNo}
                                     max={10}
                                 />
-                                {formData?.PanNo != "" && (
+                                {formData?.PanNo != "" && formData?.PanNo?.length!=10 && (
                                     <span className="golbal-Error">{errors?.PanLength}</span>
                                 )}
                             </div>
@@ -1248,6 +1276,11 @@ const PheleBotomistRegisteration = () => {
                                 {formData?.UserName.trim() === "" && (
                                     <span className="golbal-Error">{errors?.UserName}</span>
                                 )}
+                                {
+                                    formData?.UserName.length > 0 && formData?.UserName.length <= 3 && (
+                                        <span className="golbal-Error">{errors?.UserNameL}</span>
+                                    )
+                                }
 
                             </div>
                             <label className="col-sm-1" htmlFor="inputEmail3">

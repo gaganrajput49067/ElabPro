@@ -224,6 +224,12 @@ const AppointmentModal = ({
       } else {
         const generatedError = AppointmentModalValidationSchema(searchData);
         if (generatedError == "") {
+          setSearchData({
+            ...searchData,
+
+            RouteId: "",
+            SelectedBindRoute: searchData.onLoadRoute,
+          });
           obj = {
             areaid: searchData?.LocalityID,
             pincode: searchData?.Pincode,
@@ -1050,7 +1056,7 @@ const AppointmentModal = ({
                       disabled={updateAddressDisable ? false : true}
                     />
 
-                    {searchData?.Email.trim().length > 0 && (
+                    {searchData?.Email.trim().length > 0 &&  !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(searchData?.Email) &&(
                       <span className="golbal-Error">{errors?.Emailvalid}</span>
                     )}
                   </div>

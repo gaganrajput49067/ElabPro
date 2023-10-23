@@ -247,13 +247,7 @@ const TemporaryPhelebotomist = () => {
     }; 
 
 
-    useEffect(() => {
-        const generatedError =  PhelboAuthenticationSchema(formData);
-        setErros({
-            ...errors,
-            Emailvalid: generatedError.Emailvalid,
-        });
-    }, [formData?.Email]);
+    
 
     useEffect(() => {
         getDropDownData('Gender')

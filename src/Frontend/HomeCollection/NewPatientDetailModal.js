@@ -15,6 +15,7 @@ import {
 } from "../../ChildComponents/validations";
 import { getTrimmedData } from "../util/Commonservices";
 import Input from "../../ChildComponents/Input";
+import { useRef } from "react";
 
 const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
   const [RadioDefaultSelect, setRadioDefaultSelect] = useState("Age");
@@ -33,14 +34,8 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
   const [locality, setLocality] = useState([]);
   const [country, setCountry] = useState([]);
   const { t } = useTranslation();
+  const initialRender = useRef(true);
 
-  // useEffect(() => {
-  //   const generatedError = NewPatientModalValidationSchema(formData);
-  //   setErros({
-  //     ...errors,
-  //     Emailvalid: generatedError.Emailvalid,
-  //   });
-  // }, [formData?.Email]);
   console.log(formData);
   const handleSave = () => {
     const generatedError = NewPatientModalValidationSchema(formData);
@@ -172,6 +167,23 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
       : "days";
   };
   // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  useEffect(() => {
+    if (!initialRender.current) {
+      if (
+        formData?.AgeDays == "" &&
+        formData?.AgeMonth == "" &&
+        formData?.AgeYear == ""
+      )
+        setFormData({
+          ...formData,
+          DOB: "",
+        });
+    } else {
+      initialRender.current = false;
+    }
+  }, [formData?.AgeMonth, formData?.AgeDays, formData?.AgeYear]);
+
   const handleDOBCalculation = (e) => {
     const { name, value } = e.target;
 
@@ -659,9 +671,10 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     value={formData.HouseNo}
                     onChange={handleSelectChange}
                   />
-                  {formData?.HouseNo.trim().length > 0 && formData?.HouseNo.trim().length < 3 && (
-                    <span className="golbal-Error">{errors?.HouseNo}</span>
-                  )}
+                  {formData?.HouseNo.trim().length > 0 &&
+                    formData?.HouseNo.trim().length < 3 && (
+                      <span className="golbal-Error">{errors?.HouseNo}</span>
+                    )}
                 </div>
                 <label className="  col-sm-1" htmlFor="State">
                   {t("State")} :
@@ -738,9 +751,10 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     onChange={handleSelectChange}
                   />
 
-                  {formData?.Email.trim().length > 0 && (
-                    <span className="golbal-Error">{errors?.Emailvalid}</span>
-                  )}
+                  {formData?.Email.trim().length > 0 &&
+                    !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData?.Email) && (
+                      <span className="golbal-Error">{errors?.Emailvalid}</span>
+                    )}
                 </div>
                 <label className="  col-sm-1" htmlFor="Landmark">
                   {t("Landmark")}:

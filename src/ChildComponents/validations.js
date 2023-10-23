@@ -43,6 +43,10 @@ export const PhelbotomistValidationSchema = (formData) => {
   if (formData?.Name.trim() === "") {
     err = { ...err, Name: "This Field is Required" };
   }
+  if(formData?.Name.trim().length<3)
+  {
+    err = { ...err, NameLength: "Name should contain atleast 3 characters" };
+  }
   if (moment(formData?.Age).format("DD-MMM-YYYY") === "") {
     err = { ...err, Age: "This Field is Required" };
   }
@@ -52,17 +56,17 @@ export const PhelbotomistValidationSchema = (formData) => {
   if (formData?.Mobile.length !== 10) {
     err = { ...err, Mobileinvalid: "Please enter valid number" };
   }
-  if (formData?.Qualification.trim() === "") {
-    err = { ...err, Qualification: "This Field is Required" };
-  }
+if(formData?.Qualification?.trim() !==""&& formData?.Qualification?.trim().length<2)
+    {
+      err={...err,QualificationLength:'Qualification should contain atleast 2 characters'}
+    }
+  
   // if (formData?.DeviceID.trim() === "") {
   //   err = { ...err, DeviceID: "This Field is Required" };
   // }
-  if (formData?.Email.trim() === "") {
-    err = { ...err, Emailempty: "This Field is Required" };
-  }
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(formData?.Email)) {
+  if (formData?.Email.trim() !== ""&&!emailRegex.test(formData?.Email)) {
     err = { ...err, Emailvalid: "Enter a valid email address" };
   }
 
@@ -88,6 +92,9 @@ export const PhelbotomistValidationSchema = (formData) => {
   }
   if (formData?.Password.trim().length <= 3) {
     err = { ...err, Passwordl: "Password length too short" };
+  }
+  if (formData?.UserName.trim().length <= 3) {
+    err = { ...err, UserNameL: "Username length too short" };
   }
   if (formData?.PhelboSource.trim() === "") {
     err = { ...err, PhelboSource: "This Field is Required" };
@@ -115,11 +122,50 @@ export const PhelbotomistValidationSchema = (formData) => {
       err = { ...err, PanLength: "Invalid Pan No." };
     }
   }
+  if(formData?.P_Address!="")
+  {
+    if(formData?.P_Address?.length<3)
+    {
+      err={...err,P_Addresslength:"Address should contain atleast 3 characters"}
+    }
+  }
+  if(formData?.P_City!="")
+  {
+    if(formData?.P_City?.length<3)
+    {
+      err={...err,P_Citylength:"City should contain atleast 3 characters"}
+    }
+  }
   if (formData?.Other_Contact != "") {
     if (formData?.Other_Contact?.length != 10) {
       err = { ...err, OtherContact: "Invalid Phone no. " };
     }
   }
+  if(formData?.FatherName!="")
+  {
+    if(formData?.FatherName?.length<3)
+    {
+      err={...err,FatherNameLength:'Name should contain atleast 3 characters'}
+    }
+  }
+  if(formData?.MotherName!="")
+  {
+    if(formData?.MotherName?.length<3)
+    {
+      err={...err,MotherNameLength:'Name should contain atleast 3 characters'}
+    }
+  }
+  if(formData?.Vehicle_Num.trim().length>0 && formData?.Vehicle_Num.trim().length<5)
+  {
+    
+  err={...err,Vehicle_NumLength:'Vehicle Number should cantain atleast 5 characters'}
+  } 
+  if(formData?.DrivingLicence.trim().length>0 &&formData?.DrivingLicence.trim().length<11)
+  {
+    
+  err={...err,Vehicle_NumLength:'Driving License should contain atleast 10 characters'}
+  } 
+
   return err;
 };
 
@@ -342,16 +388,18 @@ export const NewPatientModalValidationSchema = (formData) => {
     err = { ...err, LocalityID: "This Field is Required" };
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   if (formData?.Email.trim().length > 0 && !emailRegex.test(formData?.Email)) {
     err = { ...err, Emailvalid: "Please enter a valid email address" };
   }
-  if (formData?.HouseNo.trim().length > 0  &&
-  formData?.HouseNo.trim().length < 3) {
+  if (
+    formData?.HouseNo.trim().length > 0 &&
+    formData?.HouseNo.trim().length < 3
+  ) {
     err = { ...err, HouseNo: "Must Have 3 length" };
   }
-  
+
   if (
     formData?.Landmark.trim().length > 0 &&
     formData?.Landmark.trim().length < 3
@@ -408,7 +456,7 @@ export const AppointmentModalValidationSchema = (searchData) => {
     err = { ...err, LocalityID: "This Field is Required" };
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   if (
     searchData?.Email.trim().length > 0 &&
