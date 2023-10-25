@@ -155,6 +155,7 @@ function HomeCollectionDetailModal({
         getBindSourceCall();
         getPatientDetails();
     }     
+    console.log(ele);
 
     return (
         <>
@@ -390,6 +391,42 @@ function HomeCollectionDetailModal({
                                     }} >{formData?.VerificationCode}</span>}
                                 </div>
                             </div>
+                            {ele?.CStatus=="Canceled" && <div className="row">
+                            <label
+                                    className="col-sm-2"
+                                    htmlFor="Cancel Date"
+                                    style={{ textAlign: "start" }}
+                                >
+                                    {t("Cancel Date")} :
+                                </label>
+                                <div className="col-sm-2">
+                                    <span>{formData?.CancelDateTime
+                                    }</span>
+                                </div>
+                                <label
+                                    className="col-sm-2"
+                                    htmlFor="Cancel Reason"
+                                    style={{ textAlign: "start" }}
+                                >
+                                    {t("Cancel Reason")} :
+                                </label>
+                                <div className="col-sm-2">
+                                    <span>{formData?.CancelReason
+                                    }</span>
+                                </div>
+                                <label
+                                    className="col-sm-2"
+                                    htmlFor="Cancel By"
+                                    style={{ textAlign: "start" }}
+                                >
+                                    {t("Cancel By")} :
+                                </label>
+                                <div className="col-sm-2">
+                                <span>{formData?.CancelByName
+                                    }</span>
+                                </div>
+
+                            </div>}
 
                            
                             <div className="row" >

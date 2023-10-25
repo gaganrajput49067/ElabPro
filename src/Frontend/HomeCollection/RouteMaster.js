@@ -177,6 +177,7 @@ const RouteMaster = () => {
       setSearchData({ ...searchData, [name]: value });
     }
     if (name === "NoofRecord") {
+      setSearchData({ ...searchData, [name]: value });
       handleSearch(value);
     }
     if (name === "Route") {

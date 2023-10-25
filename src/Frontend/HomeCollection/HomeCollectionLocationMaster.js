@@ -51,7 +51,7 @@ const HomeCollectionLocationMaster = () => {
   });
   const [localities, setLocalities] = useState([
     {
-      isHomeColection: true,
+      isHomeColection: "1",
       HeadquarterID: "",
       CityZoneId: "",
       NoofSlotForApp: "1",
@@ -370,7 +370,7 @@ const HomeCollectionLocationMaster = () => {
     });
     setLocalities([
       {
-        IsHomeColection: "1",
+        isHomeColection: "1",
         HeadquarterID: "",
         CityZoneId: "",
         NoofSlotForApp: "1",
@@ -464,16 +464,22 @@ const HomeCollectionLocationMaster = () => {
           if (generatedError === "") {
             setLoad(true);
             delete formData.edit;
-
-            const AriaDetailsData = localities.map((item) => {
+      
+            const trimmedData=localities.map((item)=>{
+              return getTrimmedData(item);
+            })
+            console.log(trimmedData);
+            const AriaDetailsData = trimmedData.map((item) => {
               return {
                 ...item,
 
                 ...formData,
-                // isHomeColection: localities?.isHomeColection ? "1" : "0",
-                IsActive: formData?.IsActive ? "1" : "0",
+                
+              IsActive: formData?.IsActive?"1":"0",
+              IsHomeColection:item?.isHomeColection?"1":"0"
               };
             });
+            
             axios
               .post("/api/v1/HCLocation/SaveLocality", {
                 AriaDetailsData,
@@ -485,7 +491,7 @@ const HomeCollectionLocationMaster = () => {
                   handleCancel();
                   setLocalities([
                     {
-                      IsHomeColection: true,
+                      isHomeColection: true,
                       HeadquarterID: "",
                       CityZoneId: "",
                       NoofSlotForApp: "1",
@@ -666,34 +672,47 @@ const HomeCollectionLocationMaster = () => {
       delete object["HeadquarterID"];
       delete object["CityZoneId"];
     });
-
-    const emptyKeys = checkLocalities.flatMap((obj) =>
-      Object.keys(obj).filter((key) => !obj[key].trim())
-    );
-
-    const concatenatedKeys = emptyKeys.join(",");
-    console.log(concatenatedKeys);
-    if (concatenatedKeys == "" || containsOnlyOneCharacter(concatenatedKeys)) {
-      const nextLocality = {
-        IsHomeColection: "1",
-        HeadquarterID: "",
-        CityZoneId: "",
-        NoofSlotForApp: "1",
-        OpenTime: "00:00",
-        CloseTime: "23:30",
-        AvgTime: "15",
-        AreaName: "",
-        Pincode: "",
-      };
-      setLocalities([...localities, nextLocality]);
-    } else {
-      toast.error(`${concatenatedKeys} not filled`);
+    if(checkLocalities[index].Pincode?.length==6)
+    {
+      if(checkLocalities[index].AreaName.length > 2)
+      {
+        const emptyKeys = checkLocalities.flatMap((obj) =>
+        Object.keys(obj).filter((key) => !obj[key].trim())
+      );
+  
+      const concatenatedKeys = emptyKeys.join(",");
+      
+      if (concatenatedKeys == "" || containsOnlyOneCharacter(concatenatedKeys)) {
+        const nextLocality = {
+          isHomeColection: "1",
+          HeadquarterID: "",
+          CityZoneId: "",
+          NoofSlotForApp: "1",
+          OpenTime: "00:00",
+          CloseTime: "23:30",
+          AvgTime: "15",
+          AreaName: "",
+          Pincode: "",
+        };
+        setLocalities([...localities, nextLocality]);
+      } else {
+        toast.error(`${concatenatedKeys} not filled`);
+      }
+      }
+      else {
+        toast.error("Locality name must have atleast 3 characters")
+      }
     }
+    else {
+      toast.error("Pincode is invalid")
+    }
+
+    
   };
 
   const removeLocality = (i) => {
     if (localities.length > 1) {
-      const newLocalities = localities.filter((_, index) => {
+      const newLocalities = localities.filter((ele, index) => {
         return index !== i;
       });
       console.log(newLocalities);
@@ -701,7 +720,7 @@ const HomeCollectionLocationMaster = () => {
     } else if (localities.length == 1) {
       setLocalities([
         {
-          IsHomeColection: true,
+          isHomeColection: "1",
           HeadquarterID: "",
           CityZoneId: "",
           NoofSlotForApp: "1",

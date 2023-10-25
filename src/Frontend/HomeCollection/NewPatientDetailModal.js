@@ -289,8 +289,8 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
     });
   };
   const findGender = () => {
-    const male = ["Mr.", "Baba", "Dr.(Mrs)"];
-    const female = ["Miss.", "Mrs.", "Baby", "Dr.(Miss)"];
+    const male = ["Mr.", "Baba","Dr.(Mr)","Master" ];
+    const female = ["Miss.", "Mrs.", "Baby", "Dr.(Miss)","Dr.(Mrs)"];
 
     if (male.includes(formData?.Title)) {
       setFormData({ ...formData, Gender: "Male" });
@@ -503,7 +503,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                 </label>
                 <div className="col-sm-2 ">
                   <div className="d-flex">
-                    <div style={{ width: "50%", height: "10px" }}>
+                    <div style={{ width: "40%", height: "10px" }}>
                       <SelectBox
                         name="Title"
                         options={title}
@@ -512,7 +512,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                       />
                     </div>
 
-                    <div style={{ width: "50%" }}>
+                    <div style={{ width: "60%" }}>
                       <Input
                         className="select-input-box form-control input-sm "
                         name="PName"

@@ -211,7 +211,7 @@ const HCHistoryModal = ({
                         }}
                       ></button>
                       &nbsp;&nbsp;
-                      <label className="control-label">{t("CheckIn")}</label>
+                      <label className="control-label">{t("Check In")}</label>
                     </div>
                     <div>
                       <button
@@ -236,7 +236,7 @@ const HCHistoryModal = ({
                       ></button>
                       &nbsp;&nbsp;
                       <label className="control-label">
-                        {t("BookingCompleted")}
+                        {t("Booking Completed")}
                       </label>
                     </div>
                     <div>

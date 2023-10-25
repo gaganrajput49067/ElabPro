@@ -220,7 +220,7 @@ const AppointmentModal = ({
             });
         } else {
           setError(generatedError);
-          setShowPhelebo([])
+          setShowPhelebo([]);
         }
       } else {
         const generatedError = AppointmentModalValidationSchema(searchData);
@@ -297,7 +297,7 @@ const AppointmentModal = ({
             });
         } else {
           setError(generatedError);
-          setShowPhelebo([])
+          setShowPhelebo([]);
         }
       }
     }
@@ -1058,9 +1058,14 @@ const AppointmentModal = ({
                       disabled={updateAddressDisable ? false : true}
                     />
 
-                    {searchData?.Email.trim().length > 0 &&  !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(searchData?.Email) &&(
-                      <span className="golbal-Error">{errors?.Emailvalid}</span>
-                    )}
+                    {searchData?.Email.trim().length > 0 &&
+                      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+                        searchData?.Email
+                      ) && (
+                        <span className="golbal-Error">
+                          {errors?.Emailvalid}
+                        </span>
+                      )}
                   </div>
 
                   <div
@@ -1302,7 +1307,7 @@ const AppointmentModal = ({
                                     (patient) =>
                                       patient.phlebotomistid ===
                                         ele.SelectedPheleboId &&
-                                      patient.apptime === slotArray[0]
+                                      slotArray.includes(patient.apptime)
                                   );
 
                                   DoAppointment(
@@ -1318,7 +1323,7 @@ const AppointmentModal = ({
                                       <>
                                         {patient.phlebotomistid ===
                                           ele.SelectedPheleboId &&
-                                        patient.apptime === slotArray[0] ? (
+                                        slotArray.includes(patient.apptime) ? (
                                           <>
                                             <div key={patientIndex}>
                                               <div
@@ -1345,7 +1350,9 @@ const AppointmentModal = ({
                                                 }}
                                               >
                                                 <p>{patient.pname}</p>
+
                                                 <p>{patient.City}</p>
+
                                                 <p>Rs. {patient.netAmount}</p>
                                               </div>
                                               {mouseHover?.index ===
@@ -1401,7 +1408,7 @@ const AppointmentModal = ({
                                             </div>
                                           </>
                                         ) : (
-                                          ""
+                                          <></>
                                         )}
                                       </>
                                     )
