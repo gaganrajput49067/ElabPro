@@ -53,7 +53,7 @@ const DoAppointmentModal = ({
     AppDateTime: `${moment(selectedPhelebo.AppointmentDate).format(
       "DD-MMM-YYYY"
     )} ${selectedPhelebo.SelectedTime}`,
-    Address: selectedPhelebo?.Address ? selectedPhelebo?.Address : "",
+    // Address: selectedPhelebo?.Address ? selectedPhelebo?.Address : "",
     SelectedTime: selectedPhelebo.SelectedTime,
     updatepatient: "",
     HardCopyRequired: "",
@@ -94,7 +94,7 @@ const DoAppointmentModal = ({
     TotalAgeInDays: selectedPhelebo?.TotalAgeInDays,
     Gender: selectedPhelebo?.Gender,
     VIP: "",
-    House_No: selectedPhelebo?.House_No,
+    House_No: selectedPhelebo?.Address ? selectedPhelebo?.Address : "",
     LocalityID: selectedPhelebo?.LocalityID,
     Locality: selectedPhelebo?.Locality,
     CityID: selectedPhelebo?.CityID,
@@ -217,6 +217,7 @@ const DoAppointmentModal = ({
         GrossAmt: ele?.Rate,
         Remarks: testData?.Remarks,
         RefDoctor: testData?.RefDoctor,
+        House_No: testData?.House_No,
         DiscAmt:
           tableData?.length > 1
             ? (ele?.Rate - NetAmount).toFixed(2)
@@ -227,8 +228,8 @@ const DoAppointmentModal = ({
         isPediatric: testData?.isPediatric ? 1 : 0,
       };
     });
-
-    const generatedError = HandleHCBooking(appointData);
+    console.log(appointData,datas[0]);
+    const generatedError = HandleHCBooking(appointData,datas[0]);
     console.log(generatedError);
     if (generatedError === "") {
       axios
@@ -746,13 +747,13 @@ const DoAppointmentModal = ({
                       className="select-input-box form-control input-sm"
                       type="Address"
                       max={30}
-                      name="Address"
-                      onChange={handleChange}
-                      value={appointData?.Address}
+                      name="House_No"
+                      onChange={handleTestChange}
+                      value={testData?.House_No}
                     />
 
-                    {appointData?.Address.trim().length > 0 && (
-                      <span className="golbal-Error">{errors?.Address}</span>
+                    {testData?.House_No.trim().length > 0 && testData?.House_No.trim().length < 3 && (
+                      <span className="golbal-Error">{errors?.House_No}</span>
                     )}
                   </div>
                 </div>

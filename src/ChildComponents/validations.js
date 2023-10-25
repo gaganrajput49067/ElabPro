@@ -408,7 +408,8 @@ export const NewPatientModalValidationSchema = (formData) => {
   }
   return err;
 };
-export const HandleHCBooking = (appointData) => {
+export const HandleHCBooking = (appointData,datas) => {
+ 
   let err = "";
   if (!appointData.Alternatemobileno) {
     err = { ...err, Alternatemobilenos: "This Field is Required" };
@@ -417,10 +418,10 @@ export const HandleHCBooking = (appointData) => {
     err = { ...err, Alternatemobilenum: "Please enter valid number" };
   }
   if (
-    appointData?.Address.trim().length > 0 &&
-    appointData?.Address.trim().length < 3
+    datas?.House_No.trim().length > 0 &&
+    datas?.House_No.trim().length < 3
   ) {
-    err = { ...err, Address: "Must Have 3 length" };
+    err = { ...err, House_No: "Must Have 3 length" };
   }
   return err;
 };
@@ -492,7 +493,37 @@ export const AppointmentModalValidationSchema = (searchData) => {
 
 //   return err;
 // };
+export const AppointmentModalValidationSchema2 = (searchData) => {
+  let err = "";
+  
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
+  if (
+    searchData?.Email.trim().length > 0 &&
+    !emailRegex.test(searchData?.Email)
+  ) {
+    err = { ...err, Emailvalid: "Please enter a valid email address" };
+  }
+
+  if (
+    searchData?.Landmark.trim().length > 0 &&
+    searchData?.Landmark.trim().length < 3
+  ) {
+    err = { ...err, Landmark: "Must Have 3 length" };
+  }
+  if (
+    searchData?.Address.trim().length > 0 &&
+    searchData?.Address.trim().length < 3
+  ) {
+    err = { ...err, Address: "Must Have 3 length" };
+  }
+  return err;
+  // if (!searchData.DropLocationId) {
+  //   err = { ...err, DropLocationId: "Pick any DropLocation" };
+  // }
+
+  return err;
+};
 export const validationForDesignations = (formData) => {
   let err = "";
   if (formData?.Name.trim() === "") {

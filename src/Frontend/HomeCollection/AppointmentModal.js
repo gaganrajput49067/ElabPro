@@ -13,6 +13,7 @@ import AppointmentNotBookedModal from "./AppointmentNotBookedModal";
 import { AppointmentModalValidationSchema } from "../../ChildComponents/validations";
 import DoAppointmentModal from "./DoAppointmentModal";
 import PhelebotomistDetailModal from "./PhelebotomistDetailModal";
+import { AppointmentModalValidationSchema2 } from "../../ChildComponents/validations";
 import Loading from "../util/Loading";
 const AppointmentModal = ({
   showPatientData,
@@ -133,11 +134,11 @@ const AppointmentModal = ({
   console.log(searchData);
   const handleSearch = (payload) => {
     console.log(payload);
-    // console.log(searchData);
-    const Today = searchData?.AppointmentDate.getDay();
-
     console.log(searchData);
-    // console.log(generatedError);
+    const Today = searchData?.AppointmentDate.getDay();
+    const generatedError = AppointmentModalValidationSchema(searchData);
+    console.log(searchData);
+    console.log(generatedError);
     let obj = {
       areaid: "",
       pincode: "",
@@ -151,7 +152,7 @@ const AppointmentModal = ({
       toast.error("You Cannot Book appointment on Sunday");
     } else {
       if (payload) {
-        const generatedError = AppointmentModalValidationSchema(searchData);
+        const generatedError = AppointmentModalValidationSchema2(searchData);
         if (generatedError == "") {
           obj = {
             areaid: payload.areaid,
@@ -227,7 +228,6 @@ const AppointmentModal = ({
         if (generatedError == "") {
           setSearchData({
             ...searchData,
-
             RouteId: "",
             SelectedBindRoute: searchData.onLoadRoute,
           });
@@ -302,6 +302,8 @@ const AppointmentModal = ({
       }
     }
   };
+
+  console.log(searchData);
   const DoAppointment = (match, data, selectedPhelebo) => {
     console.log(match, data, selectedPhelebo);
     const currentTime = new Date();
@@ -657,7 +659,7 @@ const AppointmentModal = ({
         );
       });
   };
-  console.log(dropLocation);
+
   const getPincode = (value, name) => {
     axios
       .post("/api/v1/CustomerCare/BindPinCode", {
@@ -671,7 +673,6 @@ const AppointmentModal = ({
         };
 
         getDropLocationDropDown(name, value, data[0].pincode);
-        console.log("first");
         handleSearch(obj);
       })
       .catch((err) => {

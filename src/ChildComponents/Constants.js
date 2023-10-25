@@ -107,9 +107,7 @@ export const TemplateName = [
   { label: "Template 5", value: "5" },
 ];
 
-export const ActiveTemplateID = [
-  { label: "Active", value: "1" },
-];
+export const ActiveTemplateID = [{ label: "Active", value: "1" }];
 
 export const PageSize = [
   {
@@ -1407,6 +1405,12 @@ export const NoofRecord = [
   { label: "20", value: "20" },
   { label: "30", value: "30" },
   { label: "40", value: "40" },
+  { label: "50", value: "50" },
+  { label: "60", value: "60" },
+  { label: "70", value: "70" },
+  { label: "80", value: "80" },
+  { label: "90", value: "90" },
+  { label: "100", value: "100" },
 ];
 
 export const HCNewPatientForm = {
@@ -1417,7 +1421,7 @@ export const HCNewPatientForm = {
   LocalityID: "",
   CityID: "",
   Pincode: "",
-  StateID:"",
+  StateID: "",
   MediaStreamAudioDestinationNode: "",
   CountryID: 1,
   Phone: "",
@@ -1442,7 +1446,6 @@ export const HCNewPatientForm = {
   isActive: "1",
   Landmark: "",
 };
-
 
 export const HCPaymentMode = [
   {
@@ -1471,23 +1474,48 @@ export const HCPaymentMode = [
   },
 ];
 
+export const Phelboweekoff = [
+  { label: "Sunday", value: "Sunday" },
+  { label: "Monday", value: "Monday" },
+  { label: "Tuseday", value: "Tuesday" },
+  { label: "Wednsesday", value: "Wednsesday" },
+  { label: "Thursday", value: "Thursday" },
+  { label: "Friday", value: "Friday" },
+  { label: "Saturday", value: "Saturday" },
+];
 
-export const Phelboweekoff = [{ label: 'Sunday', value: 'Sunday' }, { label: 'Monday', value: 'Monday' }, { label: 'Tuseday', value: 'Tuesday' }, { label: 'Wednsesday', value: 'Wednsesday' }, { label: 'Thursday', value: 'Thursday' }, { label: 'Friday', value: 'Friday' }, { label: 'Saturday', value: 'Saturday' }];
+export const PhelboSearchTypes = [
+  {
+    label: "Mobile",
+    value: "Mobile",
+  },
+  { label: "Phelebo Code", value: "hpm.PhlebotomistID" },
+  { label: "Name", value: "Name" },
+  { label: "Email", value: "Email" },
+  {
+    label: "PanNo.",
+    value: "PanNo.",
+  },
+];
 
-export const PhelboSearchTypes = [{
-  label: 'Mobile', value: 'Mobile'
-}, { label: 'Phelebo Code', value: 'hpm.PhlebotomistID' },
-{ label: 'Name', value: 'Name' }, { label: 'Email', value: 'Email' }, {
-  label: 'PanNo.', value: 'PanNo.'
-}]
+export const Phelborecordoptions = [
+  {
+    label: 5,
+    value: Number(5),
+  },
+  { label: 10, value: Number(10) },
+  { label: 20, value: 20 },
+  { label: 50, value: 50 },
+  { label: 100, value: 100 },
+];
 
-export const Phelborecordoptions = [{
-  label: 5, value: Number(5)
-}, { label: 10, value:Number(10) }, { label: 20, value: 20 }, { label: 50, value: 50 }, { label: 100, value: 100 }]
-
-export const PhelboSources = [{
-  label: 'Lab', value: 'Lab'
-}, { label: 'Franchise', value: 'Franchise' }]
+export const PhelboSources = [
+  {
+    label: "Lab",
+    value: "Lab",
+  },
+  { label: "Franchise", value: "Franchise" },
+];
 
 export const PhelbosearchDefault = {
   SearchType: "",
@@ -1496,20 +1524,33 @@ export const PhelbosearchDefault = {
   SearchGender: "",
   IsDeactivatePP: "1",
   SearchState: "",
-  SearchCity: ""
-}
+  SearchCity: "",
+};
 
-export const TimeSlots = [{
-  label: '1-Slot', value: '1'
-}, { label: '2-Slot', value: '2' }, {
-  label: '3-Slot', value: '3'
-}, {
-  label: '6-Slot', value: '6'
-}]
+export const TimeSlots = [
+  {
+    label: "1-Slot",
+    value: "1",
+  },
+  { label: "2-Slot", value: "2" },
+  {
+    label: "3-Slot",
+    value: "3",
+  },
+  {
+    label: "6-Slot",
+    value: "6",
+  },
+];
 export const AvgTimes = [
-  { label: '15 min', value: '15' }, {
-    label: '30 min', value: '30'
-  }, { label: '60 min', value: '60' }, {
-    label: '120 min', value: '120'
-  }
-]
+  { label: "15 min", value: "15" },
+  {
+    label: "30 min",
+    value: "30",
+  },
+  { label: "60 min", value: "60" },
+  {
+    label: "120 min",
+    value: "120",
+  },
+];

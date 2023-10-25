@@ -26,7 +26,7 @@ const HomeCollectionSearch = () => {
     const [formData, setFormdata] = useState({
         DateOption: "hc.AppID",
         FromDate: new Date(),
-        ToDate: new Date(),
+        ToDate: new Date(new Date().getTime() + 86400000),
         FromTime: "00:00:00",
         ToTime: "23:59:59",
         StateId: "",
