@@ -619,7 +619,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                   </div>
                 </div>
                 <label className="col-sm-1 ">
-                  D.O.B :&nbsp;
+                {t("D.O.B")} :&nbsp;
                   <input
                     type="radio"
                     value={"DOB"}

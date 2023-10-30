@@ -101,7 +101,7 @@ const HCHistoryCancelModal = ({ showCancel, handleCloseCancel, details }) => {
 
                     }
                   >
-                    Cancel
+                    {t("Cancel")}
                   </button>
                 </div>
               </div>

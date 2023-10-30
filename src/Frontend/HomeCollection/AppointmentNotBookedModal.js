@@ -104,7 +104,7 @@ const AppointmentNotBookedModal = ({
                       handleReason();
                     }}
                   >
-                    Save Reason
+                   {t("Save Reason")}
                   </button>
                 </div>
               </div>

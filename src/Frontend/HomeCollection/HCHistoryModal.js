@@ -355,7 +355,7 @@ const HCHistoryModal = ({
                                   }}
                                   onClick={() => getHappyCode(ele, index)}
                                 >
-                                  Show Happy Code
+                                  {t("Show Happy Code")}
                                 </span>
                               )}
                               {showHappyCode[index] && (
@@ -478,7 +478,7 @@ const HCHistoryModal = ({
                                 className="btn btn-primary btn-sm "
                                 onClick={() => getViewLog(ele)}
                               >
-                                View Log
+                                {t("View Log")}
                               </button>
                             </div>
                           </div>

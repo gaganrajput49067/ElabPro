@@ -163,7 +163,7 @@ const CallCentre = () => {
               </label>
             </div>
             <label className=" col-md-1" htmlFor="Mobile">
-              {t("Mobile No. ")} &nbsp;&nbsp;:
+              {t("Mobile No. ")}  :
             </label>
             <div className=" col-md-2">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -175,7 +175,7 @@ const CallCentre = () => {
                   value={mobile}
                   max={10}
                   onInput={(e) => number(e, 10)}
-                  // onBlur={handleBlur}
+                  
                   onKeyDown={handlePatientData}
                   onChange={handleMobile}
                   autoComplete="off"
@@ -200,7 +200,7 @@ const CallCentre = () => {
                   handleClear();
                 }}
               >
-                Clear
+                {t("Clear")}
               </button>
             </div>
           </div>

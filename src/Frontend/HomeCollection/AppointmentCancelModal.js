@@ -71,7 +71,7 @@ const AppointmentCancelModal = ({
                       handleCloseCancel();
                     }}
                   >
-                    Cancel
+                   {t("Cancel")}
                   </button>
                 </div>
               </div>

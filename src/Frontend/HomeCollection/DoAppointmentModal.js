@@ -228,8 +228,8 @@ const DoAppointmentModal = ({
         isPediatric: testData?.isPediatric ? 1 : 0,
       };
     });
-    console.log(appointData,datas[0]);
-    const generatedError = HandleHCBooking(appointData,datas[0]);
+    console.log(appointData, datas[0]);
+    const generatedError = HandleHCBooking(appointData, datas[0]);
     console.log(generatedError);
     if (generatedError === "") {
       axios
@@ -752,9 +752,10 @@ const DoAppointmentModal = ({
                       value={testData?.House_No}
                     />
 
-                    {testData?.House_No.trim().length > 0 && testData?.House_No.trim().length < 3 && (
-                      <span className="golbal-Error">{errors?.House_No}</span>
-                    )}
+                    {testData?.House_No.trim().length > 0 &&
+                      testData?.House_No.trim().length < 3 && (
+                        <span className="golbal-Error">{errors?.House_No}</span>
+                      )}
                   </div>
                 </div>
 
@@ -821,7 +822,7 @@ const DoAppointmentModal = ({
                       checked={testSearchType === "By Test Name"}
                       onChange={onValueChange}
                     ></input>
-                    &nbsp; By TestName
+                    &nbsp; {t("By TestName")}
                   </label>
 
                   <label className="col-md-2">
@@ -832,7 +833,7 @@ const DoAppointmentModal = ({
                       checked={testSearchType === "By Test Code"}
                       onChange={onValueChange}
                     ></input>
-                    &nbsp;By TestCode
+                    &nbsp; {t("By TestCode")}
                   </label>
 
                   <label className="col-md-3">
@@ -843,7 +844,7 @@ const DoAppointmentModal = ({
                       checked={testSearchType === "InBetween"}
                       onChange={onValueChange}
                     ></input>
-                    &nbsp;In Between
+                    &nbsp; {t("In Between")}
                   </label>
 
                   <div className="col-sm-2">
@@ -853,7 +854,7 @@ const DoAppointmentModal = ({
                       onChange={handleTestChange}
                       checked={testData?.VIP}
                     />
-                    <label className="control-label">&nbsp;VIP</label>
+                    <label className="control-label">&nbsp; {t("VIP")}</label>
                   </div>
 
                   <div className="col-sm-3">
@@ -940,16 +941,17 @@ const DoAppointmentModal = ({
                         >
                           <thead className="cf text-center">
                             <tr>
-                              <th>#</th>
-                              <th>Code</th>
-                              <th>Item</th>
-                              <th>View</th>
-                              <th>DOS</th>
-                              <th>MRP</th>
-                              <th>Rate</th>
-                              <th>Disc.</th>
-                              <th>Amt.</th>
-                              <th>IsUrgent</th>
+                              {t("Cancel")}
+                              <th> {t("#")}</th>
+                              <th> {t("Code")}</th>
+                              <th> {t("Item")}</th>
+                              <th> {t("View")}</th>
+                              <th> {t("DOS")}</th>
+                              <th> {t("MRP")}</th>
+                              <th> {t("Rate")}</th>
+                              <th> {t("Disc.")}</th>
+                              <th> {t("Amt.")}</th>
+                              <th> {t("IsUrgent")}</th>
                             </tr>
                           </thead>
 
@@ -1050,7 +1052,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                        Total Amount
+                      {t("Total Amount")}
                       </span>
                     </div>
                     <Input
@@ -1068,7 +1070,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                        Total Amount to Pay
+                      {t("Total Amount to Pay")}
                       </span>
                     </div>
 
@@ -1087,7 +1089,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                        Discount Amount
+                      {t("Discount Amount")}
                       </span>
                     </div>
                     <Input
@@ -1113,7 +1115,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                        Discount in %
+                      {t("Discount in %")}
                       </span>
                     </div>
                     <Input
@@ -1143,7 +1145,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                        Discount Given By
+                      {t("Discount Given By")}
                       </span>
                     </div>
                     <SelectBox
@@ -1161,7 +1163,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                        Discount Reason
+                      {t("Discount Reason")}
                       </span>
                     </div>
                     <Input
@@ -1296,12 +1298,12 @@ const DoAppointmentModal = ({
                                 >
                                   <thead className="cf text-center">
                                     <tr>
-                                      <th className="text-center">Test Name</th>
-                                      <th className="text-center">Rate</th>
+                                      <th className="text-center">{t("Test Name")}</th>
+                                      <th className="text-center"> {t("Rate")}</th>
                                       <th className="text-center">
-                                        Disc. Amt.
+                                      {t(" Disc. Amt.")}
                                       </th>
-                                      <th className="text-center">Amt.</th>
+                                      <th className="text-center">{t("Amt.")}</th>
                                     </tr>
                                   </thead>
 
@@ -1341,7 +1343,7 @@ const DoAppointmentModal = ({
                                           color: "white",
                                         }}
                                       >
-                                        <td data-title="Total">Total</td>
+                                        <td data-title="Total">{t("Total")}</td>
                                         <td>{ele.Rate}</td>
                                         <td>{ele.DiscAmt}</td>
                                         <td>{ele.NetAmt}</td>
@@ -1358,11 +1360,11 @@ const DoAppointmentModal = ({
                                   }}
                                 >
                                   <label className="col-md-6">
-                                    PatientRating : {ele?.PatientRating}&nbsp;☆
+                                  {t("PatientRating")} : {ele?.PatientRating}&nbsp;☆
                                   </label>
 
                                   <label className="col-md-6">
-                                    PhelboRating : {ele?.PhelboRating}&nbsp;☆
+                                  {t("PhelboRating")} : {ele?.PhelboRating}&nbsp;☆
                                   </label>
                                 </div>
 
@@ -1374,7 +1376,7 @@ const DoAppointmentModal = ({
                                   }}
                                 >
                                   <label className="col-md-12">
-                                    PhelboFeedback : {ele?.PhelboFeedback}
+                                  {t("PhelboFeedback")} : {ele?.PhelboFeedback}
                                   </label>
                                 </div>
 
@@ -1386,7 +1388,7 @@ const DoAppointmentModal = ({
                                   }}
                                 >
                                   <label className="col-md-12">
-                                    PatientFeedback : {ele?.PatientFeedback}
+                                  {t("PatientFeedback")}  : {ele?.PatientFeedback}
                                   </label>
                                 </div>
                               </div>
@@ -1447,7 +1449,7 @@ const DoAppointmentModal = ({
                     className="btn btn-primary btn-block btn-sm"
                     onClick={handleBooking}
                   >
-                    Book Slot
+                    {t("Book Slot")} 
                   </button>
                 </div>
               </div>
@@ -1458,7 +1460,7 @@ const DoAppointmentModal = ({
               <div className="box hcStatus">
                 <div className="box-body">
                   <div className="row">
-                    <label className="col-md-2">Appointment List</label>
+                    <label className="col-md-2">{t("Appointment List")} </label>
                     <div className="col-md-3">
                       <button
                         style={{
@@ -1646,8 +1648,7 @@ const DoAppointmentModal = ({
                       setLastThreeVisitShow((prev) => !prev);
                     }}
                   >
-                    Last Three Apointment of {selectedPhelebo?.Phelebo} test
-                    case
+                    {t("Last Three Apointment of")}  {selectedPhelebo?.Phelebo} {t("test case")} 
                   </button>
                 )}
                 {suggestedTest.length > 0 && (
@@ -1658,7 +1659,7 @@ const DoAppointmentModal = ({
                       setSuggestedTestShow((prev) => !prev);
                     }}
                   >
-                    SuggestedTest
+                    {t("SuggestedTest")} 
                   </button>
                 )}
               </div>

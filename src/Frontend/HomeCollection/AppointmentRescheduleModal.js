@@ -129,7 +129,7 @@ const AppointmentRescheduleModal = ({
                     handleCloseReschedule();
                     }}
                   >
-                    Reschedule
+                    {t("Reschedule")}
                   </button>
                 </div>
               </div>

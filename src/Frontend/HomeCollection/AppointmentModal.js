@@ -1214,6 +1214,7 @@ const AppointmentModal = ({
                         height: "12px",
                       }}
                     >
+                    
                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     </span>
                     &nbsp;
@@ -1272,9 +1273,6 @@ const AppointmentModal = ({
                                       className="text-center"
                                       style={{
                                         textAlign: "center",
-
-                                        // width:"100%",
-                                        // border: "1px  solid white",
                                       }}
                                     >
                                       {time}
