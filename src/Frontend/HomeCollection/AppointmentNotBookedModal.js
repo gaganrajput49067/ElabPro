@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import Input from "../../ChildComponents/Input";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { getTrimmedData } from "../util/Commonservices";
 const AppointmentNotBookedModal = ({
   showPatientData,
   notBookedShow,
@@ -16,7 +17,9 @@ const AppointmentNotBookedModal = ({
   };
 
   const handleReason = () => {
-    if (reason) {
+    if (reason.trim().length < 3) {
+      toast.error("Remarks length must be 3");
+    } else {
       axios
         .post("/api/v1/CustomerCare/savenotbookedreason", {
           savenotbookedreasonData: {
@@ -27,7 +30,7 @@ const AppointmentNotBookedModal = ({
             CityID: showPatientData?.CityID,
             StateID: showPatientData?.StateID,
             Pincode: showPatientData?.Pincode,
-            Reason: reason,
+            Reason: reason.trim(),
           },
         })
         .then((res) => {
@@ -38,19 +41,24 @@ const AppointmentNotBookedModal = ({
         .catch((err) => {
           toast.error(err);
         });
-    } else {
-      toast.error("Please enter any reason");
     }
   };
   const { t } = useTranslation();
   return (
     <>
-      <Modal show={notBookedShow} style={{ backgroundColor: "black" }} id="AppNotBooked">
+      <Modal
+        show={notBookedShow}
+        style={{ backgroundColor: "black" }}
+        id="AppNotBooked"
+      >
         <div
           className="box-success"
           style={{ marginTop: "200px", backgroundColor: "transparent" }}
         >
-          <Modal.Header className="modal-header" style={{ position: "sticky" ,zIndex: 1055,top:0}}>
+          <Modal.Header
+            className="modal-header"
+            style={{ position: "sticky", zIndex: 1055, top: 0 }}
+          >
             <Modal.Title className="modal-title">
               {t("Home Collection Not Booked Reason")}
             </Modal.Title>

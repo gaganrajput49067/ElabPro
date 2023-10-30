@@ -457,27 +457,27 @@ export const AppointmentModalValidationSchema = (searchData) => {
     err = { ...err, LocalityID: "This Field is Required" };
   }
 
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-  if (
-    searchData?.Email.trim().length > 0 &&
-    !emailRegex.test(searchData?.Email)
-  ) {
-    err = { ...err, Emailvalid: "Please enter a valid email address" };
-  }
+  // if (
+  //   searchData?.Email.trim().length > 0 &&
+  //   !emailRegex.test(searchData?.Email)
+  // ) {
+  //   err = { ...err, Emailvalid: "Please enter a valid email address" };
+  // }
 
-  if (
-    searchData?.Landmark.trim().length > 0 &&
-    searchData?.Landmark.trim().length < 3
-  ) {
-    err = { ...err, Landmark: "Must Have 3 length" };
-  }
-  if (
-    searchData?.Address.trim().length > 0 &&
-    searchData?.Address.trim().length < 3
-  ) {
-    err = { ...err, Address: "Must Have 3 length" };
-  }
+  // if (
+  //   searchData?.Landmark.trim().length > 0 &&
+  //   searchData?.Landmark.trim().length < 3
+  // ) {
+  //   err = { ...err, Landmark: "Must Have 3 length" };
+  // }
+  // if (
+  //   searchData?.Address.trim().length > 0 &&
+  //   searchData?.Address.trim().length < 3
+  // ) {
+  //   err = { ...err, Address: "Must Have 3 length" };
+  // }
   return err;
   // if (!searchData.DropLocationId) {
   //   err = { ...err, DropLocationId: "Pick any DropLocation" };

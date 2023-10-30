@@ -152,8 +152,8 @@ const AppointmentModal = ({
       toast.error("You Cannot Book appointment on Sunday");
     } else {
       if (payload) {
-        const generatedError = AppointmentModalValidationSchema2(searchData);
-        if (generatedError == "") {
+        
+       
           obj = {
             areaid: payload.areaid,
             pincode: payload.pincode,
@@ -219,10 +219,7 @@ const AppointmentModal = ({
                   : "Error Occured"
               );
             });
-        } else {
-          setError(generatedError);
-          setShowPhelebo([]);
-        }
+        
       } else {
         const generatedError = AppointmentModalValidationSchema(searchData);
         if (generatedError == "") {
@@ -305,6 +302,9 @@ const AppointmentModal = ({
 
   console.log(searchData);
   const DoAppointment = (match, data, selectedPhelebo) => {
+
+    const generatedError = AppointmentModalValidationSchema2(searchData);
+    if (generatedError == "") {
     console.log(match, data, selectedPhelebo);
     const currentTime = new Date();
     const currentHours = currentTime.getHours();
@@ -442,6 +442,10 @@ const AppointmentModal = ({
         }
       }
     }
+
+  } else {
+    setError(generatedError);
+  }
   };
   const handleChange = (event) => {
     const { name, value } = event?.target;

@@ -61,6 +61,7 @@ const HCHistoryModal = ({
         )
       );
   };
+  console.log(showHappyCode)
   const showHcHistoryData = () => {
     axios
       .post("/api/v1/CustomerCare/getHChistory", {
