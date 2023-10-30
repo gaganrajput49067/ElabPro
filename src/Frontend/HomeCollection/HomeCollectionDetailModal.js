@@ -7,7 +7,6 @@ import { dateConfig } from "../../util/DateConfig";
 import Input from "../../ChildComponents/Input";
 import { useTranslation } from "react-i18next";
 import { SelectBox } from "../../ChildComponents/SelectBox";
-
 import DatePicker from "../Components/DatePicker";
 import ViewLogModal from "./ViewLogModal";
 import HCHistoryCancelModal from "./HCHistoryCancelModal";

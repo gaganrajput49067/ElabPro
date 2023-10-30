@@ -44,12 +44,6 @@ const CallCentre = () => {
     setMobile(e.target.value);
   };
 
-  // const handleBlur = (e) => {
-  //   if (e.target.value.length < 10) {
-  //     toast.error("Length Must be 10");
-  //   }
-  // };
-
   const handlePatientData = (e) => {
     const keypress = [13];
     if (keypress.includes(e.which)) {
@@ -65,12 +59,12 @@ const CallCentre = () => {
           mobile: mobile,
         })
         .then((res) => {
-          if (res.data.message.length == 0) {
+          if (res?.data?.message?.length == 0) {
             setShowPatientData({});
             toast.error("No Patient Found");
             setShow(true);
           } else {
-            setMobileData(res.data.message);
+            setMobileData(res?.data?.message);
             setDetailShow(true);
           }
         })
@@ -96,7 +90,7 @@ const CallCentre = () => {
   const getHcHistory = (ele) => {
     axios
       .post("/api/v1/CustomerCare/BindOldPatientHomeCollectionData", {
-        patient_id: ele.Patientid,
+        patient_id: ele?.Patientid,
         // patient_id: "AKKR.0000131251",
       })
       .then((res) => {
@@ -163,7 +157,7 @@ const CallCentre = () => {
               </label>
             </div>
             <label className=" col-md-1" htmlFor="Mobile">
-              {t("Mobile No. ")}  :
+              {t("Mobile No.")}  :
             </label>
             <div className=" col-md-2">
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -296,8 +290,8 @@ const CallCentre = () => {
                         name="HC History"
                         className="btn btn-success btn-sm "
                         onClick={handleOpenhcHistory}
-                      >
-                        HC History
+                      > {t("HC History")}
+                    
                       </button>
                     </div>
 
@@ -333,7 +327,7 @@ const CallCentre = () => {
                   style={{ height: "30px", fontSize: "15px" }}
                   onClick={() => setAppointShow(true)}
                 >
-                  Home Collection
+                   {t("Home Collection")}
                 </button>
               </div>
             </div>

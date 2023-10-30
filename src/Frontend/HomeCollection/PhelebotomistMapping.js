@@ -265,7 +265,7 @@ const PhelebotomistMapping = () => {
             label: ele?.BusinessZoneName,
           };
         });
-        BusinessZones.unshift({ label: t("Select Business Zone"), value: "" });
+        // BusinessZones.unshift({ label: t("Select Business Zone"), value: "" });
         setBusinessZones(BusinessZones);
       })
       .catch((err) =>
@@ -323,7 +323,10 @@ const PhelebotomistMapping = () => {
             </label>
             <div className="col-sm-12 col-md-2">
               <SelectBox
-                options={businessZones}
+                options={[
+                  { label: "Select Business Zone", value: "" },
+                  ...businessZones,
+                ]}
                 name="BusinessZoneId"
                 className="input-sm"
                 selectedValue={formData?.BusinessZoneId}

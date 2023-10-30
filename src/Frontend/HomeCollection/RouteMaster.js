@@ -9,7 +9,10 @@ import Loading from "../util/Loading";
 import { SimpleCheckbox } from "../../ChildComponents/CheckBox";
 import { NoofRecord } from "../../ChildComponents/Constants";
 import ExportFile from "../Master/ExportFile";
-import { getTrimmedData } from "../util/Commonservices";
+import {
+  PreventSpecialCharacter,
+  getTrimmedData,
+} from "../util/Commonservices";
 
 const RouteMaster = () => {
   const [errors, setErros] = useState({}); //check
@@ -149,7 +152,7 @@ const RouteMaster = () => {
     if (name === "Route") {
       setFormData({
         ...formData,
-        [name]: type === "checkbox" ? checked : value,
+        [name]: PreventSpecialCharacter(value) ? value : formData[name],
       });
     }
 
@@ -267,6 +270,7 @@ const RouteMaster = () => {
 
   const handleSubmit = () => {
     const generatedError = RouteMasterValidationSchema(formData);
+    console.log(generatedError)
     if (generatedError === "") {
       setLoad(true);
       axios
@@ -334,7 +338,7 @@ const RouteMaster = () => {
             label: ele?.State,
           };
         });
-        States.unshift({ label: t("Select State"), value: "" });
+        // States.unshift({ label: t("Select State"), value: "" });
         setStatesSearch(States);
       })
       .catch((err) => {
@@ -369,7 +373,7 @@ const RouteMaster = () => {
                   ...businessZones,
                 ]}
                 // options={businessZones}
-             
+
                 name="BusinessZoneId"
                 className="input-sm"
                 selectedValue={formData?.BusinessZoneId}
@@ -443,7 +447,9 @@ const RouteMaster = () => {
                 <span className="golbal-Error">{errors?.Route}</span>
               )}
               {formData?.Route.trim().length > 0 &&
-                formData?.Route.trim().length <2 && (<span className="golbal-Error">{errors?.Routes}</span>)}
+                formData?.Route.trim().length < 2 && (
+                  <span className="golbal-Error">{errors?.Routes}</span>
+                )}
             </div>
 
             <div className="col-md-2">
@@ -508,7 +514,10 @@ const RouteMaster = () => {
 
             <div className="col-sm-12 col-md-2">
               <SelectBox
-                options={statesSearch}
+                options={[
+                  { label: "Select State", value: "" },
+                  ...statesSearch,
+                ]}
                 name="StateId"
                 className="input-sm"
                 selectedValue={searchData?.StateId}
@@ -560,7 +569,7 @@ const RouteMaster = () => {
           className="box-body divResult boottable table-responsive"
           id="no-more-tables"
         >
-          <div className="row">
+          <div className="row" >
             <table
               className="table table-bordered table-hover table-striped tbRecord"
               cellPadding="{0}"
@@ -594,7 +603,7 @@ const RouteMaster = () => {
                               editRouteMaster(ele);
                             }}
                           >
-                            Select
+                            {t("Select")}
                           </button>
                         </td>
                         <td data-title="Route Name" className="text-center">

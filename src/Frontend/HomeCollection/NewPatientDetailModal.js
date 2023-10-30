@@ -16,6 +16,7 @@ import {
 import { getTrimmedData } from "../util/Commonservices";
 import Input from "../../ChildComponents/Input";
 import { useRef } from "react";
+import Loading from "../util/Loading";
 
 const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
   const [RadioDefaultSelect, setRadioDefaultSelect] = useState("Age");
@@ -25,7 +26,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
     AgeMonth: "",
     AgeMonth: "",
   });
-
+  const [load, setLoad] = useState(false);
   const [errors, setErros] = useState({});
   const [gender, setGender] = useState([]);
   const [title, setTitle] = useState([]);
@@ -42,20 +43,21 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
     console.log(formData);
     const updatedFormData = {
       ...formData,
-      AgeDays: ageCount(formData.AgeYear, formData.AgeMonth, formData.AgeDays),
-      Age: `${formData.AgeYear == "" ? 0 : formData.AgeYear} Y ${
-        formData.AgeMonth == "" ? 0 : formData.AgeMonth
+      AgeDays: ageCount(formData?.AgeYear, formData?.AgeMonth, formData?.AgeDays),
+      Age: `${formData?.AgeYear == "" ? 0 : formData?.AgeYear} Y ${
+        formData?.AgeMonth == "" ? 0 : formData?.AgeMonth
       } M ${ageCount(
-        formData.AgeYear,
-        formData.AgeMonth,
-        formData.AgeDays
+        formData?.AgeYear,
+        formData?.AgeMonth,
+        formData?.AgeDays
       )} D `,
 
-      AgeMonth: formData.AgeMonth == "" ? 0 : formData.AgeMonth,
-      AgeYear: formData.AgeYear == "" ? 0 : formData.AgeYear,
+      AgeMonth: formData?.AgeMonth == "" ? 0 : formData?.AgeMonth,
+      AgeYear: formData?.AgeYear == "" ? 0 : formData?.AgeYear,
     };
     console.log(generatedError);
     if (generatedError === "") {
+      setLoad(true);
       axios
         .post(
           "/api/v1/CustomerCare/SaveNewPatient",
@@ -64,6 +66,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
           })
         )
         .then((res) => {
+          setLoad(false);
           console.log(formData);
           toast.success(res?.data?.message);
           setFormData(HCNewPatientForm);
@@ -81,6 +84,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
           handleClose();
         });
     } else {
+      setLoad(false);
       setErros(generatedError);
     }
   };
@@ -289,8 +293,8 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
     });
   };
   const findGender = () => {
-    const male = ["Mr.", "Baba","Dr.(Mr)","Master" ];
-    const female = ["Miss.", "Mrs.", "Baby", "Dr.(Miss)","Dr.(Mrs)"];
+    const male = ["Mr.", "Baba", "Dr.(Mr)", "Master"];
+    const female = ["Miss.", "Mrs.", "Baby", "Dr.(Miss)", "Dr.(Mrs)"];
 
     if (male.includes(formData?.Title)) {
       setFormData({ ...formData, Gender: "Male" });
@@ -315,7 +319,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
         const data = res?.data?.message;
         setFormData({
           ...formData,
-          Pincode: data[0].pincode,
+          Pincode: data[0]?.pincode,
           [name]: value,
         });
       })
@@ -431,11 +435,11 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
     axios
       .post("/api/v1/Global/getGlobalData", { Type: name })
       .then((res) => {
-        let data = res.data.message;
-        let value = data.map((ele) => {
+        let data = res?.data?.message;
+        let value = data?.map((ele) => {
           return {
-            value: match.includes(name) ? ele.FieldDisplay : ele.FieldID,
-            label: ele.FieldDisplay,
+            value: match.includes(name) ? ele?.FieldDisplay : ele?.FieldID,
+            label: ele?.FieldDisplay,
           };
         });
         !["Title"].includes(name) &&
@@ -518,11 +522,11 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                         name="PName"
                         type="text"
                         max={30}
-                        value={formData.PName}
+                        value={formData?.PName}
                         autoComplete="off"
                         onChange={handleSelectChange}
                       />
-                      {formData?.PName.trim() === "" && (
+                      {formData?.PName?.trim() === "" && (
                         <span className="golbal-Error">{errors?.PName}</span>
                       )}
                       {formData?.PName.trim().length > 0 &&
@@ -533,7 +537,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                   </div>
                 </div>
                 <label className="col-sm-1">
-                  Age : &nbsp;
+                {t("Age")} : &nbsp;
                   <input
                     type="radio"
                     name="AgeWise"
@@ -607,7 +611,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                           ? false
                           : true
                       }
-                      value={formData.AgeDays}
+                      value={formData?.AgeDays}
                       onChange={handleDOBCalculation}
                     />
                     <span
@@ -619,12 +623,12 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                   </div>
                 </div>
                 <label className="col-sm-1 ">
-                {t("D.O.B")} :&nbsp;
+                  {t("D.O.B")} :&nbsp;
                   <input
                     type="radio"
                     value={"DOB"}
                     onChange={(e) => {
-                      setRadioDefaultSelect(e.target.value);
+                      setRadioDefaultSelect(e?.target?.value);
                     }}
                     name="AgeWise"
                     checked={RadioDefaultSelect === "DOB" ? true : false}
@@ -663,7 +667,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                   <SelectBox
                     name="CountryID"
                     options={country}
-                    selectedValue={formData.CountryID}
+                    selectedValue={formData?.CountryID}
                     onChange={handleSelectChange}
                   />
                 </div>
@@ -678,7 +682,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     max={20}
                     autoComplete="off"
                     placeholder="House No."
-                    value={formData.HouseNo}
+                    value={formData?.HouseNo}
                     onChange={handleSelectChange}
                   />
                   {formData?.HouseNo.trim().length > 0 &&
@@ -693,7 +697,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                   <SelectBox
                     options={states}
                     name="StateID"
-                    selectedValue={formData.StateID}
+                    selectedValue={formData?.StateID}
                     onChange={handleSelectChange}
                   />
                   {formData?.StateID === "" && (
@@ -754,7 +758,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                     className="select-input-box form-control input-sm"
                     name="Email"
                     max={30}
-                    value={formData.Email}
+                    value={formData?.Email}
                     type="text"
                     autoComplete="off"
                     placeholder="Email Id"
@@ -796,13 +800,17 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                 style={{ display: "flex", justifyContent: "center" }}
               >
                 <div className="col-sm-2">
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-block btn-sm"
-                    onClick={handleSave}
-                  >
-                    Register New Patient
-                  </button>
+                  {load ? (
+                    <Loading />
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block btn-sm"
+                      onClick={handleSave}
+                    >
+                     {t("Register New Patient")} 
+                    </button>
+                  )}
                 </div>
                 <div className="col-sm-1">
                   <button
@@ -813,7 +821,7 @@ const NewPatientDetailModal = ({ show, handleClose, mobile }) => {
                       setFormData([]);
                     }}
                   >
-                    Close
+                    {t("Close")}
                   </button>
                 </div>
               </div>

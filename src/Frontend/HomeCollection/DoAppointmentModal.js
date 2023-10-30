@@ -14,6 +14,7 @@ import AppointmentCancelModal from "./AppointmentCancelModal";
 import { HCPaymentMode } from "../../ChildComponents/Constants";
 import { autocompleteOnBlur } from "../util/Commonservices";
 import { HandleHCBooking } from "../../ChildComponents/validations";
+import Loading from "../util/Loading";
 const DoAppointmentModal = ({
   selectedPhelebo,
   routeValueData,
@@ -36,6 +37,7 @@ const DoAppointmentModal = ({
     CentreID: "",
     InvestigationID: "",
   });
+  const [load, setLoad] = useState(false);
   const [discountPercentage, setDiscountPercentage] = useState("");
   const [disAmt, setdisAmt] = useState("");
   const [net, setNet] = useState(0);
@@ -204,11 +206,14 @@ const DoAppointmentModal = ({
   const handleSubmit = () => {
     const datas = tableData.map((ele) => {
       const DiscountPercentage = (Number(discountamount) / Number(net)) * 100;
-      const NetAmount = (
-        ele?.Rate -
-        (DiscountPercentage / 100) * ele?.Rate
-      ).toFixed(2);
-
+      // const NetAmount = (
+      //   ele?.Rate -
+      //   (DiscountPercentage / 100) * ele?.Rate
+      // ).toFixed(2);
+      const NetAmount = Math.round(
+        ele?.Rate - (DiscountPercentage / 100) * ele?.Rate
+      );
+      
       return {
         ...ele,
         DisReason: testData?.DisReason,
@@ -232,6 +237,7 @@ const DoAppointmentModal = ({
     const generatedError = HandleHCBooking(appointData, datas[0]);
     console.log(generatedError);
     if (generatedError === "") {
+      setLoad(true);
       axios
         .post("/api/v1/CustomerCare/SaveHomeCollection", {
           datatosave: datas,
@@ -239,12 +245,14 @@ const DoAppointmentModal = ({
           HardCopyRequired: appointData.HardCopyRequired ? 1 : 0,
         })
         .then((res) => {
+          setLoad(false);
           console.log(res?.data?.message);
           toast.success("Booking Successfully");
           handleAppointment();
           callhandleOnRouteValue(routeValueData);
         })
         .catch((err) => {
+          setLoad(false)
           toast.error(
             err?.response?.data?.message
               ? err?.response?.data?.message
@@ -252,6 +260,7 @@ const DoAppointmentModal = ({
           );
         });
     } else {
+      setLoad(false);
       setError(generatedError);
     }
   };
@@ -348,7 +357,7 @@ const DoAppointmentModal = ({
         const data = res?.data?.message;
         const discount = data?.map((ele) => {
           return {
-            value: handleSplit(ele?.VALUE, "#")[0],
+            value: ele?.EmployeeID,
             label: ele?.label,
           };
         });
@@ -844,7 +853,7 @@ const DoAppointmentModal = ({
                       checked={testSearchType === "InBetween"}
                       onChange={onValueChange}
                     ></input>
-                    &nbsp; {t("In Between")}
+                    &nbsp; {t("InBetween")}
                   </label>
 
                   <div className="col-sm-2">
@@ -908,7 +917,7 @@ const DoAppointmentModal = ({
                   </div>
                   <div className="col-sm-2" style={{ textAlign: "center" }}>
                     <button type="button" className=" btn  btn-primary btn-sm">
-                      Count : {tableData.length}
+                       {t("Count")} : {tableData.length}
                     </button>
                   </div>
 
@@ -941,7 +950,7 @@ const DoAppointmentModal = ({
                         >
                           <thead className="cf text-center">
                             <tr>
-                              {t("Cancel")}
+                              
                               <th> {t("#")}</th>
                               <th> {t("Code")}</th>
                               <th> {t("Item")}</th>
@@ -1052,7 +1061,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                      {t("Total Amount")}
+                        {t("Total Amount")}
                       </span>
                     </div>
                     <Input
@@ -1070,7 +1079,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                      {t("Total Amount to Pay")}
+                        {t("Total Amount to Pay")}
                       </span>
                     </div>
 
@@ -1089,7 +1098,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                      {t("Discount Amount")}
+                        {t("Discount Amount")}
                       </span>
                     </div>
                     <Input
@@ -1115,7 +1124,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                      {t("Discount in %")}
+                        {t("Discount in %")}
                       </span>
                     </div>
                     <Input
@@ -1145,7 +1154,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                      {t("Discount Given By")}
+                        {t("Discount Given By")}
                       </span>
                     </div>
                     <SelectBox
@@ -1163,7 +1172,7 @@ const DoAppointmentModal = ({
                   <div className="col-md-2">
                     <div className="input-group-prepend">
                       <span className="input-group-text font-weight-bold text-info">
-                      {t("Discount Reason")}
+                        {t("Discount Reason")}
                       </span>
                     </div>
                     <Input
@@ -1191,7 +1200,7 @@ const DoAppointmentModal = ({
                   >
                     <Modal.Header className="modal-header">
                       <Modal.Title className="modal-title">
-                        {t("Suggested  Test")}
+                        {t("Suggested Test")}
                       </Modal.Title>
                       <button
                         type="button"
@@ -1298,12 +1307,19 @@ const DoAppointmentModal = ({
                                 >
                                   <thead className="cf text-center">
                                     <tr>
-                                      <th className="text-center">{t("Test Name")}</th>
-                                      <th className="text-center"> {t("Rate")}</th>
                                       <th className="text-center">
-                                      {t(" Disc. Amt.")}
+                                        {t("Test Name")}
                                       </th>
-                                      <th className="text-center">{t("Amt.")}</th>
+                                      <th className="text-center">
+                                        {" "}
+                                        {t("Rate")}
+                                      </th>
+                                      <th className="text-center">
+                                        {t(" Disc. Amt.")}
+                                      </th>
+                                      <th className="text-center">
+                                        {t("Amt.")}
+                                      </th>
                                     </tr>
                                   </thead>
 
@@ -1360,11 +1376,13 @@ const DoAppointmentModal = ({
                                   }}
                                 >
                                   <label className="col-md-6">
-                                  {t("PatientRating")} : {ele?.PatientRating}&nbsp;☆
+                                    {t("PatientRating")} : {ele?.PatientRating}
+                                    &nbsp;☆
                                   </label>
 
                                   <label className="col-md-6">
-                                  {t("PhelboRating")} : {ele?.PhelboRating}&nbsp;☆
+                                    {t("PhelboRating")} : {ele?.PhelboRating}
+                                    &nbsp;☆
                                   </label>
                                 </div>
 
@@ -1376,7 +1394,8 @@ const DoAppointmentModal = ({
                                   }}
                                 >
                                   <label className="col-md-12">
-                                  {t("PhelboFeedback")} : {ele?.PhelboFeedback}
+                                    {t("PhelboFeedback")} :{" "}
+                                    {ele?.PhelboFeedback}
                                   </label>
                                 </div>
 
@@ -1388,7 +1407,8 @@ const DoAppointmentModal = ({
                                   }}
                                 >
                                   <label className="col-md-12">
-                                  {t("PatientFeedback")}  : {ele?.PatientFeedback}
+                                    {t("PatientFeedback")} :{" "}
+                                    {ele?.PatientFeedback}
                                   </label>
                                 </div>
                               </div>
@@ -1444,13 +1464,17 @@ const DoAppointmentModal = ({
                 style={{ display: "flex", justifyContent: "center" }}
               >
                 <div className="col-md-2">
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-block btn-sm"
-                    onClick={handleBooking}
-                  >
-                    {t("Book Slot")} 
-                  </button>
+                  {load ? (
+                    <Loading />
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-block btn-sm"
+                      onClick={handleBooking}
+                    >
+                      {t("Book Slot")}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -1648,7 +1672,8 @@ const DoAppointmentModal = ({
                       setLastThreeVisitShow((prev) => !prev);
                     }}
                   >
-                    {t("Last Three Apointment of")}  {selectedPhelebo?.Phelebo} {t("test case")} 
+                    {t("Last Three Apointment of")} {selectedPhelebo?.Phelebo}
+                    {t("test case")}
                   </button>
                 )}
                 {suggestedTest.length > 0 && (
@@ -1659,7 +1684,7 @@ const DoAppointmentModal = ({
                       setSuggestedTestShow((prev) => !prev);
                     }}
                   >
-                    {t("SuggestedTest")} 
+                    {t("SuggestedTest")}
                   </button>
                 )}
               </div>

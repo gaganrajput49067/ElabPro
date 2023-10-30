@@ -93,7 +93,7 @@ const AppointmentModal = ({
   //   console.log(searchData?.LocalityID);
   //   console.log(searchData);
   // }, [searchData?.LocalityID]);
-
+  console.log(states, cities, localities);
   const GetPatientDetailonSlot = (SetPhelebo) => {
     const phleboIds = SetPhelebo.map((phelebo) => phelebo.SelectedPheleboId);
 
@@ -135,7 +135,7 @@ const AppointmentModal = ({
   const handleSearch = (payload) => {
     console.log(payload);
     console.log(searchData);
-    const Today = searchData?.AppointmentDate.getDay();
+
     const generatedError = AppointmentModalValidationSchema(searchData);
     console.log(searchData);
     console.log(generatedError);
@@ -147,306 +147,327 @@ const AppointmentModal = ({
       phelboid: "",
     };
 
-    if (Today == 0) {
-      setShowPhelebo([]);
-      toast.error("You Cannot Book appointment on Sunday");
-    } else {
-      if (payload) {
-        
-       
-          obj = {
-            areaid: payload.areaid,
-            pincode: payload.pincode,
+    // if (Today == 0) {
+    //   setShowPhelebo([]);
+    //   toast.error("You Cannot Book appointment on Sunday");
+    // } else {
+    if (payload) {
+      obj = {
+        areaid: payload.areaid,
+        pincode: payload.pincode,
 
-            fromdate: moment(searchData.AppointmentDate).format("DD-MMM-YYYY"),
-            freeslot: searchData?.freeslot,
-            phelboid: searchData?.phelboid,
-          };
-          setLoad(true);
-          axios
-            .post("/api/v1/CustomerCare/BindSlot", obj)
-            .then((res) => {
-              setLoad(false);
-              const data = res.data.Data;
-              const slot = res?.data?.Slot;
-              const TimeslotData = res?.data?.TimeslotData;
+        fromdate: moment(searchData.AppointmentDate).format("DD-MMM-YYYY"),
+        freeslot: searchData?.freeslot,
+        phelboid: searchData?.phelboid,
+      };
+      setLoad(true);
+      axios
+        .post("/api/v1/CustomerCare/BindSlot", obj)
+        .then((res) => {
+          setLoad(false);
+          const data = res.data.Data;
+          const slot = res?.data?.Slot;
+          const TimeslotData = res?.data?.TimeslotData;
 
-              const slotTime = TimeslotData.map((e) => {
-                return {
-                  NoofSlotForApp: e.NoofSlotForApp,
-                };
-              });
-
-              const SlotArray = [];
-              for (
-                let i = 0;
-                i < slot.length;
-                i += parseInt(slotTime[0].NoofSlotForApp, 10)
-              ) {
-                SlotArray.push(
-                  slot.slice(i, i + parseInt(slotTime[0].NoofSlotForApp, 10))
-                );
-              }
-
-              const SetPhelebo = data?.map((ele) => {
-                return {
-                  SelectedPheleboId: ele?.ID,
-                  // value: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[1],
-                  // label: handleSplit(ele?.centreid, "^")[1],
-                  // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
-                  SelectedRouteName: handleSplit(ele?.route, "@")[0],
-                  LoginTime: "00:00",
-                  LogoutTime: "16:00",
-                  SelectedRouteId: handleSplit(ele?.route, "@")[1],
-                  PheleboNumber: handleSplit(ele?.NAME, " ")[1],
-                  PheleboName: handleSplit(ele?.NAME, " ")[0],
-                  istemp: ele?.istemp,
-                  Slotdata: slot,
-                  SlotArray: SlotArray,
-                  TimeslotData: slotTime[0].NoofSlotForApp,
-                };
-              });
-              console.log(SetPhelebo);
-              setShowPhelebo(SetPhelebo);
-              GetPatientDetailonSlot(SetPhelebo);
-            })
-            .catch((err) => {
-              setLoad(false);
-              setShowPhelebo([]);
-              toast.error(
-                err?.response?.data?.message
-                  ? err?.response?.data?.message
-                  : "Error Occured"
-              );
-            });
-        
-      } else {
-        const generatedError = AppointmentModalValidationSchema(searchData);
-        if (generatedError == "") {
-          setSearchData({
-            ...searchData,
-            RouteId: "",
-            SelectedBindRoute: searchData.onLoadRoute,
+          const slotTime = TimeslotData.map((e) => {
+            return {
+              NoofSlotForApp: e.NoofSlotForApp,
+            };
           });
-          obj = {
-            areaid: searchData?.LocalityID,
-            pincode: searchData?.Pincode,
-            fromdate: moment(searchData.AppointmentDate).format("DD-MMM-YYYY"),
-            freeslot: searchData?.freeslot,
-            phelboid: searchData?.phelboid,
-          };
-          setLoad(true);
-          axios
-            .post("/api/v1/CustomerCare/BindSlot", obj)
-            .then((res) => {
-              setLoad(false);
-              const data = res.data.Data;
-              const slot = res?.data?.Slot;
-              const TimeslotData = res?.data?.TimeslotData;
 
-              const slotTime = TimeslotData.map((e) => {
-                return {
-                  NoofSlotForApp: e.NoofSlotForApp,
-                };
-              });
+          const SlotArray = [];
+          for (
+            let i = 0;
+            i < slot.length;
+            i += parseInt(slotTime[0].NoofSlotForApp, 10)
+          ) {
+            SlotArray.push(
+              slot.slice(i, i + parseInt(slotTime[0].NoofSlotForApp, 10))
+            );
+          }
 
-              const SlotArray = [];
-              for (
-                let i = 0;
-                i < slot.length;
-                i += parseInt(slotTime[0].NoofSlotForApp, 10)
-              ) {
-                SlotArray.push(
-                  slot.slice(i, i + parseInt(slotTime[0].NoofSlotForApp, 10))
-                );
-              }
-
-              const SetPhelebo = data?.map((ele) => {
-                return {
-                  SelectedPheleboId: ele?.ID,
-                  // value: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[1],
-                  // label: handleSplit(ele?.centreid, "^")[1],
-                  // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
-                  SelectedRouteName: handleSplit(ele?.route, "@")[0],
-                  LoginTime: "00:00",
-                  LogoutTime: "16:00",
-                  SelectedRouteId: handleSplit(ele?.route, "@")[1],
-                  PheleboNumber: handleSplit(ele?.NAME, " ")[1],
-                  PheleboName: handleSplit(ele?.NAME, " ")[0],
-                  istemp: ele?.istemp,
-                  Slotdata: slot,
-                  SlotArray: SlotArray,
-                  TimeslotData: slotTime[0].NoofSlotForApp,
-                };
-              });
-              console.log(SetPhelebo);
-              setShowPhelebo(SetPhelebo);
-              GetPatientDetailonSlot(SetPhelebo);
-            })
-            .catch((err) => {
-              setLoad(false);
-              setShowPhelebo([]);
-              toast.error(
-                err?.response?.data?.message
-                  ? err?.response?.data?.message
-                  : "Error Occured"
-              );
-            });
-        } else {
-          setError(generatedError);
+          const SetPhelebo = data?.map((ele) => {
+            return {
+              SelectedPheleboId: ele?.ID,
+              // value: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[1],
+              // label: handleSplit(ele?.centreid, "^")[1],
+              // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
+              SelectedRouteName: handleSplit(ele?.route, "@")[0],
+              LoginTime: ele?.LoginTime,
+              LogoutTime: ele?.LogoutTime,
+              SelectedRouteId: handleSplit(ele?.route, "@")[1],
+              PheleboNumber: handleSplit(ele?.NAME, " ")[1],
+              PheleboName: handleSplit(ele?.NAME, " ")[0],
+              istemp: ele?.istemp,
+              Slotdata: slot,
+              WeakOff: ele?.WeakOff,
+              SlotArray: SlotArray,
+              TimeslotData: slotTime[0].NoofSlotForApp,
+            };
+          });
+          console.log(SetPhelebo);
+          setShowPhelebo(SetPhelebo);
+          GetPatientDetailonSlot(SetPhelebo);
+        })
+        .catch((err) => {
+          setLoad(false);
           setShowPhelebo([]);
-        }
+          toast.error(
+            err?.response?.data?.message
+              ? err?.response?.data?.message
+              : "Error Occured"
+          );
+        });
+    } else {
+      const generatedError = AppointmentModalValidationSchema(searchData);
+      if (generatedError == "") {
+        setSearchData({
+          ...searchData,
+          RouteId: "",
+          SelectedBindRoute: searchData.onLoadRoute,
+        });
+        obj = {
+          areaid: searchData?.LocalityID,
+          pincode: searchData?.Pincode,
+          fromdate: moment(searchData.AppointmentDate).format("DD-MMM-YYYY"),
+          freeslot: searchData?.freeslot,
+          phelboid: searchData?.phelboid,
+        };
+        setLoad(true);
+        axios
+          .post("/api/v1/CustomerCare/BindSlot", obj)
+          .then((res) => {
+            setLoad(false);
+            const data = res.data.Data;
+            const slot = res?.data?.Slot;
+            const TimeslotData = res?.data?.TimeslotData;
+
+            const slotTime = TimeslotData.map((e) => {
+              return {
+                NoofSlotForApp: e.NoofSlotForApp,
+              };
+            });
+
+            const SlotArray = [];
+            for (
+              let i = 0;
+              i < slot.length;
+              i += parseInt(slotTime[0].NoofSlotForApp, 10)
+            ) {
+              SlotArray.push(
+                slot.slice(i, i + parseInt(slotTime[0].NoofSlotForApp, 10))
+              );
+            }
+
+            const SetPhelebo = data?.map((ele) => {
+              return {
+                SelectedPheleboId: ele?.ID,
+                // value: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[1],
+                // label: handleSplit(ele?.centreid, "^")[1],
+                // centreid: handleSplit(handleSplit(ele?.centreid, "^")[0], "#")[0],
+                SelectedRouteName: handleSplit(ele?.route, "@")[0],
+                LoginTime: ele?.LoginTime,
+                LogoutTime: ele?.LogoutTime,
+                SelectedRouteId: handleSplit(ele?.route, "@")[1],
+                WeakOff: ele?.WeakOff,
+                PheleboNumber: handleSplit(ele?.NAME, " ")[1],
+                PheleboName: handleSplit(ele?.NAME, " ")[0],
+                istemp: ele?.istemp,
+                Slotdata: slot,
+                SlotArray: SlotArray,
+                TimeslotData: slotTime[0].NoofSlotForApp,
+              };
+            });
+            console.log(SetPhelebo);
+            setShowPhelebo(SetPhelebo);
+            GetPatientDetailonSlot(SetPhelebo);
+          })
+          .catch((err) => {
+            setLoad(false);
+            setShowPhelebo([]);
+            toast.error(
+              err?.response?.data?.message
+                ? err?.response?.data?.message
+                : "Error Occured"
+            );
+          });
+      } else {
+        setError(generatedError);
+        setShowPhelebo([]);
       }
     }
+    // }
   };
+  function getDayCode(dayName) {
+    const daysOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const dayCode = daysOfWeek.indexOf(dayName);
 
+    return dayCode;
+  }
   console.log(searchData);
   const DoAppointment = (match, data, selectedPhelebo) => {
-
     const generatedError = AppointmentModalValidationSchema2(searchData);
     if (generatedError == "") {
-    console.log(match, data, selectedPhelebo);
-    const currentTime = new Date();
-    const currentHours = currentTime.getHours();
-    const currentMinutes = currentTime.getMinutes();
-    const [dataHours, dataMinutes] = data.split(":").map(Number);
-    const [loginHour, loginMinute] =
-      selectedPhelebo?.LoginTime?.split(":").map(Number);
-    const [logoutHour, logoutMinute] =
-      selectedPhelebo?.LogoutTime?.split(":").map(Number);
-    const appointmentDate = new Date(searchData.AppointmentDate);
-    const currentDate = new Date();
-    const appointmentDay = appointmentDate.getDate();
-    const currentDay = currentDate.getDate();
-    console.log(appointmentDay, currentDay);
+      console.log(match, data, selectedPhelebo);
+      const currentTime = new Date();
+      const currentHours = currentTime.getHours();
+      const currentMinutes = currentTime.getMinutes();
+      const [dataHours, dataMinutes] = data.split(":").map(Number);
+      const [loginHour, loginMinute] =
+        selectedPhelebo?.LoginTime?.split(":").map(Number);
+      const [logoutHour, logoutMinute] =
+        selectedPhelebo?.LogoutTime?.split(":").map(Number);
+      const appointmentDate = new Date(searchData.AppointmentDate);
+      const AppointmentWeekDay = appointmentDate.getDay();
+      const SelectedPheleboWeekOff = getDayCode(selectedPhelebo?.WeakOff);
+      const currentDate = new Date();
 
-    if (appointmentDay < currentDay) {
-      toast.error("The appointment date is in the past");
-    } else if (appointmentDay == currentDay) {
-      if (
-        dataHours < currentHours ||
-        (dataHours === currentHours && dataMinutes < currentMinutes)
-      ) {
-        toast.error("You can't book an appointment for this time");
-      } else if (
-        !(
-          (dataHours > loginHour ||
-            (dataHours === loginHour && dataMinutes >= loginMinute)) &&
-          (dataHours < logoutHour ||
-            (dataHours === logoutHour && dataMinutes <= logoutMinute))
-        )
-      ) {
-        toast.error("Phelebo Not Available for this time");
-      } else if (match >= selectedPhelebo?.TimeslotData) {
-        toast.error("Booking is Filled for given Slot");
-      } else {
-        setSelectedPhelebo({
-          ...selectedPhelebo,
-          centreid: searchData.DropLocationId,
-          SelectedTime: data,
-          Address: searchData.Address,
-          AppointmentDate: searchData.AppointmentDate,
-          CityID: searchData.CityID,
-          DropLocationId: searchData.DropLocationId,
-          // DropLocationLabel: searchData?.DropLocationLabel,
-          Email: searchData.Email,
-          Landmark: searchData.Landmark,
-          LocalityID: searchData.LocalityID,
-          Pincode: searchData.Pincode,
-          RouteId: searchData.RouteId
-            ? searchData?.RouteId
-            : dropLocation[0]?.SelectedRouteId,
-          SelectedBindRoute: searchData.SelectedBindRoute,
-          StateID: searchData.StateID,
-          uhid: showPatientData.Patientid,
-          Title: showPatientData.title,
-          Patient_ID: showPatientData.Patientid,
-          Mobile: showPatientData.Mobile,
-          DOB: moment(showPatientData.DOB).format("YYYY-MMM-DD"),
-          Age: showPatientData.Age,
-          NAME: showPatientData?.FirstName,
-          Gender: showPatientData.Gender,
-          House_No: showPatientData.HouseNo,
-          Locality: showPatientData.LocalityName,
-          State: showPatientData.StateName,
-          City: showPatientData.City,
-          Landmark: showPatientData.Landmark,
-          AgeYear: showPatientData?.AgeYear,
-          AgeMonth: showPatientData?.AgeMonth,
-          AgeDays: showPatientData?.AgeDays,
-          TotalAgeInDays: showPatientData?.TotalAgeInDays,
-        });
-        if (searchData.Address === "") {
-          toast.error("Please Enter Proper Address");
-        } else if (searchData?.DropLocationId === "") {
-          toast.error("Please Pick Any DropLocation");
+      const appointmentDay = appointmentDate.getDate();
+      const appointmentMonth = appointmentDate.getMonth();
+      const currentDay = currentDate.getDate();
+      const currentMonth = currentDate.getMonth();
+      console.log(
+        appointmentDay,
+        currentDay,
+        AppointmentWeekDay,
+        SelectedPheleboWeekOff
+      );
+
+      if (appointmentDay == currentDay && appointmentMonth == currentMonth) {
+        if (
+          dataHours < currentHours ||
+          (dataHours === currentHours && dataMinutes < currentMinutes)
+        ) {
+          toast.error("You can't book an appointment for this time");
+        } else if (AppointmentWeekDay == SelectedPheleboWeekOff) {
+          toast.error("Phelebo on a off on this day");
+        } else if (
+          !(
+            (dataHours > loginHour ||
+              (dataHours === loginHour && dataMinutes >= loginMinute)) &&
+            (dataHours < logoutHour ||
+              (dataHours === logoutHour && dataMinutes <= logoutMinute))
+          )
+        ) {
+          toast.error("Phelebo Not Available for this time");
+        } else if (match >= selectedPhelebo?.TimeslotData) {
+          toast.error("Booking is Filled for given Slot");
         } else {
-          setAppointment(true);
+          setSelectedPhelebo({
+            ...selectedPhelebo,
+            centreid: searchData.DropLocationId,
+            SelectedTime: data,
+            Address: searchData.Address,
+            AppointmentDate: searchData.AppointmentDate,
+            CityID: searchData.CityID,
+            DropLocationId: searchData.DropLocationId,
+            // DropLocationLabel: searchData?.DropLocationLabel,
+            Email: searchData.Email,
+            Landmark: searchData.Landmark,
+            LocalityID: searchData.LocalityID,
+            Pincode: searchData.Pincode,
+            RouteId: searchData.RouteId
+              ? searchData?.RouteId
+              : dropLocation[0]?.SelectedRouteId,
+            SelectedBindRoute: searchData.SelectedBindRoute,
+            StateID: searchData.StateID,
+            uhid: showPatientData.Patientid,
+            Title: showPatientData.title,
+            Patient_ID: showPatientData.Patientid,
+            Mobile: showPatientData.Mobile,
+            DOB: moment(showPatientData.DOB).format("YYYY-MMM-DD"),
+            Age: showPatientData.Age,
+            NAME: showPatientData?.FirstName,
+            Gender: showPatientData.Gender,
+            House_No: searchData.Address,
+            Locality: FindLabel(localities, searchData?.LocalityID),
+            State: FindLabel(states, searchData?.StateID),
+            City: FindLabel(cities, searchData?.CityID),
+            AgeYear: showPatientData?.AgeYear,
+            AgeMonth: showPatientData?.AgeMonth,
+            AgeDays: showPatientData?.AgeDays,
+            TotalAgeInDays: showPatientData?.TotalAgeInDays,
+          });
+          if (searchData.Address === "") {
+            toast.error("Please Enter Proper Address");
+          } else if (searchData?.DropLocationId === "") {
+            toast.error("Please Pick Any DropLocation");
+          } else {
+            setAppointment(true);
+          }
+        }
+      } else {
+        if (
+          !(
+            (dataHours > loginHour ||
+              (dataHours === loginHour && dataMinutes >= loginMinute)) &&
+            (dataHours < logoutHour ||
+              (dataHours === logoutHour && dataMinutes <= logoutMinute))
+          )
+        ) {
+          toast.error("Phelebo Not Available for this time");
+        } else if (AppointmentWeekDay == SelectedPheleboWeekOff) {
+          toast.error("Phelebo on a off on this day");
+        } else if (match >= selectedPhelebo?.TimeslotData) {
+          toast.error("Booking is Filled for given Slot");
+        } else {
+          setSelectedPhelebo({
+            ...selectedPhelebo,
+            centreid: searchData.DropLocationId,
+            SelectedTime: data,
+            Address: searchData.Address,
+            AppointmentDate: searchData.AppointmentDate,
+            CityID: searchData.CityID,
+            DropLocationId: searchData.DropLocationId,
+            // DropLocationLabel: searchData?.DropLocationLabel,
+            Email: searchData.Email,
+            Landmark: searchData.Landmark,
+            LocalityID: searchData.LocalityID,
+            Pincode: searchData.Pincode,
+            RouteId: searchData.RouteId
+              ? searchData?.RouteId
+              : dropLocation[0]?.SelectedRouteId,
+            SelectedBindRoute: searchData.SelectedBindRoute,
+            StateID: searchData.StateID,
+            uhid: showPatientData.Patientid,
+            Title: showPatientData.title,
+            Patient_ID: showPatientData.Patientid,
+            Mobile: showPatientData.Mobile,
+            DOB: moment(showPatientData.DOB).format("YYYY-MMM-DD"),
+            Age: showPatientData.Age,
+            NAME: showPatientData?.FirstName,
+            Gender: showPatientData.Gender,
+            House_No: searchData.Address,
+            Locality: FindLabel(localities, searchData?.LocalityID),
+            State: FindLabel(states, searchData?.StateID),
+            City: FindLabel(cities, searchData?.CityID),
+            AgeYear: showPatientData?.AgeYear,
+            AgeMonth: showPatientData?.AgeMonth,
+            AgeDays: showPatientData?.AgeDays,
+            TotalAgeInDays: showPatientData?.TotalAgeInDays,
+          });
+          if (searchData.Address === "") {
+            toast.error("Please Enter Proper Address");
+          } else if (searchData?.DropLocationId === "") {
+            toast.error("Please Pick Any DropLocation");
+          } else {
+            setAppointment(true);
+          }
         }
       }
     } else {
-      if (
-        !(
-          (dataHours > loginHour ||
-            (dataHours === loginHour && dataMinutes >= loginMinute)) &&
-          (dataHours < logoutHour ||
-            (dataHours === logoutHour && dataMinutes <= logoutMinute))
-        )
-      ) {
-        toast.error("Phelebo Not Available for this time");
-      } else if (match >= selectedPhelebo?.TimeslotData) {
-        toast.error("Booking is Filled for given Slot");
-      } else {
-        setSelectedPhelebo({
-          ...selectedPhelebo,
-          centreid: searchData.DropLocationId,
-          SelectedTime: data,
-          Address: searchData.Address,
-          AppointmentDate: searchData.AppointmentDate,
-          CityID: searchData.CityID,
-          DropLocationId: searchData.DropLocationId,
-          // DropLocationLabel: searchData?.DropLocationLabel,
-          Email: searchData.Email,
-          Landmark: searchData.Landmark,
-          LocalityID: searchData.LocalityID,
-          Pincode: searchData.Pincode,
-          RouteId: searchData.RouteId
-            ? searchData?.RouteId
-            : dropLocation[0]?.SelectedRouteId,
-          SelectedBindRoute: searchData.SelectedBindRoute,
-          StateID: searchData.StateID,
-          uhid: showPatientData.Patientid,
-          Title: showPatientData.title,
-          Patient_ID: showPatientData.Patientid,
-          Mobile: showPatientData.Mobile,
-          DOB: moment(showPatientData.DOB).format("YYYY-MMM-DD"),
-          Age: showPatientData.Age,
-          NAME: showPatientData?.FirstName,
-          Gender: showPatientData.Gender,
-          House_No: showPatientData.HouseNo,
-          Locality: showPatientData.LocalityName,
-          State: showPatientData.StateName,
-          City: showPatientData.City,
-          Landmark: showPatientData.Landmark,
-          AgeYear: showPatientData?.AgeYear,
-          AgeMonth: showPatientData?.AgeMonth,
-          AgeDays: showPatientData?.AgeDays,
-          TotalAgeInDays: showPatientData?.TotalAgeInDays,
-        });
-        if (searchData.Address === "") {
-          toast.error("Please Enter Proper Address");
-        } else if (searchData?.DropLocationId === "") {
-          toast.error("Please Pick Any DropLocation");
-        } else {
-          setAppointment(true);
-        }
-      }
+      setError(generatedError);
     }
-
-  } else {
-    setError(generatedError);
-  }
   };
+
   const handleChange = (event) => {
     const { name, value } = event?.target;
 
@@ -576,6 +597,12 @@ const AppointmentModal = ({
     else handleSearch(false);
   };
 
+  const FindLabel = (state, id) => {
+    const labels = state.filter((ele, _) => {
+      return ele.value == id;
+    });
+    return labels[0].label;
+  };
   const getBindRoute = (value) => {
     axios
       .post("/api/v1/CustomerCare/BindRoute", {
@@ -880,7 +907,7 @@ const AppointmentModal = ({
                 {/* <div className="box-body"> */}
                 <div className="row" style={{ backgroundColor: "skyblue" }}>
                   <label className="col-sm-12  col-md-2" htmlFor="Address">
-                    {t("Address :- ")}
+                    {t("Address ")} :-
                   </label>
 
                   <div className="col-md-3">

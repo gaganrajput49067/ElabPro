@@ -148,7 +148,7 @@ const HCHistoryModal = ({
             <div className="box">
               <div className="box-body">
                 <label className="col-sm-12  col-md-12" htmlFor="UHID">
-                  {t("Home Collection History of ")} :&nbsp;
+                  {t("Home Collection History of")} :&nbsp;
                   {showPatientData?.NAME}({showPatientData?.Mobile})
                 </label>
               </div>

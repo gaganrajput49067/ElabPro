@@ -354,8 +354,8 @@ const HomeCollectionPatientEdit = () => {
     return formattedDate;
   }
 
-  const ageCount = (y, m, d) => {
-    if ((y == 0 || y == "") && (m == "" || m == 0) && (d == "" || d == 0)) {
+  const ageCount = (y = "0", m = "0", d = "0") => {
+    if (y == 0 && m == 0 && d == 0) {
       return 1;
     } else {
       return d;
@@ -524,7 +524,6 @@ const HomeCollectionPatientEdit = () => {
     });
   };
 
-  console.log(patientDetails?.Age);
   const calculateDOB = (value) => {
     var TodayDate = moment(new Date().now).format("YYYY,MM,DD");
     var DOBDate = moment(value).format("YYYY,MM,DD");
@@ -567,25 +566,18 @@ const HomeCollectionPatientEdit = () => {
 
   // dynamicaly updating input state
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
+    const { name, value, checked, type } = e.target;
+    const sanitizedValue = value.replace(/[^A-Za-z]/g, "").trim();
     if (name === "FirstName") {
       setpatientDetails((prevDetails) => ({
         ...prevDetails,
-        [name]: PreventNumber(value)
-          ? value
-          : setpatientDetails.FirstName
-          ? PreventSpecialCharacter(value)
-            ? value
-            : setpatientDetails.FirstName
-          : value,
+        [name]: sanitizedValue,
       }));
     }
 
-    const trimed = value.trim();
     setpatientDetails((prevDetails) => ({
       ...prevDetails,
-      [name]: trimed,
+      [name]: value,
     }));
   };
 
@@ -908,7 +900,7 @@ const HomeCollectionPatientEdit = () => {
                         )}
                       </div>
                       <div style={{ width: "70%" }}>
-                        <Input
+                        <input
                           className="select-input-box form-control input-sm required"
                           name="FirstName"
                           type="text"
@@ -926,7 +918,7 @@ const HomeCollectionPatientEdit = () => {
                               <br />
                             </>
                           ))}
-                        {!/^\D*$/.test(patientDetails?.FirstName) && (
+                        {/[^A-Za-z\s]/g.test(patientDetails?.FirstName) && (
                           <span className="golbal-Error">
                             {errors?.FirstNameNumber}
                           </span>

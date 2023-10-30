@@ -929,6 +929,7 @@ const PheleBotomistRegisteration = () => {
                                     <Input
                                         type='number'
                                         name="P_Pincode"
+                                        onInput={(e)=>number(e,6)}
                                         className="select-input-box form-control input-sm"
                                         onChange={handleSelectChange}
                                         value={formData?.P_Pincode}

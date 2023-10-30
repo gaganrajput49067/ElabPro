@@ -67,7 +67,7 @@ const RegisteredPatientDetailModal = ({
                                 handleSelectData(ele);
                               }}
                             >
-                              Select
+                               {t("Select")}
                             </button>
                           </td>
                           <td data-title="UHID" className="text-center">
@@ -126,7 +126,7 @@ const RegisteredPatientDetailModal = ({
                       handleCloseDetailShow();
                     }}
                   >
-                    Register New Patient With Same Mobile
+                     {t("Register New Patient With Same Mobile")}
                   </button>
                 </div>
                 <div className="col-md-1">
@@ -137,7 +137,7 @@ const RegisteredPatientDetailModal = ({
                       handleCloseDetailShow();
                     }}
                   >
-                    Close
+                     {t("Close")}
                   </button>
                 </div>
               </div>

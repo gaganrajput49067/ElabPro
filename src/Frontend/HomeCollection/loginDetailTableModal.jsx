@@ -21,7 +21,16 @@ const LoginDetailTableModal = ({
                 <Modal.Title className='modal-title'>
                     Details
                 </Modal.Title>
-                <button type='button' className='close' onClick={handleClose}>x</button>
+                <div style={{ textAlign: "right" }}>
+                    <button
+                        type="button"
+                        className="cross"
+                        style={{ backgroundColor: "red", color: "white" }}
+                        onClick={handleClose}
+                    >
+                        X
+                    </button>
+                </div>
             </Modal.Header>
             <Modal.Body>
                 <div
